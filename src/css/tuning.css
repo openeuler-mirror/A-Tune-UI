@@ -1,0 +1,27 @@
+.chart-background {
+    max-width: 750px;
+    max-height: 600px;
+    min-width: 500px;
+    min-height: 400px;
+    margin: 10px;
+    float: left;
+    display: inline;
+    background-color: #fff;
+    opacity: .8;
+}
+
+.performance-chart {
+    width: 750px;
+    height: 600px;
+    min-width: 500px;
+    min-height: 400px;
+    float: left;
+    display: inline;
+    padding: 15px;
+    flex-flow: row wrap;
+}
+
+.tuning-middle {
+    max-width: 1540px;
+    min-width: 1000px;
+}
