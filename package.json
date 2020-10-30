@@ -7,7 +7,7 @@
   "private": true,
   "scripts": {
     "test": "echo \"No test specified\" && exit 0",
-    "start": "quasar dev -H IP_ADDR"
+    "start": "quasar dev -H localhost"
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
