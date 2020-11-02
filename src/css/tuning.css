@@ -10,7 +10,7 @@
     opacity: .8;
 }
 
-.performance-chart {
+.evaluation-chart {
     width: 750px;
     height: 600px;
     min-width: 500px;
@@ -23,5 +23,5 @@
 
 .tuning-middle {
     max-width: 1540px;
-    min-width: 1000px;
+    min-width: 1540px;
 }

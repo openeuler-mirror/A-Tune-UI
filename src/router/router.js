@@ -20,8 +20,10 @@ const routes = [
         component: Layout,
         children: [
             {path: '', component: () => import('pages/Index.vue')},
-            {path: 'tuning', component: () => import('pages/Tuning.vue')},
-            {path: 'analysis', component: () => import('pages/Analysis.vue')}
+            {path: 'tuning', name: 'Tuning', component: () => import('pages/Tuning.vue')},
+            {path: 'analysis', name: 'Analysis', component: () => import('pages/Analysis.vue')},
+            {path: 'tuning/details', name: 'TuningDetails', component: () => import('pages/TuningDetails.vue')},
+            {path: 'analysis/details', name: 'AnalysisDetails', component: () => import('pages/AnalysisDetails.vue')}
         ]
     },
     {
