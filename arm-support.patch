@@ -1,0 +1,122 @@
+diff --git a/.drone.yml b/.drone.yml
+new file mode 100644
+index 00000000..0246a2de
+--- /dev/null
++++ b/.drone.yml
+@@ -0,0 +1,100 @@
++---
++kind: pipeline
++name: node8-arm64v8
++
++platform:
++  os: linux
++  arch: arm64
++
++steps:
++  - name: build
++    image: arm64v8/node:8
++    volumes:
++      - name: vendor
++        path: /tmp/vendor
++    commands:
++      - export SKIP_SASS_BINARY_DOWNLOAD_FOR_CI="true"
++      - env
++      - node -v
++      - npm -v
++      - gcc --version
++      - g++ --version
++      - node -p process.versions
++      - node -p process.arch
++      - node -p process.platform
++      - node -p process.config.variables
++      - uname -m
++      # - npm install --unsafe-perm
++      # - npm test
++      # - cp -R /drone/src/vendor /tmp
++      # - ls -lsa /tmp/vendor
++volumes:
++  - name: vendor
++    temp: {}
++---
++kind: pipeline
++name: node8-arm32v7
++
++platform:
++  os: linux
++  arch: arm
++
++steps:
++  - name: build
++    image: arm32v7/node:8
++    volumes:
++      - name: vendor
++        path: /tmp/vendor
++    commands:
++      - export SKIP_SASS_BINARY_DOWNLOAD_FOR_CI="true"
++      - env
++      - node -v
++      - npm -v
++      - gcc --version
++      - g++ --version
++      - node -p process.versions
++      - node -p process.arch
++      - node -p process.platform
++      - node -p process.config.variables
++      - uname -m
++      # - npm install --unsafe-perm
++      # - npm test
++      # - cp -R /drone/src/vendor /tmp
++      #  - ls -lsa /tmp/vendor
++volumes:
++  - name: vendor
++    temp: {}
++---
++kind: pipeline
++name: node8-arm32v6
++
++platform:
++  os: linux
++  arch: arm
++
++steps:
++  - name: build
++    image: arm32v6/node:8-alpine
++    volumes:
++      - name: vendor
++        path: /tmp/vendor
++    commands:
++      - export SKIP_SASS_BINARY_DOWNLOAD_FOR_CI="true"
++      - apk add --no-cache python=2.7.15-r3 git-perl bash make gcc g++
++      - rm /bin/sh && ln -s /bin/bash /bin/sh
++      - node -v
++      - npm -v
++      - gcc --version
++      - g++ --version
++      - node -p process.versions
++      - node -p process.arch
++      - node -p process.platform
++      - node -p process.config.variables
++      - uname -m
++      # - npm install --unsafe-perm
++      # - npm test
++      # - cp -R /drone/src/vendor /tmp
++      #  - ls -lsa /tmp/vendor
++volumes:
++  - name: vendor
++    temp: {}
+diff --git a/lib/extensions.js b/lib/extensions.js
+index 1d1528e6..f408cfcf 100644
+--- a/lib/extensions.js
++++ b/lib/extensions.js
+@@ -44,6 +44,11 @@ function getHumanArchitecture(arch) {
+     case 'ia32': return '32-bit';
+     case 'x86': return '32-bit';
+     case 'x64': return '64-bit';
++    case 'armv7l': return '32-bit, ARM';
++    case 'armv7hf': return '32-bit, ARM';
++    case 'armv8': return '64-bit, ARM';
++    case 'aarch64': return '64-bit, ARM';
++    case 'arm64': return '64-bit, ARM';
+     default: return false;
+   }
+ }
