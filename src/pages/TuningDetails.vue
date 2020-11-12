@@ -1,11 +1,11 @@
 <template>
   <q-page class="q-py-xl q-mx-auto bg-grey-4" style="overflow: auto">
     <div id="tuning-main" class="text-center" style="display: grid">
-      <div class="text-h5" style="">{{ fileName }}</div>
+      <div class="text-h5">{{ fileName }}</div>
       <div class="text-subtitle1">engine:&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-body1">{{ fileEngine }}</span></div>
       <div class="text-subtitle1">round:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-body1">{{ fileRound }}</span></div>
       <div class="text-subtitle1">status:&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-body1">{{ fileStatus }}</span></div>
-      <div id="compare-tuning-form" class="q-mx-auto tuning-middle" style="display: none">
+      <div id="compare-tuning-form" class="q-mx-auto tuning-middle">
         <q-form @submit="onSubmit" class="q-gutter-md" style="width: 100%; display: flow-root; float: right;">
           <q-btn label="Submit" type="submit" class="vertical-middle" style="float: right; margin-right: 30px" color="primary"/>
           <q-select

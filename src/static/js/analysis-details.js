@@ -15,13 +15,14 @@
 
 import echarts from 'echarts';
 import axios from 'axios';
-import {host, port} from './utils.js';
+import {host, port, enginePort} from './utils.js';
 
 export default {
     data() {
         return {
             fileName: '',
             fileWorkLoad: '',
+            appName: '',
             avgCPU: 0,
             avgMEM: 0,
             avgNET: 0,
@@ -34,14 +35,45 @@ export default {
             modelCompare: [],
             optionCompare: [],
             fileChartId: [],
-            compareChartId: []
+            compareChartId: [],
+            statisticData: [],
+            statisticColumns: [
+                {colName: 'Name', align: 'center', label: 'Name', field: 'Name'},
+                {colName: 'Round#', align: 'center', label: 'Round#', field: 'Round#'},
+                {colName: 'Mean', align: 'center', label: 'Mean', field: 'Mean'},
+                {colName: 'Variance', align: 'center', label: 'Variance', field: 'Variance'},
+                {colName: 'Standard Division', align: 'center',
+                label: 'Standard Division', field: 'Standard Division'}],
+            statisticPagination: {page: 1, rowsPerPage: 5},
+            detectResData: [],
+            detectResColumns: [
+                {colName: 'Parameters', align: 'center', label: 'Parameters', field: 'Parameters'},
+                {colName: 'Minimum', align: 'center', label: 'Minimum', field: 'Minimum'},
+                {colName: 'Maximum', align: 'center', label: 'Maximum', field: 'Maximum'},
+                {colName: 'Outlier', align: 'center', label: 'Outlier', field: 'Outlier'}],
+            detectResPagination: {page: 1, rowsPerPage: 5}
         };
     },
     components: { },
     methods: {
         closePopUp() {
-            console.log('close popup');
             document.getElementById('popup-window').style.display = 'none';
+        },
+
+        closeDetectPopUp() {
+            document.getElementById('detect-popup-window').style.display = 'none';
+        },
+
+        showDetectPopUp() {
+            document.getElementById('detect-popup-window').style.display = 'block';
+        },
+
+        cleanDetectPopUp() {
+            document.getElementById('detect-error-empty').style.display = 'none';
+            document.getElementById('detect-error-nonexist').style.display = 'none';
+            document.getElementById('detect-error').style.display = 'none';
+            document.getElementById('detect-result-form').style.display = 'none';
+            this.detectResData.splice();
         },
 
         onSubmit() {
@@ -59,6 +91,42 @@ export default {
             for (var file in this.modelCompare) {
                 this.addCompareFileInfo(this.modelCompare[file], 0, count);
                 count++;
+            }
+        },
+
+        onSubmitDetect() {
+            this.cleanDetectPopUp();
+            if (this.appName === undefined || this.appName === '') {
+                document.getElementById('detect-btn').disabled = false;
+                document.getElementById('detect-error-empty').style.display = 'block';
+            } else {
+                document.getElementById('detect-btn').disabled = true;
+                const path = `http://${host}:${enginePort}/v1/detecting`;
+                var params = {appname: this.appName, detectpath: this.fileName};
+                axios.get(path, {params: params}, {'Access-Control-Allow-Origin': '*'}).then((res) => {
+                    document.getElementById('detect-btn').disabled = false;
+                    if (res.data.length === 0) {
+                        document.getElementById('detect-error-nonexist').style.display = 'block';
+                        return;
+                    }
+                    document.getElementById('detect-result-form').style.display = 'block';
+                    var container = document.getElementById('detect-result');
+                    var lines = res.data.split('@');
+                    for (var el in lines) {
+                        if (lines[el].length > 0) {
+                            var newParam = {};
+                            var name = lines[el].split(/ /);
+                            newParam['Parameters'] = name[0];
+                            var outliner = name[1].split(/<|>/);
+                            if (outliner.length >= 2) {
+                                newParam['Outlier'] = outliner[0];
+                                newParam['Maximum'] = outliner[1].split(',')[0];
+                                newParam['Minimum'] = outliner[1].split(',')[1];
+                                this.detectResData.push(newParam);
+                            }
+                        }
+                    }
+                });
             }
         },
 
@@ -162,6 +230,11 @@ export default {
                     var div = document.createElement('div');
                     div.id = 'div-' + dim;
                     container.appendChild(div);
+                    var br = document.createElement('br');
+                    br.style.clear = 'both';
+                    br.style.buttom = '0';
+                    div.appendChild(br);
+                    div.appendChild(document.createElement('hr'));
                     this.optionDim.push(dim);
                     this.modelDim.push(dim);
                 }
@@ -169,6 +242,46 @@ export default {
                 this.fileChartId.push('chart-' + header[el]);
             }
             this.onSubmit();
+        },
+
+        setPopUp(id) {
+            this.statisticData = [];
+            var chartSmall = echarts.init(document.getElementById(id));
+            var chartPopUp = echarts.init(document.getElementById('chart-container'));
+            if (chartPopUp.getOption() !== undefined) {
+                var oldSeries = chartPopUp.getOption().series;
+                for (var i = 0; i < oldSeries.length; i++) {
+                    oldSeries[i].data = [];
+                    oldSeries[i].name = '';
+                    oldSeries[i] = {};
+                }
+                chartPopUp.setOption({
+                    xAxis: {data: []},
+                    series: oldSeries
+                });
+            } else {
+                initialPopUp();
+                chartPopUp = echarts.init(document.getElementById('chart-container'));
+            }
+            chartPopUp.setOption({
+                title: {text: chartSmall.getOption().title[0].text},
+                xAxis: {data: chartSmall.getOption().xAxis[0].data},
+                series: chartSmall.getOption().series
+            });
+            for (var el in chartSmall.getOption().series) {
+                var newStatistic = {};
+                newStatistic['Name'] = chartSmall.getOption().series[el].name;
+                var round = chartSmall.getOption().series[el].data.length;
+                var avg = roundCal(getTotal(chartSmall.getOption().series[el].data), round, '/');
+                var variance = roundCal(getVariance(chartSmall.getOption().series[el].data, avg), round, '/');
+                var stdDiv = Math.sqrt(variance);
+                newStatistic['Round#'] = round;
+                newStatistic['Mean'] = avg;
+                newStatistic['Variance'] = variance;
+                newStatistic['Standard Division'] = stdDiv;
+                this.statisticData.push(newStatistic);
+            }
+            document.getElementById('popup-window').style.display = 'grid';
         }
     },
     created() {
@@ -180,7 +293,12 @@ export default {
             this.fileName = JSON.parse(sessionStorage.analysisParams).name;
             this.optionCompare = JSON.parse(sessionStorage.analysisParams).optionCompare;
         }
+        this.detectResData.splice();
+        this.appName = '';
         this.initialDetailInfo(this.fileName, 0);
+    },
+    mounted() {
+        window.setPopUpWindow = this.setPopUp;
     }
 };
 
@@ -190,7 +308,7 @@ function initialParamChart(divId, param, fileName) {
     var div = document.createElement('div');
     div.id = 'chart-' + param;
     div.onclick = function () {
-        setPopUp(div.id);
+        setPopUpWindow(div.id);
     };
     div.className = 'io-chart';
     container.appendChild(div);
@@ -335,6 +453,39 @@ function addSeriesForChart(id, fileName) {
     });
 }
 
+function getTotal(list) {
+    var res = 0;
+    for (var i in list) {
+        res = roundCal(res, parseFloat(list[i]), '+');
+    }
+    return res;
+}
+
+function getVariance(list, avg) {
+    var res = 0;
+    for (let i in list) {
+        var div = roundCal(parseFloat(list[i]), avg, '-');
+        var tempRes = roundCal(div, div, '*');
+        res = roundCal(res, tempRes, '+');
+    }
+    return res;
+}
+
+function roundCal(numA, numB, operator) {
+    numA = Math.floor(parseFloat(numA.toFixed(2)) * 100);
+    numB = Math.floor(parseFloat(numB.toFixed(2)) * 100);
+    switch (operator) {
+        case '+':
+            return (numA + numB) / 100;
+        case '-':
+            return (numA - numB) / 100;
+        case '*':
+            return (numA * numB) / 10000;
+        case '/':
+            return (numA / numB);
+    }
+}
+
 function getYAxis(value) {
     var texts = value;
     if (texts > 1000000000) {
@@ -361,32 +512,6 @@ function initialPopUp() {
     });
 }
 
-function setPopUp(id) {
-    var chartSmall = echarts.init(document.getElementById(id));
-    var chartPopUp = echarts.init(document.getElementById('chart-container'));
-    if (chartPopUp.getOption() !== undefined) {
-        var oldSeries = chartPopUp.getOption().series;
-        for (var i = 0; i < oldSeries.length; i++) {
-            oldSeries[i].data = [];
-            oldSeries[i].name = '';
-            oldSeries[i] = {};
-        }
-        chartPopUp.setOption({
-            xAxis: {data: []},
-            series: oldSeries
-        });
-    } else {
-        initialPopUp();
-        chartPopUp = echarts.init(document.getElementById('chart-container'));
-    }
-    chartPopUp.setOption({
-        title: {text: chartSmall.getOption().title[0].text},
-        xAxis: {data: chartSmall.getOption().xAxis[0].data},
-        series: chartSmall.getOption().series
-    });
-    document.getElementById('popup-window').style.display = 'block';
-}
-
 function getAvgById(id) {
     var chart = echarts.init(document.getElementById(id));
     if (chart === undefined) {
@@ -402,4 +527,3 @@ function getAvgById(id) {
     total /= count;
     return total;
 }
-
