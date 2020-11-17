@@ -12,7 +12,8 @@
  * See the Mulan PSL v2 for more details.
  * Create: 2020-10-29
 */
-var host = '9.85.179.32';
+var host = 'ENGINE_HOST';
+var enginePort = '3838';
 var port = '5000';
 
 function deleteChild(id) {

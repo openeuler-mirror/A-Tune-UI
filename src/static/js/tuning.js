@@ -20,11 +20,25 @@ export default {
         return {
             listTab: 'all',
             files: [],
-            optionCompare: []
+            optionCompare: [],
+            newFileName: '',
+            currFileName: '',
+            currFileStat: ''
         };
     },
     components: { },
     methods: {
+        closeRenamePopUp() {
+            console.log('close popup');
+            document.getElementById('rename-popup-window').style.display = 'none';
+            document.getElementById('rename-error-duplicate').style.display = 'none';
+            document.getElementById('rename-error-same').style.display = 'none';
+            document.getElementById('rename-error-empty').style.display = 'none';
+            this.newFileName = '';
+            this.currFileName = '';
+            this.currFileStat = '';
+        },
+
         getFileList(type) {
             const path = `http://${host}:${port}/tuning/${type}`;
             axios.get(path).then((res) => {
@@ -36,6 +50,41 @@ export default {
                     }
                 }
             });
+        },
+
+        rename(file) {
+            document.getElementById('rename-popup-window').style.display = 'block';
+            document.getElementById('rename-error-duplicate').style.display = 'none';
+            document.getElementById('rename-error-same').style.display = 'none';
+            document.getElementById('rename-error-empty').style.display = 'none';
+            this.currFileName = file.name;
+            this.currFileStat = file.status;
+        },
+
+        onSubmitRename() {
+            document.getElementById('rename-error-duplicate').style.display = 'none';
+            document.getElementById('rename-error-same').style.display = 'none';
+            document.getElementById('rename-error-empty').style.display = 'none';
+            if (this.newFileName === undefined || this.newFileName === '') {
+                document.getElementById('rename-error-empty').style.display = 'block';
+            } else if (this.newFileName === this.currFileName) {
+                document.getElementById('rename-error-same').style.display = 'block';
+            } else {
+                const path = `http://${host}:${port}/tuning/${this.currFileStat}/${this.currFileName}/new_file/${this.newFileName}`;
+                axios.get(path).then((res) => {
+                    if (res.data.duplicate) {
+                        document.getElementById('rename-error-duplicate').style.display = 'block';
+                    } else if (res.data.rename) {
+                        this.$q.notify('Rename success');
+                        this.closeRenamePopUp();
+                        this.getFileList(res.data.status);
+                    } else {
+                        this.$q.notify('Rename error');
+                        this.closeRenamePopUp();
+                        this.getFileList(res.data.status);
+                    }
+                });
+            }
         },
 
         initialTuningDetails(file) {
@@ -70,9 +119,5 @@ export default {
         this.getFileList('all');
     },
     mounted() {
-    //    document.getElementById('tuning-list-form').style.display = 'block';
-    //    var container = document.getElementById('tuning-evaluation');
-    //    deleteChild('tuning-evaluation');
-    //    container.style.display = 'none';
     }
 };

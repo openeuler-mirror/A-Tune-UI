@@ -35,16 +35,44 @@ export default {
     },
     methods: {
         addCompareFileInfo(file, line, fileNum) {
-            const path = `http://${host}:${port}/analysis/${file}/${line}`;
-            console.log('add compare file', path);
+            if (line === 0) {
+                for (var el in this.compareChartId) {
+                    var chart = echarts.init(document.getElementById(this.compareChartId[el]));
+                    var option = chart.getOption();
+                    option.series.push({
+                        type: chart.getOption().series[0].type,
+                        name: file,
+                        symbolSize: 5,
+                        barGap: 0,
+                        data: []
+                    });
+                    chart.setOption(option, true);
+                }
+            }
+            const path = `http://${host}:${port}/tuning/finished/${file}/${line}`;
+            axios.get(path).then((res) => {
+                if (!res.data.find_file) {
+                    this.optionCompare.splice(this.optionCompare.indexOf(file), 1);
+                    this.modelCompare.splice(this.modelCompare.indexOf(file), 1);
+                } else {
+                    var lineList = [];
+                    for (var i in res.data.data[0]) {
+                        lineList[i] = parseInt(res.data.initial_line + 1, 10) + parseInt(i, 10);
+                    }
+                    updatePerformanceChart('evaluation', lineList, res.data.data[res.data.data.length - 1], file);
+                    updatePerformanceChart('best evaluation', lineList, res.data.data[res.data.data.length - 1], file);
+                    updatePerformanceChart('cost', lineList, res.data.cost, file);
+                    if (res.data.line !== -1) {
+                        this.addCompareFileInfo(file, res.data.line, fileNum);
+                    }
+                }
+            });
         },
 
         onSubmit() {
             deleteOldData(this.compareChartId);
             var count = 1;
-            console.log(this.modelCompare, this.optionCompare);
             for (var file in this.modelCompare) {
-                console.log(this.modelCompare[file]);
                 this.addCompareFileInfo(this.modelCompare[file], 0, count);
                 count++;
             }
@@ -127,15 +155,7 @@ export default {
                 xAxis: {data: xAxisData},
                 series: {
                     data: yAxisData,
-                    barWidth: 120,
-                    itemStyle: {
-                        normal: {
-                            color: function (params) {
-                                var colorList = ['#003366', '#EE7942'];
-                                return colorList[params.dataIndex];
-                            }
-                        }
-                    }
+                    barMaxWidth: 120
                 }
             });
         },
@@ -269,13 +289,17 @@ export default {
                         for (var i in res.data.data[0]) {
                             lineList[i] = parseInt(res.data.initial_line + 1, 10) + parseInt(i, 10);
                         }
-                        updatePerformanceChart('evaluation', lineList, res.data.data[res.data.data.length - 1]);
-                        updatePerformanceChart('best evaluation', lineList, res.data.data[res.data.data.length - 1]);
-                        updatePerformanceChart('cost', lineList, res.data.cost);
+                        updatePerformanceChart('evaluation', lineList,
+                        res.data.data[res.data.data.length - 1], res.data.file_name);
+                        updatePerformanceChart('best evaluation', lineList,
+                        res.data.data[res.data.data.length - 1], res.data.file_name);
+                        updatePerformanceChart('cost', lineList, res.data.cost, res.data.file_name);
                         this.updateAllData(res, res.data.line, stat);
                     } else {
-                        updatePerformanceChart('evaluation', lineList, res.data.data[res.data.data.length - 1]);
-                        updatePerformanceChart('best evaluation', lineList, res.data.data[res.data.data.length - 1]);
+                        updatePerformanceChart('evaluation', lineList,
+                        res.data.data[res.data.data.length - 1], res.data.file_name);
+                        updatePerformanceChart('best evaluation', lineList,
+                        res.data.data[res.data.data.length - 1], res.data.file_name);
                         this.updateAllData(res, res.data.line, stat);
                     }
                 } else if (res.data.status === 'running') {
@@ -290,7 +314,6 @@ export default {
         findFile(filename, res, line) {
             const path = `http://${host}:${port}/tuning/findFile/${filename}`;
             axios.get(path).then((ret) => {
-                console.log('return', ret.data.status);
                 var newStat = ret.data.status;
                 if (newStat === 'running') {
                     this.$q.notify('Tuning "', res.data.file_name, '"  has been deleted');
@@ -339,51 +362,67 @@ function getYAxis(value) {
     return texts;
 }
 
-function updatePerformanceChart(name, times, value) {
+function updatePerformanceChart(name, times, value, fileName) {
     var id = 'chart-' + name;
     var chart = echarts.init(document.getElementById(id));
     var oldData = chart.getOption().series[0].data;
     var oldX = chart.getOption().xAxis[0].data;
+    var count = 0;
+    for (var currSeries in chart.getOption().series) {
+        if (chart.getOption().series[currSeries].name === fileName) {
+            oldData = chart.getOption().series[currSeries].data;
+            break;
+        }
+        count++;
+    }
     for (var i in times) {
-        oldX.push(times[i]);
+        if (count === 0) {
+            oldX.push(times[i]);
+        }
         if (name === 'best evaluation') {
             var vsChart = echarts.init(document.getElementById('chart-hist'));
-            var yData = vsChart.getOption().series[0].data;
+            var yData = vsChart.getOption().series[count].data;
             if (parseInt(value[i], 10) > parseInt(oldData[oldData.length - 1], 10) || oldData[0] === undefined) {
                 oldData.push(value[i]);
             } else {
                 oldData.push(oldData[oldData.length - 1]);
             }
             if (yData[0] === undefined) {
-                yData.push(value[i]);
-                yData.push(value[i]);
+                yData.push(parseFloat(value[i]));
+                yData.push(parseFloat(value[i]));
             } else {
                 yData.pop();
                 yData.push(oldData[oldData.length - 1]);
             }
-            vsChart.setOption({series: [{data: yData}]});
+            var barSeries = vsChart.getOption().series;
+            barSeries[count].data = yData;
+            vsChart.setOption({series: barSeries});
         } else {
             oldData.push(value[i]);
         }
     }
-    chart.setOption({
-        xAxis: {data: oldX},
-        series: [{data: oldData}]
-    });
+    if (count !== 0) {
+        var oldSeries = chart.getOption().series;
+        oldSeries[count].data = oldData;
+        chart.setOption({
+            series: oldSeries
+        });
+    } else {
+        chart.setOption({
+            xAxis: {data: oldX},
+            series: [{data: oldData}]
+        });
+    }
 }
 
 function deleteOldData(compareChartId) {
     for (var el in compareChartId) {
         var chart = echarts.init(document.getElementById(compareChartId[el]));
         var oldSeries = chart.getOption().series;
+        var option = chart.getOption();
         for (var i = 1; i < oldSeries.length; i++) {
-            if (i === 1 && compareChartId[el] === 'chart-cost') {
-                continue;
-            }
-            oldSeries[i].data = [];
+            option.series[i] = undefined;
         }
-        chart.setOption({
-            series: oldSeries
-        });
+        chart.setOption(option, true);
     }
 }

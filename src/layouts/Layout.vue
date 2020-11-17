@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="hHh 1pR fFf">
+  <q-layout>
 
     <q-header elevated class="bg-dark text-white">
       <q-toolbar>
