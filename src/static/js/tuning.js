@@ -22,8 +22,7 @@ export default {
             files: [],
             optionCompare: [],
             newFileName: '',
-            currFileName: '',
-            currFileStat: ''
+            currFileName: ''
         };
     },
     components: { },
@@ -40,13 +39,23 @@ export default {
         },
 
         getFileList(type) {
-            const path = `http://${host}:${port}/tuning/${type}`;
-            axios.get(path).then((res) => {
+            this.listTab = type;
+            this.optionCompare = [];
+            var uid = localStorage.getItem('userId');
+            if (uid === null || uid === '') {
+                return;
+            }
+            const path = `http://${host}:${port}/v1/UI/tuning/initialPage`;
+            var params = {status: type, uid: uid};
+            axios.get(path, {params: params}, {'Access-Control-Allow-Origin': '*'}).then((res) => {
+                if (typeof(res.data) === 'string') {
+                    res.data = JSON.parse(res.data);
+                }
                 this.files = res.data.message;
                 this.optionCompare.splice();
                 for (var el in this.files) {
                     if (this.files[el].status === 'finished') {
-                        this.optionCompare.push(this.files[el].name);
+                        this.optionCompare.push(this.files[el].status);
                     }
                 }
             });
@@ -58,7 +67,6 @@ export default {
             document.getElementById('rename-error-same').style.display = 'none';
             document.getElementById('rename-error-empty').style.display = 'none';
             this.currFileName = file.name;
-            this.currFileStat = file.status;
         },
 
         onSubmitRename() {
@@ -70,27 +78,36 @@ export default {
             } else if (this.newFileName === this.currFileName) {
                 document.getElementById('rename-error-same').style.display = 'block';
             } else {
-                const path = `http://${host}:${port}/tuning/${this.currFileStat}/${this.currFileName}/new_file/${this.newFileName}`;
-                axios.get(path).then((res) => {
-                    if (res.data.duplicate) {
-                        document.getElementById('rename-error-duplicate').style.display = 'block';
-                    } else if (res.data.rename) {
+                const path = `http://${host}:${port}/v1/UI/tuning/rename`;
+                var params = {name: this.currFileName, newName: this.newFileName};
+                axios.get(path, {params: params}, {'Access-Control-Allow-Origin': '*'}).then((res) => {
+                    if (typeof(res.data) === 'string') {
+                        res.data = JSON.parse(res.data);
+                    }
+                    if (res.data.rename) {
                         this.$q.notify('Rename success');
                         this.closeRenamePopUp();
-                        this.getFileList(res.data.status);
+                        this.getFileList(this.listTab);
+                        document.getElementById('rename-error-duplicate').style.display = 'block';
+                    } else if (res.data.reason === 'duplicate') {
+                        document.getElementById('rename-error-duplicate').style.display = 'block';
                     } else {
-                        this.$q.notify('Rename error');
+                        this.$q.notify('Rename failed');
                         this.closeRenamePopUp();
-                        this.getFileList(res.data.status);
+                        this.getFileList(this.listTab);
                     }
                 });
             }
         },
 
         initialTuningDetails(file) {
-            const path = `http://${host}:${port}/tuning/${file.status}/${file.name}`;
-            axios.get(path).then((res) => {
-                if (res.data.find_file) {
+            const path = `http://${host}:${port}/v1/UI/tuning/chooseFile`;
+            var params = {status: file.status, name: file.name};
+            axios.get(path, {params: params}, {'Access-Control-Allow-Origin': '*'}).then((res) => {
+                if (typeof(res.data) === 'string') {
+                    res.data = JSON.parse(res.data);
+                }
+                if (res.data.isExist) {
                     this.optionCompare.splice(this.optionCompare.indexOf(file.name), 1);
                     this.$router.push({
                         path: '/tuning/details',
@@ -102,7 +119,7 @@ export default {
                         }
                     });
                 } else {
-                    if (res.data.status === 'running') {
+                    if (file.status === 'running') {
                         console.log('file might be moved to finished/error dict');
                         this.$q.notify('This tuning might finished or interrupted');
                     } else {
@@ -116,7 +133,14 @@ export default {
 
     },
     created() {
-        this.getFileList('all');
+        if (localStorage.getItem('userId') === null) {
+            this.$router.push({
+                path: '/index',
+                name: 'Index'
+            });
+        } else {
+            this.getFileList('all');
+        }
     },
     mounted() {
     }

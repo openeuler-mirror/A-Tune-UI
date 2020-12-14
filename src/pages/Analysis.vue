@@ -6,12 +6,12 @@
             <div class="text-h6 q-px-lg q-pb-lg q-pt-sm" style="min-height: 800px">
               <q-list bordered class="rounded-borders q-my-md" v-for="(file, index) in analysis" :key="index" style="display: -webkit-inline-box">
 
-                <q-item clickable v-ripple class="q-px-lg" @click="initialAnalysisDetails(file, 0)" style="width: 1420px">
+                <q-item clickable v-ripple class="q-px-lg" @click="initialAnalysisDetails(file)" style="width: 1420px">
                   <q-item-section>
                     <q-item-label lines="1" >{{ file.name }}</q-item-label>
                     <q-item-label caption lines="2">
                       <span class="text-weight-bold"></span>
-                      {{ file.info }}
+                      ip: {{ file.info }}
                     </q-item-label>
                   </q-item-section>
 

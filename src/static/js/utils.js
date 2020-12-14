@@ -12,9 +12,10 @@
  * See the Mulan PSL v2 for more details.
  * Create: 2020-10-29
 */
-var host = 'ENGINE_HOST';
-var enginePort = '3838';
-var port = '5000';
+var host = 'HOST';
+var port = 'PORT';
+var engineHost = 'ENGINE_HOST';
+var enginePort = 'ENGINE_PORT';
 
 function deleteChild(id) {
     var container = document.getElementById(id);
@@ -26,5 +27,7 @@ function deleteChild(id) {
 export {
     deleteChild,
     host,
-    port
+    port,
+    engineHost,
+    enginePort
 };
