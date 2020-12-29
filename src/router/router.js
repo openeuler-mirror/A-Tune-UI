@@ -18,13 +18,32 @@ const routes = [
     {
         path: '/',
         component: Layout,
-        children: [
-            {path: '', component: () => import('pages/Index.vue')},
-            {path: 'tuning', name: 'Tuning', component: () => import('pages/Tuning.vue')},
-            {path: 'analysis', name: 'Analysis', component: () => import('pages/Analysis.vue')},
-            {path: 'tuning/details', name: 'TuningDetails', component: () => import('pages/TuningDetails.vue')},
-            {path: 'analysis/details', name: 'AnalysisDetails', component: () => import('pages/AnalysisDetails.vue')}
-        ]
+        children: [{path: 'index', name: 'Index', component: () => import('pages/Index.vue')}]
+    },
+    {
+        path: '/login',
+        component: () => import('layouts/Login.vue'),
+        children: [{path: '', name: 'Login', component: () => import('pages/Login.vue')}]
+    },
+    {
+        path: '/tuning',
+        component: Layout,
+        children: [{path: '', name: 'Tuning', component: () => import('pages/Tuning.vue')}]
+    },
+    {
+        path: '/analysis',
+        component: Layout,
+        children: [{path: '', name: 'Analysis', component: () => import('pages/Analysis.vue')}]
+    },
+    {
+        path: '/tuning/details',
+        component: Layout,
+        children: [{path: '', name: 'TuningDetails', component: () => import('pages/TuningDetails.vue')}]
+    },
+    {
+        path: '/analysis/details',
+        component: Layout,
+        children: [{path: '', name: 'AnalysisDetails', component: () => import('pages/AnalysisDetails.vue')}]
     },
     {
         path: '*',

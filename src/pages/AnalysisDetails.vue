@@ -2,7 +2,7 @@
   <q-page class="q-py-xl q-mx-auto bg-grey-4" style="overflow: auto">
     <div id="analysis-main" class="text-center" style="display: grid">
       <div class="text-h5" style="">{{ fileName }}</div>
-      <div id="workload-type" class="text-subtitle1">
+      <div id="workload-type" class="text-subtitle1" style="display: none">
         workload:&nbsp;&nbsp;&nbsp;&nbsp;
         <span class="text-body1">{{ fileWorkLoad }}&nbsp;&nbsp;</span>
         <q-btn rounded outline color="primary" label="Detect" @click="showDetectPopUp()">
@@ -27,14 +27,14 @@
         <q-circular-progress
           show-value
           font-size="12px"
-          :value="avgMEM"
+          :value="avgSTR"
           size="180px"
           :thickness="0.22"
           color="primary"
           track-color="grey-3"
           class="q-ma-md q-mx-xl"
         >
-          <div class="text-subtitle1">MEM: {{ avgMEM }}%</div>
+          <div class="text-subtitle1">STORAGE: {{ avgSTR }}%</div>
         </q-circular-progress>
 
         <q-circular-progress
@@ -47,20 +47,20 @@
           track-color="grey-3"
           class="q-ma-md q-mx-xl"
         >
-          <div class="text-subtitle1">NET: {{ avgNET }}</div>
+          <div class="text-subtitle1">NET: {{ avgNET }}%</div>
         </q-circular-progress>
 
         <q-circular-progress
           show-value
           font-size="12px"
-          :value="avgSTR"
+          :value="avgMEM"
           size="180px"
           :thickness="0.22"
           color="primary"
           track-color="grey-3"
           class="q-ma-md q-mx-xl"
         >
-          <div class="text-subtitle1">STORAGE: {{ avgSTR }}</div>
+          <div class="text-subtitle1">MEM: {{ avgMEM }}%</div>
         </q-circular-progress>
       </div>
 
@@ -89,13 +89,14 @@
         </q-form>
       </div>
 
-      <div id="analysis-param-form" class="q-mx-auto q-my-md page-middle">
+      <div id="analysis-param-form" class="q-mx-auto q-my-md page-middle" style="display: none">
         <q-table
           title="Parameter"
           :data="paramData"
           :columns="paramColumns"
           row-key="colName"
           :pagination.sync="paramPagination"
+          :hide-pagination="true"
           style="max-height: 1154px"
         >
           <template v-slot:top>
@@ -106,7 +107,8 @@
       </div>
     </div>
 
-    <div id="popup-window" style="z-index: 1; display: none" class="bg-grey-3 fixed-center">
+    <div id="popup-window" style="z-index: 1; display: none; max-height: calc(100% - 200px); overflow: auto" class="bg-grey-3
+ fixed-center">
       <q-btn flat round color="primary" icon="close" class="absolute-top-right" @click="closePopUp"/>
       <div id="chart-container" style="height: 450px; width: 750px;"></div>
       <div id="value-form" class="q-ma-md">
@@ -115,6 +117,7 @@
           :columns="statisticColumns"
           row-key="colName"
           :pagination.sync="statisticPagination"
+          :hide-pagination="true"
           style="max-height: 1154px"
         >
         </q-table>

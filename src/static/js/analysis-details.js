@@ -15,7 +15,7 @@
 
 import echarts from 'echarts';
 import axios from 'axios';
-import {host, port, enginePort} from './utils.js';
+import {host, port, engineHost, enginePort} from './utils.js';
 
 export default {
     data() {
@@ -28,8 +28,12 @@ export default {
             avgNET: 0,
             avgSTR: 0,
             paramData: [],
-            paramColumns: [],
-            paramPagination: {page: 1, rowsPerPage: 20},
+            paramColumns: [{colName: 'Section', align: 'center', label: 'Section', field: 'Section'},
+                {colName: 'Status', align: 'center', label: 'Status', field: 'Status'},
+                {colName: 'Key', align: 'center', label: 'Key', field: 'Key'},
+                {colName: 'Value', align: 'center', label: 'Value', field: 'Value'},
+                {colName: 'Note', align: 'center', label: 'Note', field: 'Note'}],
+            paramPagination: {page: 1, rowsPerPage: 10},
             modelDim: [],
             optionDim: [],
             modelCompare: [],
@@ -44,14 +48,15 @@ export default {
                 {colName: 'Variance', align: 'center', label: 'Variance', field: 'Variance'},
                 {colName: 'Standard Division', align: 'center',
                 label: 'Standard Division', field: 'Standard Division'}],
-            statisticPagination: {page: 1, rowsPerPage: 5},
+            statisticPagination: {page: 1, rowsPerPage: 6},
             detectResData: [],
             detectResColumns: [
                 {colName: 'Parameters', align: 'center', label: 'Parameters', field: 'Parameters'},
                 {colName: 'Minimum', align: 'center', label: 'Minimum', field: 'Minimum'},
                 {colName: 'Maximum', align: 'center', label: 'Maximum', field: 'Maximum'},
                 {colName: 'Outlier', align: 'center', label: 'Outlier', field: 'Outlier'}],
-            detectResPagination: {page: 1, rowsPerPage: 5}
+            detectResPagination: {page: 1, rowsPerPage: 5},
+            verticalDisplay: ['div-CPU', 'div-MEM', 'div-NET', 'div-STORAGE']
         };
     },
     components: { },
@@ -80,7 +85,11 @@ export default {
             for (var el in this.optionDim) {
                 var container = document.getElementById('div-' + this.optionDim[el]);
                 if (this.modelDim.indexOf(this.optionDim[el]) > -1) {
-                    container.style.display = 'block';
+                    if (this.verticalDisplay.includes('div-' + this.optionDim[el])) {
+                        container.style.display = 'grid';
+                    } else {
+                        container.style.display = 'block';
+                    }
                 } else {
                     container.style.display = 'none';
                 }
@@ -101,7 +110,7 @@ export default {
                 document.getElementById('detect-error-empty').style.display = 'block';
             } else {
                 document.getElementById('detect-btn').disabled = true;
-                const path = `http://${host}:${enginePort}/v1/detecting`;
+                const path = `http://${engineHost}:${enginePort}/v1/detecting`;
                 var params = {appname: this.appName, detectpath: this.fileName};
                 axios.get(path, {params: params}, {'Access-Control-Allow-Origin': '*'}).then((res) => {
                     document.getElementById('detect-btn').disabled = false;
@@ -131,9 +140,13 @@ export default {
         },
 
         addCompareFileInfo(file, line, fileNum) {
-            const path = `http://${host}:${port}/analysis/${file}/${line}`;
-            axios.get(path).then((res) => {
-                if (res.data.file_exist === false) {
+            const path = `http://${host}:${port}/v1/UI/analysis/compareWith`;
+            var params = {name: file, csvLine: line};
+            axios.get(path, {params: params}, {'Access-Control-Allow-Origin': '*'}).then((res) => {
+                if (typeof(res.data) === 'string') {
+                    res.data = JSON.parse(res.data);
+                }
+                if (res.data.isExist === false) {
                     this.optionCompare.splice(this.optionCompare.indexOf(file), 1);
                     if (this.modelCompare.indexOf(file) > -1) {
                         this.modelCompare.splice(this.modelCompare.indexOf(file), 1);
@@ -141,71 +154,60 @@ export default {
                 } else {
                     if (line === 0) {
                         for (var el in res.data.table_header) {
-                            if (document.getElementById('chart-' + res.data.table_header[el]) === undefined) {
+                            if (document.getElementById('chart-' + res.data.table_header[el]) === null) {
                                 var divId = res.data.table_header[el].split('.')[0];
-                                if (document.getElementById('div-' + divId) === undefined) {
-                                    var outer = document.getElementById('analysis-chart');
-                                    var div = document.createElement('div');
-                                    div.id = 'div-' + divId;
-                                    outer.appendChild(div);
+                                if (document.getElementById('div-' + divId) === null) {
+                                    var container = document.getElementById('analysis-chart');
+                                    this.createDiv(container, divId, null, null);
                                     this.compareChartId.push(divId);
-                                    this.optionDim.push(div);
-                                    this.modelDim.push(div);
                                 }
-                                initialParamChart('div-' + divId, res.data.table_header[el], file);
+                                initialParamChart('div-' + divId, res.data.table_header[el],
+                                    file, this.verticalDisplay);
                                 this.compareChartId.push('chart-' + res.data.table_header[el]);
                             } else {
                                 addSeriesForChart('chart-' + res.data.table_header[el], file);
                             }
                         }
                     }
-                    if (res.data.csv_lines > 0) {
-                        updateParamChart(res.data.table_header, res.data.csv_data, fileNum, file);
-                    }
-                    if (res.data.csv_lines === 20) {
-                        this.addCompareFileInfo(file, res.data.line, fileNum);
+                    updateParamChart(res.data.table_header, res.data.csv_data, fileNum, file);
+                    if (res.data.hasNext) {
+                        this.addCompareFileInfo(file, res.data.nextCsv, fileNum);
                     }
                 }
             });
         },
 
-        initialDetailInfo(file, line) {
-            const path = `http://${host}:${port}/analysis/${this.fileName}/${line}`;
-            axios.get(path).then((res) => {
-                if (!res.data.file_exist) {
+        initialDetailInfo(file, csvLine, logLine) {
+            const path = `http://${host}:${port}/v1/UI/analysis/getAnalysisData`;
+            var params = {name: file, csvLine: csvLine, logLine: logLine};
+            axios.get(path, {params: params}, {'Access-Control-Allow-Origin': '*'}).then((res) => {
+                if (typeof(res.data) === 'string') {
+                    res.data = JSON.parse(res.data);
+                }
+                if (!res.data.isExist) {
                     this.$q.notify('Data has been deleted');
                     this.$router.push({
                         path: '/analysis',
                         name: 'Analysis',
                     });
+                    return;
                 }
-                if (line === 0) {
+                if (csvLine === 0) {
                     this.initialChart(res.data.table_header, this.fileName);
-                    if (res.data.log_lines === 0) {
-                        document.getElementById('analysis-param-form').style.display = 'none';
-                        document.getElementById('workload-type').style.display = 'none';
-                    }
+                }
+                if (res.data.workload !== undefined) {
+                    document.getElementById('workload-type').style.display = 'block';
+                    this.fileWorkLoad = res.data.workload;
                 }
                 if (res.data.csv_data.length > 0) {
                     updateParamChart(res.data.table_header, res.data.csv_data, 0, this.fileName);
                     this.avgCPU = parseFloat(getAvgById('chart-CPU.STAT.util').toFixed(3));
                     this.avgMEM = parseFloat(getAvgById('chart-MEM.BANDWIDTH.Total_Util').toFixed(3));
-                    this.avgNET = parseFloat((getAvgById('chart-NET.STAT.rxkBs')
-                        + getAvgById('chart-NET.STAT.txkBs')).toFixed(3));
-                    this.avgSTR = parseFloat((getAvgById('chart-STORAGE.STAT.rMBs')
-                        + getAvgById('chart-STORAGE.STAT.wMBs')).toFixed(3));
+                    this.avgNET = parseFloat(getAvgById('chart-NET.STAT.ifutil').toFixed(3));
+                    this.avgSTR = parseFloat(getAvgById('chart-STORAGE.STAT.util').toFixed(3));
                 }
-                if (res.data.log_lines !== 0) {
-                    if (line === 0) {
-                        this.paramColumns.push({colName: 'Section', align: 'center',
-                                                label: 'Section', field: 'Section'});
-                        this.paramColumns.push({colName: 'Status', align: 'center',
-                                                label: 'Status', field: 'Status'});
-                        this.paramColumns.push({colName: 'Key', align: 'center', label: 'Key', field: 'Key'});
-                        this.paramColumns.push({colName: 'Value', align: 'center', label: 'Value', field: 'Value'});
-                        this.paramColumns.push({colName: 'Note', align: 'center', label: 'Note', field: 'Note'});
-                        this.fileWorkLoad = res.data.workload;
-                    }
+                if (res.data.nextLog !== 0) {
+                    document.getElementById('analysis-param-form').style.display = 'block';
                     for (var m = 0; m < res.data.log_data.length; m++) {
                         var newParam = {Section: res.data.log_data[m][0], Status: res.data.log_data[m][1]};
                         newParam[this.paramColumns[0].colName] = res.data.log_data[m][0];
@@ -216,30 +218,44 @@ export default {
                         this.paramData.push(newParam);
                     }
                 }
-                if (res.data.csv_lines === 20 || res.data.log_lines === 20) {
-                    this.initialDetailInfo(file, res.data.line);
+                if (res.data.hasNext) {
+                    setTimeout(this.initialDetailInfo, res.data.interval, file, res.data.nextCsv, res.data.nextLog);
                 }
             });
         },
 
+        createDiv(dim, container, chart, fileName) {
+            var div = document.createElement('div');
+            div.id = 'div-' + dim;
+            container.appendChild(div);
+            var br = document.createElement('br');
+            br.style.clear = 'both';
+            br.style.buttom = '0';
+            div.appendChild(br);
+            div.appendChild(document.createElement('hr'));
+            this.optionDim.push(dim);
+            this.modelDim.push(dim);
+            if (chart !== null) {
+                initialParamChart('div-' + dim, chart, fileName, this.verticalDisplay);
+                this.fileChartId.push('chart-' + chart);
+            }
+        },
+
         initialChart(header, fileName) {
             var container = document.getElementById('analysis-chart');
+            this.createDiv('CPU', container, 'CPU.STAT.util', fileName);
+            this.createDiv('STORAGE', container, 'STORAGE.STAT.util', fileName);
+            this.createDiv('NET', container, 'NET.STAT.ifutil', fileName);
+            this.createDiv('MEM', container, 'MEM.BANDWIDTH.Total_Util', fileName);
             for (var el in header) {
                 var dim = header[el].split('.')[0];
                 if (this.optionDim.indexOf(dim) <= -1) {
-                    var div = document.createElement('div');
-                    div.id = 'div-' + dim;
-                    container.appendChild(div);
-                    var br = document.createElement('br');
-                    br.style.clear = 'both';
-                    br.style.buttom = '0';
-                    div.appendChild(br);
-                    div.appendChild(document.createElement('hr'));
-                    this.optionDim.push(dim);
-                    this.modelDim.push(dim);
+                    this.createDiv(dim, container, null, fileName);
                 }
-                initialParamChart('div-' + dim, header[el], fileName);
-                this.fileChartId.push('chart-' + header[el]);
+                initialParamChart('div-' + dim, header[el], fileName, this.verticalDisplay);
+                if (this.fileChartId.indexOf('chart-' + header[el]) <= -1) {
+                    this.fileChartId.push('chart-' + header[el]);
+                }
             }
             this.onSubmit();
         },
@@ -289,22 +305,38 @@ export default {
             sessionStorage.setItem('analysisParams', JSON.stringify(this.$route.params));
             this.fileName = this.$route.params.name;
             this.optionCompare = this.$route.params.optionCompare;
+            this.detectResData.splice();
+            this.appName = '';
+            this.initialDetailInfo(this.fileName, 0, 0);
+        } else if (sessionStorage.analysisParams === undefined) {
+            this.$router.push({
+                path: '/analysis',
+                name: 'Analysis'
+            });
         } else {
             this.fileName = JSON.parse(sessionStorage.analysisParams).name;
             this.optionCompare = JSON.parse(sessionStorage.analysisParams).optionCompare;
+            this.detectResData.splice();
+            this.appName = '';
+            this.initialDetailInfo(this.fileName, 0, 0);
         }
-        this.detectResData.splice();
-        this.appName = '';
-        this.initialDetailInfo(this.fileName, 0);
     },
     mounted() {
         window.setPopUpWindow = this.setPopUp;
     }
 };
 
-function initialParamChart(divId, param, fileName) {
+function initialParamChart(divId, param, fileName, vertical) {
+    if (document.getElementById('chart-' + param) !== null) {
+        return;
+    }
     var container = document.getElementById(divId);
-    container.style.display = 'block';
+    if (vertical.includes(divId)) {
+        container.style.display = 'grid';
+        container.style.float = 'left';
+    } else {
+        container.style.display = 'block';
+    }
     var div = document.createElement('div');
     div.id = 'chart-' + param;
     div.onclick = function () {
@@ -328,7 +360,7 @@ function initialEchart(div, param, fileName) {
             left: 'center',
             padding: [20, 0, 5, 0]
         },
-        color: ['#003366', '#006699', '#4cabce', '#e5323e'],
+        color: ['#003366', '#e5323e', '#fcc565', '#db6eba'],
         tooltip: {
             trigger: 'axis',
             axisPointer: {
@@ -344,6 +376,15 @@ function initialEchart(div, param, fileName) {
                 mark: {show: true}
             }
         },
+        dataZoom: [{
+            type: 'slider',
+            show: true,
+            xAxisIndex: [0],
+            left: '9%',
+            bottom: -5,
+            start: 0,
+            end: 100
+        }],
         xAxis: [{
             name: '',
             data: []
@@ -420,12 +461,11 @@ function deleteOldData(fileChartId, compareChartId) {
     for (var el in fileChartId) {
         var chart = echarts.init(document.getElementById(fileChartId[el]));
         var oldSeries = chart.getOption().series;
+        var option = chart.getOption();
         for (var i = 1; i < oldSeries.length; i++) {
-            oldSeries[i].data = [];
+            option.series[i] = undefined;
         }
-        chart.setOption({
-            series: oldSeries
-        });
+        chart.setOption(option, true);
     }
     for (var e in compareChartId) {
         var element = document.getElementById(compareChartId[e]);
@@ -488,15 +528,15 @@ function roundCal(numA, numB, operator) {
 
 function getYAxis(value) {
     var texts = value;
-    if (texts > 1000000000) {
+    if (texts >= 1000000000) {
         texts = texts / 1000000000;
         return texts + 'b';
     }
-    if (texts > 1000000) {
+    if (texts >= 1000000) {
         texts = texts / 1000000;
         return texts + 'm';
     }
-    if (texts > 1000) {
+    if (texts >= 1000) {
         texts = texts / 1000;
         return texts + 'k';
     }

@@ -44,22 +44,12 @@
         </div>
 
         <div class="q-pa-sm">
-          <q-btn-dropdown flat round color="primary" label="User">
-            <q-list>
-              <q-item clickable v-close-popup @click="onItemClick">
-                <q-item-section>
-                  <q-item-label>Profile</q-item-label>
-                </q-item-section>
-              </q-item>
-
-              <q-item clickable v-close-popup @click="onItemClick">
-                <q-item-section>
-                  <q-item-label>Log Out</q-item-label>
-                </q-item-section>
-              </q-item>
-
-            </q-list>
-          </q-btn-dropdown>
+          <q-btn flat round icon="login" color="primary" @click='onLoginClick' v-if="!loginSuccess">
+            <q-tooltip content-class="bg-grey-1 text-black">Login</q-tooltip>
+          </q-btn>
+          <q-btn flat round icon="logout" color="primary" @click='onLogOutClick' v-else>
+            <q-tooltip content-class="bg-grey-1 text-black">Log Out</q-tooltip>
+          </q-btn>
         </div>
       </q-toolbar>
     </q-header>
@@ -77,7 +67,7 @@
             </q-item-section>
           </q-item>
 
-          <q-item to="/tuning" exact clickable v-ripple>
+          <q-item to="/tuning" exact clickable v-ripple v-if="loginSuccess">
             <q-item-section avatar>
               <q-icon name="tune" />
             </q-item-section>
@@ -87,7 +77,7 @@
             </q-item-section>
           </q-item>
 
-          <q-item to="/analysis" clickable v-ripple>
+          <q-item to="/analysis" clickable v-ripple v-if="loginSuccess">
             <q-item-section avatar>
               <q-icon name="analytics" />
             </q-item-section>
@@ -98,6 +88,18 @@
           </q-item>
 
           <q-separator />
+
+          <q-item to="/profile" clickable v-ripple v-if="loginSuccess">
+            <q-item-section avatar>
+              <q-icon name="analytics" />
+            </q-item-section>
+
+            <q-item-section>
+              Analysis
+            </q-item-section>
+          </q-item>
+
+          <q-separator v-if="loginSuccess"/>
 
           <q-item clickable v-ripple>
             <q-item-section avatar>
@@ -147,12 +149,29 @@ export default {
       searchText: '',
       leftDrawerOpen: false,
       miniState: true,
-      dense: false
+      dense: false,
+      loginSuccess: false
     }
   },
   methods: {
     onItemClick () {
       console.log('---')
+    },
+    onLoginClick() {
+      this.$router.push({
+        path: '/login',
+        name: 'Login'
+      });
+    },
+    onLogOutClick() {
+      localStorage.clear();
+      sessionStorage.clear();
+      location.reload();
+    }
+  },
+  created() {
+    if (localStorage.getItem('userName') !== null && localStorage.getItem('userId') !== null) {
+        this.loginSuccess = true;
     }
   }
 }

@@ -28,7 +28,7 @@
                     <q-item-label lines="1">{{ file.name }}</q-item-label>
                     <q-item-label caption lines="2">
                       <span class="text-weight-bold"></span>
-                      {{ file.info }}
+                      ip: {{ file.info }}
                     </q-item-label>
                   </q-item-section>
 
@@ -61,7 +61,7 @@
                     <q-item-label lines="1" >{{ file.name }}</q-item-label>
                     <q-item-label caption lines="2">
                       <span class="text-weight-bold"></span>
-                      {{ file.info }}
+                      ip: {{ file.info }}
                     </q-item-label>
                   </q-item-section>
 
@@ -94,7 +94,7 @@
                     <q-item-label lines="1">{{ file.name }}</q-item-label>
                     <q-item-label caption lines="2">
                       <span class="text-weight-bold"></span>
-                      {{ file.info }}
+                      ip: {{ file.info }}
                     </q-item-label>
                   </q-item-section>
 
@@ -127,7 +127,7 @@
                     <q-item-label lines="1">{{ file.name }}</q-item-label>
                     <q-item-label caption lines="2">
                       <span class="text-weight-bold"></span>
-                      {{ file.info }}
+                      ip: {{ file.info }}
                     </q-item-label>
                   </q-item-section>
 

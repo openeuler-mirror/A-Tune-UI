@@ -30,7 +30,8 @@ export default {
             pagination: {page: 1, rowsPerPage: 20},
             modelCompare: [],
             optionCompare: [],
-            compareChartId: ['chart-evaluation', 'chart-best evaluation', 'chart-cost', 'chart-hist']
+            compareChartId: ['chart-evaluation', 'chart-best evaluation', 'chart-cost', 'chart-hist'],
+            intervalId: ''
         };
     },
     methods: {
@@ -49,9 +50,13 @@ export default {
                     chart.setOption(option, true);
                 }
             }
-            const path = `http://${host}:${port}/tuning/finished/${file}/${line}`;
-            axios.get(path).then((res) => {
-                if (!res.data.find_file) {
+            const path = `http://${host}:${port}/v1/UI/tuning/compareWith`;
+            var params = {name: file, line: line};
+            axios.get(path, {params: params}, {'Access-Control-Allow-Origin': '*'}).then((res) => {
+                if (typeof(res.data) === 'string') {
+                    res.data = JSON.parse(res.data);
+                }
+                if (!res.data.isExist) {
                     this.optionCompare.splice(this.optionCompare.indexOf(file), 1);
                     this.modelCompare.splice(this.modelCompare.indexOf(file), 1);
                 } else {
@@ -95,18 +100,23 @@ export default {
         },
 
         initialPage() {
-            const path = `http://${host}:${port}/tuning/${this.fileStatus}/${this.fileName}`;
-            axios.get(path).then((res) => {
-                if (!res.data.find_file) {
+            const path = `http://${host}:${port}/v1/UI/tuning/initialChart`;
+            var params = {status: this.fileStatus, name: this.fileName};
+            axios.get(path, {params: params}, {'Access-Control-Allow-Origin': '*'}).then((res) => {
+                if (typeof(res.data) === 'string') {
+                    res.data = JSON.parse(res.data);
+                }
+                if (!res.data.isExist) {
                     this.$q.notify('Tuning has been deleted');
                     this.$router.push({
                         path: '/tuning',
                         name: 'Tuning',
                     });
+                    return;
                 }
                 if (res.data.base !== 'ERROR' && (res.data.base === '' || res.data.parameter === '')) {
                     this.initialPage();
-                } else if (res.data.find_file) {
+                } else if (res.data.isExist) {
                     deleteChild('tuning-evaluation');
                     deleteChild('tuning-details');
                     var baseline = parseInt(res.data.base, 10);
@@ -265,7 +275,11 @@ export default {
 
         updateAllData(res, line, stat) {
             if (line !== -1) {
-                this.updateChart(res, line, stat);
+                if (stat === 'running' && res.data.line === res.data.initial_line) {
+                    setTimeout(this.updateChart, 5000, res, line, stat);
+                } else {
+                    this.updateChart(res, line, stat);
+                }
             } else if (stat === 'running') {
                 this.fileStatus = 'finished';
                 this.$q.notify('Tuning finished');
@@ -273,14 +287,18 @@ export default {
         },
 
         updateChart(res, line, stat) {
-            const path = `http://${host}:${port}/tuning/${res.data.status}/${res.data.file_name}/` + line;
-            axios.get(path).then((res) => {
-                if (res.data.find_file === true) {
+            const path = `http://${host}:${port}/v1/UI/tuning/getTuningData`;
+            var params = {status: res.data.status, name: res.data.file_name, line: line};
+            axios.get(path, {params: params}, {'Access-Control-Allow-Origin': '*'}).then((res) => {
+                if (typeof(res.data) === 'string') {
+                    res.data = JSON.parse(res.data);
+                }
+                if (res.data.isExist === true) {
                     if (res.data.data.length !== 0) {
                         for (var k = 0; k < res.data.data[0].length; k++) {
-                            var newCol = {'round#': line + k + 1};
-                            for (var j = 0; j < res.data.data.length; j++) {
-                                newCol[res.data.parameter[j]] = res.data.data[j][k];
+                            var newCol = {'round#': res.data.data[0][k]};
+                            for (var j = 1; j < res.data.data.length; j++) {
+                                newCol[res.data.parameter[j - 1]] = res.data.data[j][k];
                             }
                             this.paramTable.push(newCol);
                         }
@@ -312,8 +330,10 @@ export default {
         },
 
         findFile(filename, res, line) {
-            const path = `http://${host}:${port}/tuning/findFile/${filename}`;
-            axios.get(path).then((ret) => {
+            const path = `http://${host}:${port}/v1/UI/tuning/getTuningStatus`;
+            var params = {name: filename};
+            axios.get(path, {params: params}, {'Access-Control-Allow-Origin': '*'}).then((ret) => {
+                res.data = JSON.parse(res.data);
                 var newStat = ret.data.status;
                 if (newStat === 'running') {
                     this.$q.notify('Tuning "', res.data.file_name, '"  has been deleted');
@@ -336,26 +356,32 @@ export default {
             this.fileName = this.$route.params.name;
             this.fileStatus = this.$route.params.status;
             this.optionCompare = this.$route.params.optionCompare;
+            this.initialPage();
+        } else if (sessionStorage.tuningParams === undefined) {
+            this.$router.push({
+                path: '/tuning',
+                name: 'Tuning'
+            });
         } else {
             this.fileName = JSON.parse(sessionStorage.tuningParams).name;
             this.fileStatus = JSON.parse(sessionStorage.tuningParams).status;
             this.optionCompare = JSON.parse(sessionStorage.tuningParams).optionCompare;
+            this.initialPage();
         }
-        this.initialPage();
     }
 };
 
 function getYAxis(value) {
     var texts = value;
-    if (texts > 1000000000) {
+    if (texts >= 1000000000) {
         texts = texts / 1000000000;
         return texts + 'b';
     }
-    if (texts > 1000000) {
+    if (texts >= 1000000) {
         texts = texts / 1000000;
         return texts + 'm';
     }
-    if (texts > 1000) {
+    if (texts >= 1000) {
         texts = texts / 1000;
         return texts + 'k';
     }

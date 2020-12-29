@@ -54,14 +54,18 @@ export default {
             } else if (this.newFileName === this.currFileName) {
                 document.getElementById('rename-error-same').style.display = 'block';
             } else {
-                const path = `http://${host}:${port}/analysis/${this.currFileName}/new_file/${this.newFileName}`;
-                axios.get(path).then((res) => {
-                    if (res.data.duplicate) {
-                        document.getElementById('rename-error-duplicate').style.display = 'block';
-                    } else if (res.data.rename) {
+                const path = `http://${host}:${port}/v1/UI/analysis/rename`;
+                var params = {name: this.currFileName, newName: this.newFileName};
+                axios.get(path, {params: params}, {'Access-Control-Allow-Origin': '*'}).then((res) => {
+                    if (typeof(res.data) === 'string') {
+                        res.data = JSON.parse(res.data);
+                    }
+                    if (res.data.rename) {
                         this.$q.notify('Rename success');
                         this.closeRenamePopUp();
                         this.getAnalysisList();
+                    } else if (res.data.reason === 'duplicate') {
+                        document.getElementById('rename-error-duplicate').style.display = 'block';
                     } else {
                         this.$q.notify('Rename error');
                         this.closeRenamePopUp();
@@ -72,26 +76,40 @@ export default {
         },
 
         getAnalysisList() {
-            const path = `http://${host}:${port}/analysis`;
-            axios.get(path).then((res) => {
+            this.optionCompare = [];
+            var uid = localStorage.getItem('userId');
+            if (uid === null || uid === '') {
+                return;
+            }
+            const path = `http://${host}:${port}/v1/UI/analysis/initialPage`;
+            var params = {uid, uid};
+            axios.get(path, {params: params}, {'Access-Control-Allow-Origin': '*'}).then((res) => {
+                if (typeof(res.data) === 'string') {
+                    res.data = JSON.parse(res.data);
+                }
                 this.analysis = res.data.analysis;
                 this.optionCompare.splice();
                 for (var el in this.analysis) {
-                    this.optionCompare.push(this.analysis[el].name);
+                    if (this.analysis[el].status === 'finished') {
+                        this.optionCompare.push(this.analysis[el].name);
+                    }
                 }
             });
         },
 
-        initialAnalysisDetails(file, line) {
+        initialAnalysisDetails(file) {
             this.fileName = file.name;
             if (this.optionCompare.indexOf(file.name) > -1) {
                 this.optionCompare.splice(this.optionCompare.indexOf(file.name), 1);
             }
-            const path = `http://${host}:${port}/analysis/${file.name}/${line}`;
-            axios.get(path).then((res) => {
-                if (!res.data.file_exist) {
+            const path = `http://${host}:${port}/v1/UI/analysis/chooseFile`;
+            var params = {name: file.name};
+            axios.get(path, {params: params}, {'Access-Control-Allow-Origin': '*'}).then((res) => {
+                if (typeof(res.data) === 'string') {
+                    res.data = JSON.parse(res.data);
+                }
+                if (!res.data.isExist) {
                     this.$q.notify('Data has been deleted');
-                    this.analysis.clear();
                     this.getAnalysisList();
                 } else {
                     this.$router.push({
@@ -99,6 +117,7 @@ export default {
                         name: 'AnalysisDetails',
                         params: {
                             name: file.name,
+                            status: file.status,
                             optionCompare: this.optionCompare
                         }
                     });
@@ -107,6 +126,13 @@ export default {
         },
     },
     created() {
-        this.getAnalysisList();
+        if (localStorage.getItem('userId') === null) {
+            this.$router.push({
+                path: '/index',
+                name: 'Index'
+            });
+        } else {
+            this.getAnalysisList();
+        }
     }
 };
