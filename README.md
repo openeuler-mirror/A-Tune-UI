@@ -2,19 +2,28 @@
 
 ## 介绍
 
-A-Tune-UI是作用于A-Tune的可视化web界面。需要搭配[A-Tune](https://gitee.com/openeuler/A-Tune)项目进行使用
+A-Tune-UI是作用于A-Tune的可视化web界面，需要搭配[A-Tune](https://gitee.com/openeuler/A-Tune)项目进行使用。  
+仅支持openEuler20.09或更高版本的openEuler操作系统使用。
 
 
 
 ## 安装
+
+#### 准备
+
+请注意，UI的依赖包npm及nodejs仅存在于openeuler-everything镜像源中，在安装前请配置openeuler-everything为yum源，具体操作如下：  
+  
+1. 打开[openeuler.org](https://openeuler.org/zh/)，点击`下载`，找到对应版本的镜像源点击`下载`。  
+2. 点击`everything`，选择需要的系统版本（`x86_64/aarch64`），此页面地址即为配置使用的url。  
+3. 使用url进行yum源配置。  
+
 
 #### 方法一：使用自带脚本安装
 
 ```bash
 sh install.sh
 ```
-如果安装失败，请参考手动安装
-
+如果安装失败，请参考手动安装。
 
 
 #### 方法二：手动安装
@@ -59,13 +68,14 @@ mv node-sass A-Tune-UI/node_modules
 hostname -I  # 查看当前运行环境ip
 打开package.json，替换第10行中localhost为当前运行环境IP
 ```
+
 ##### 2、运行
 ```bash
 npm run start
 ```
-运行成功后返回web网址，用于打开界面
+运行成功后返回web网址，用于打开界面。
 
-> 注：如果A-Tune项目没有运行，您依然可以看到网页界面，但无法获取具体数据
+> 注：如果A-Tune项目没有运行，您依然可以看到网页界面，但无法获取具体数据。
 
 
 
@@ -73,3 +83,6 @@ npm run start
 
 ##### A-Tune
 A-Tune项目地址：https://gitee.com/openeuler/A-Tune
+
+##### A-Tune-Collector
+A-Tune-Collector项目地址：https://gitee.com/openeuler/A-Tune-Collector
