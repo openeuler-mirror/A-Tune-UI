@@ -19,6 +19,7 @@ build_err()
     shift
     if [ $ret -ne $res ];then
             echo "==== Error: $@ error ===="
+            echo "==== Please check the build.log for detail. ===="
             exit $ret
     else
             echo "==== $@ finished ===="
