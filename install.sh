@@ -12,6 +12,9 @@
 # See the Mulan PSL v2 for more details.
 # Create: 2020-11-05
 
+INSTALL_FOLDER=$(cd "$(dirname "$0")"; pwd)
+LOG_FILE=$INSTALL_FOLDER/build.log
+
 build_err()
 {
     local ret=$1
@@ -19,7 +22,7 @@ build_err()
     shift
     if [ $ret -ne $res ];then
             echo "==== Error: $@ error ===="
-            echo "==== Please check the build.log for detail. ===="
+            echo "==== Please check the $LOG_FILE for detail. ===="
             exit $ret
     else
             echo "==== $@ finished ===="
@@ -30,37 +33,37 @@ build_finished()
 {
     echo "build finished"
     echo "please change IP under package.json file and then using 'npm run start' to start UI"
-    rm -f build.log
+    rm -f $LOG_FILE
 }
 
 
-yum install -y make nodejs npm patch gcc-c++ >& build.log
+yum install -y make nodejs npm patch gcc-c++ >& $LOG_FILE
 build_err $? "yum install"
 
 export NODE_TLS_REJECT_UNAUTHORIZED=0
-npm ci >& build.log
+npm ci >& $LOG_FILE
 build_err $? "install dependency"
 
 cd ..
 rm -rf node-sass
-git clone -b v5 --recursive https://github.com/sass/node-sass.git >& build.log
-build_err $? "Clone repo"
+git clone -b v5 --recursive https://github.com/sass/node-sass.git >& $LOG_FILE
+build_err $? "clone repo"
 
 cd node-sass
 cp ../A-Tune-UI/arm-support.patch .
-patch -p1 < arm-support.patch >& build.log
+patch -p1 < arm-support.patch >& $LOG_FILE
 build_err $? "apply patch"
 
 rm -f appveyor.yml
-npm i >& build.log
+npm i >& $LOG_FILE
 build_err $? "build node-sass"
 
-node scripts/build -f >& build.log
+node scripts/build -f >& $LOG_FILE
 build_err $? "compile node-sass"
-rm -f build.log
+rm -f $LOG_FILE
 
 cd ..
 mv node-sass A-Tune-UI/node_modules/
-rm -f build.log
+rm -f $LOG_FILE
 cd A-Tune-UI
 build_finished
