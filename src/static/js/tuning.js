@@ -55,7 +55,7 @@ export default {
                 this.optionCompare.splice();
                 for (var el in this.files) {
                     if (this.files[el].status === 'finished') {
-                        this.optionCompare.push(this.files[el].status);
+                        this.optionCompare.push(this.files[el].name);
                     }
                 }
             });

@@ -48,7 +48,7 @@ export default {
                 {colName: 'Variance', align: 'center', label: 'Variance', field: 'Variance'},
                 {colName: 'Standard Division', align: 'center',
                 label: 'Standard Division', field: 'Standard Division'}],
-            statisticPagination: {page: 1, rowsPerPage: 6},
+            statisticPagination: {page: 1, rowsPerPage: 5},
             detectResData: [],
             detectResColumns: [
                 {colName: 'Parameters', align: 'center', label: 'Parameters', field: 'Parameters'},
@@ -63,6 +63,11 @@ export default {
     methods: {
         closePopUp() {
             document.getElementById('popup-window').style.display = 'none';
+            var chart = echarts.init(document.getElementById('chart-container'));
+            var option = chart.getOption();
+            option.series = [];
+            option.xAxis[0].data = [];
+            chart.setOption(option, true);
         },
 
         closeDetectPopUp() {
@@ -94,7 +99,7 @@ export default {
                     container.style.display = 'none';
                 }
             }
-            deleteOldData(this.fileChartId, this.compareChartId);
+            deleteOldData(this.fileChartId, this.compareChartId, this.fileName);
             this.compareChartId.splice();
             var count = 1;
             for (var file in this.modelCompare) {
@@ -158,18 +163,20 @@ export default {
                                 var divId = res.data.table_header[el].split('.')[0];
                                 if (document.getElementById('div-' + divId) === null) {
                                     var container = document.getElementById('analysis-chart');
-                                    this.createDiv(container, divId, null, null);
+                                    this.createDiv(container, divId, null);
                                     this.compareChartId.push(divId);
                                 }
                                 initialParamChart('div-' + divId, res.data.table_header[el],
-                                    file, this.verticalDisplay);
+                                    this.verticalDisplay);
                                 this.compareChartId.push('chart-' + res.data.table_header[el]);
                             } else {
                                 addSeriesForChart('chart-' + res.data.table_header[el], file);
                             }
                         }
                     }
-                    updateParamChart(res.data.table_header, res.data.csv_data, fileNum, file);
+                    if (res.data.csv_data.length !== 0) {
+                        updateParamChart(res.data.table_header, res.data.csv_data, fileNum, file);
+                    }
                     if (res.data.hasNext) {
                         this.addCompareFileInfo(file, res.data.nextCsv, fileNum);
                     }
@@ -193,7 +200,7 @@ export default {
                     return;
                 }
                 if (csvLine === 0) {
-                    this.initialChart(res.data.table_header, this.fileName);
+                    this.initialChart(res.data.table_header);
                 }
                 if (res.data.workload !== undefined) {
                     document.getElementById('workload-type').style.display = 'block';
@@ -224,7 +231,7 @@ export default {
             });
         },
 
-        createDiv(dim, container, chart, fileName) {
+        createDiv(dim, container, chart) {
             var div = document.createElement('div');
             div.id = 'div-' + dim;
             container.appendChild(div);
@@ -236,25 +243,27 @@ export default {
             this.optionDim.push(dim);
             this.modelDim.push(dim);
             if (chart !== null) {
-                initialParamChart('div-' + dim, chart, fileName, this.verticalDisplay);
+                initialParamChart('div-' + dim, chart, this.verticalDisplay);
                 this.fileChartId.push('chart-' + chart);
             }
         },
 
-        initialChart(header, fileName) {
+        initialChart(header) {
             var container = document.getElementById('analysis-chart');
-            this.createDiv('CPU', container, 'CPU.STAT.util', fileName);
-            this.createDiv('STORAGE', container, 'STORAGE.STAT.util', fileName);
-            this.createDiv('NET', container, 'NET.STAT.ifutil', fileName);
-            this.createDiv('MEM', container, 'MEM.BANDWIDTH.Total_Util', fileName);
+            this.createDiv('CPU', container, 'CPU.STAT.util');
+            this.createDiv('STORAGE', container, 'STORAGE.STAT.util');
+            this.createDiv('NET', container, 'NET.STAT.ifutil');
+            this.createDiv('MEM', container, 'MEM.BANDWIDTH.Total_Util');
             for (var el in header) {
                 var dim = header[el].split('.')[0];
                 if (this.optionDim.indexOf(dim) <= -1) {
-                    this.createDiv(dim, container, null, fileName);
+                    this.createDiv(dim, container, null);
                 }
-                initialParamChart('div-' + dim, header[el], fileName, this.verticalDisplay);
-                if (this.fileChartId.indexOf('chart-' + header[el]) <= -1) {
-                    this.fileChartId.push('chart-' + header[el]);
+                var tempId = header[el].split('.', 4);
+                var chartId = tempId[0] + '.' + tempId[1] + '.' + tempId[2];
+                initialParamChart('div-' + dim, chartId, this.verticalDisplay);
+                if (this.fileChartId.indexOf('chart-' + chartId) <= -1) {
+                    this.fileChartId.push('chart-' + chartId);
                 }
             }
             this.onSubmit();
@@ -265,16 +274,10 @@ export default {
             var chartSmall = echarts.init(document.getElementById(id));
             var chartPopUp = echarts.init(document.getElementById('chart-container'));
             if (chartPopUp.getOption() !== undefined) {
-                var oldSeries = chartPopUp.getOption().series;
-                for (var i = 0; i < oldSeries.length; i++) {
-                    oldSeries[i].data = [];
-                    oldSeries[i].name = '';
-                    oldSeries[i] = {};
-                }
-                chartPopUp.setOption({
-                    xAxis: {data: []},
-                    series: oldSeries
-                });
+                var option = chartPopUp.getOption();
+                option.series = [];
+                option.xAxis[0].data = [];
+                chartPopUp.setOption(option, true);
             } else {
                 initialPopUp();
                 chartPopUp = echarts.init(document.getElementById('chart-container'));
@@ -326,7 +329,7 @@ export default {
     }
 };
 
-function initialParamChart(divId, param, fileName, vertical) {
+function initialParamChart(divId, param, vertical) {
     if (document.getElementById('chart-' + param) !== null) {
         return;
     }
@@ -344,11 +347,11 @@ function initialParamChart(divId, param, fileName, vertical) {
     };
     div.className = 'io-chart';
     container.appendChild(div);
-    var chart = initialEchart(div, param, fileName);
+    var chart = initialEchart(div, param);
     return chart;
 }
 
-function initialEchart(div, param, fileName) {
+function initialEchart(div, param) {
     var chart = echarts.init(document.getElementById(div.id));
     var option = {
         title: {
@@ -360,7 +363,6 @@ function initialEchart(div, param, fileName) {
             left: 'center',
             padding: [20, 0, 5, 0]
         },
-        color: ['#003366', '#e5323e', '#fcc565', '#db6eba'],
         tooltip: {
             trigger: 'axis',
             axisPointer: {
@@ -380,7 +382,8 @@ function initialEchart(div, param, fileName) {
             type: 'slider',
             show: true,
             xAxisIndex: [0],
-            left: '9%',
+            left: '5%',
+            right: '8%',
             bottom: -5,
             start: 0,
             end: 100
@@ -398,14 +401,7 @@ function initialEchart(div, param, fileName) {
             formatter: function (value) {
                 return getYAxis(value);
             }
-        },
-        series: [{
-            name: fileName,
-            type: 'line',
-            symbolSize: 5,
-            barGap: 0,
-            data: []
-        }]
+        }
     };
     chart.setOption(option);
     return chart;
@@ -413,56 +409,55 @@ function initialEchart(div, param, fileName) {
 
 function updateParamChart(header, data, fileNum, fileName) {
     for (var el in header) {
-        var chart = echarts.init(document.getElementById('chart-' + header[el]));
-        if (fileNum === 0) {
-            var oldData = chart.getOption().series[0].data;
-            var oldX = chart.getOption().xAxis[0].data;
-            var val = 1;
-            if (oldData.length !== 0) {
-                val = oldX[oldX.length - 1] + 1;
+        var tempId = header[el].split('.', 4);
+        var chartId = tempId[0] + '.' + tempId[1] + '.' + tempId[2];
+        var name = fileName;
+        if (tempId[3] !== undefined) {
+            name += '-' + tempId[3];
+        }
+        var chart = echarts.init(document.getElementById('chart-' + chartId));
+        var currSeries = chart.getOption().series;
+        var ind = 0;
+        for (; ind < currSeries.length; ind++) {
+            if (currSeries[ind].name === name) {
+                break;
             }
-            for (var i in data[el]) {
-                oldX.push(val);
-                oldData.push(data[el][i]);
-                val++;
-            }
-            chart.setOption({
-                xAxis: {data: oldX},
-                series: [{data: oldData}]
-            });
+        }
+        var yData = [];
+        var xAxis = chart.getOption().xAxis[0].data;
+        if (currSeries[ind] !== undefined) {
+            yData = currSeries[ind].data;
         } else {
-            var sery = 1;
-            var currSeries = chart.getOption().series;
-            for (i = 1; i < currSeries.length; i++) {
-                if (currSeries[i].name === fileName) {
-                    sery = i;
-                    break;
-                }
-            }
-            oldX = chart.getOption().xAxis[0].data;
-            oldData = chart.getOption().series[sery].data;
-            for (i in data[el]) {
-                if (oldX.length === oldData.length) {
-                    oldX.push(oldX.length + 1);
-                }
-                oldData.push(data[el][i]);
-            }
-            var newData = chart.getOption().series;
-            newData[sery].data = oldData;
-            chart.setOption({
-                xAxis: {data: oldX},
-                series: newData
+            currSeries.push({
+                type: 'line',
+                name: name,
+                symboleSize: 5,
+                barGap: 0,
+                data: []
             });
         }
+        for (var i in data[el]) {
+            yData.push(data[el][i]);
+        }
+        while (yData.length > xAxis.length) {
+            xAxis.push(xAxis.length + 1);
+        }
+        currSeries[ind].data = yData;
+        var option = chart.getOption();
+        option.xAxis[0].data = xAxis;
+        option.series = currSeries;
+        chart.setOption(option, true);
     }
 }
 
-function deleteOldData(fileChartId, compareChartId) {
+function deleteOldData(fileChartId, compareChartId, fileName) {
     for (var el in fileChartId) {
         var chart = echarts.init(document.getElementById(fileChartId[el]));
-        var oldSeries = chart.getOption().series;
         var option = chart.getOption();
-        for (var i = 1; i < oldSeries.length; i++) {
+        for (var i = option.series.length - 1; i >= 0; i--) {
+            if (option.series[i].name === fileName || option.series[i].name.startsWith(fileName + '-')) {
+                break;
+            }
             option.series[i] = undefined;
         }
         chart.setOption(option, true);
@@ -477,11 +472,8 @@ function deleteOldData(fileChartId, compareChartId) {
 
 function addSeriesForChart(id, fileName) {
     var chart = echarts.init(document.getElementById(id));
-    var newSeries = [];
-    for (var ser in chart.getOption().series) {
-        newSeries.push(chart.getOption().series[ser]);
-    }
-    newSeries.push({
+    var series = chart.getOption().series;
+    series.push({
         name: fileName,
         type: 'line',
         symbolSize: 5,
@@ -489,7 +481,7 @@ function addSeriesForChart(id, fileName) {
         data: []
     });
     chart.setOption({
-        series: newSeries
+        series: series
     });
 }
 
@@ -546,15 +538,18 @@ function getYAxis(value) {
 function initialPopUp() {
     var container = document.getElementById('chart-container');
     container.className = 'popup-chart';
-    var ret = initialEchart(container, '', '');
+    var ret = initialEchart(container, '');
     ret.setOption({
-        title: {textStyle: {fontSize: 25}, padding: [10, 0, 10, 0]}
+        title: {textStyle: {fontSize: 25}, padding: [10, 0, 10, 0]},
+        legend: {bottom: '10%', top: '6%', selectedMode: 'multiple', type: 'scroll',
+                orient: 'horizontal', padding: [20, 10, 0, 35]},
+        grid: {containLabel: true, top: 90, left: 30, right: 10, bottom: '10%'}
     });
 }
 
 function getAvgById(id) {
     var chart = echarts.init(document.getElementById(id));
-    if (chart === undefined) {
+    if (chart === undefined || chart.getOption().series.length === 0) {
         return 0;
     }
     var data = chart.getOption().series[0].data;

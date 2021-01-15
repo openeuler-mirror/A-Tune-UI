@@ -165,7 +165,23 @@ export default {
                 xAxis: {data: xAxisData},
                 series: {
                     data: yAxisData,
-                    barMaxWidth: 120
+                    barMaxWidth: 120,
+                    itemStyle: {
+                        normal: {
+                            label: {
+                                show: true,
+                                position: 'top',
+                                textStyle: {
+                                    fontSize: 14,
+                                    fontWeight: 700,
+                                    color: '#000'
+                                },
+                                formatter: function (value) {
+                                    return getPercentage(value.value);
+                                }
+                            }
+                        }
+                    }
                 }
             });
         },
@@ -451,4 +467,20 @@ function deleteOldData(compareChartId) {
         }
         chart.setOption(option, true);
     }
+}
+
+function getPercentage(value) {
+    var chart = echarts.init(document.getElementById('chart-hist'));
+    var series = chart.getOption().series[0];
+    if (series.data === null || series.data === undefined || value === series.data[0]) {
+        return 'baseline';
+    }
+    if (series.data[0] === 0) {
+        return '+' + value + '%';
+    }
+    var res = (value - series.data[0]) / series.data[0] * 100;
+    if (res === 0) {
+        return '0%';
+    }
+    return '+' + res.toFixed(3) + '%';
 }

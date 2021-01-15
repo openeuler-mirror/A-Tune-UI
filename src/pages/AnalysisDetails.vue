@@ -117,7 +117,6 @@
           :columns="statisticColumns"
           row-key="colName"
           :pagination.sync="statisticPagination"
-          :hide-pagination="true"
           style="max-height: 1154px"
         >
         </q-table>
