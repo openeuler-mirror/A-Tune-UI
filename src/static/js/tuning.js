@@ -13,7 +13,7 @@
  * Create: 2020-10-29
 */
 import axios from 'axios';
-import {host, port} from './utils.js';
+import {engineHost, enginePort} from './utils.js';
 
 export default {
     data() {
@@ -45,7 +45,7 @@ export default {
             if (uid === null || uid === '') {
                 return;
             }
-            const path = `http://${host}:${port}/v1/UI/tuning/initialPage`;
+            const path = `http://${engineHost}:${enginePort}/v1/UI/tuning/initialPage`;
             var params = {status: type, uid: uid};
             axios.get(path, {params: params}, {'Access-Control-Allow-Origin': '*'}).then((res) => {
                 if (typeof(res.data) === 'string') {
@@ -78,7 +78,7 @@ export default {
             } else if (this.newFileName === this.currFileName) {
                 document.getElementById('rename-error-same').style.display = 'block';
             } else {
-                const path = `http://${host}:${port}/v1/UI/tuning/rename`;
+                const path = `http://${engineHost}:${enginePort}/v1/UI/tuning/rename`;
                 var params = {name: this.currFileName, newName: this.newFileName};
                 axios.get(path, {params: params}, {'Access-Control-Allow-Origin': '*'}).then((res) => {
                     if (typeof(res.data) === 'string') {
@@ -101,7 +101,7 @@ export default {
         },
 
         initialTuningDetails(file) {
-            const path = `http://${host}:${port}/v1/UI/tuning/chooseFile`;
+            const path = `http://${engineHost}:${enginePort}/v1/UI/tuning/chooseFile`;
             var params = {status: file.status, name: file.name};
             axios.get(path, {params: params}, {'Access-Control-Allow-Origin': '*'}).then((res) => {
                 if (typeof(res.data) === 'string') {

@@ -14,7 +14,7 @@
 */
 import echarts from 'echarts';
 import axios from 'axios';
-import {host, port} from './utils.js';
+import {engineHost, enginePort} from './utils.js';
 
 export default {
     data() {
@@ -54,7 +54,7 @@ export default {
             } else if (this.newFileName === this.currFileName) {
                 document.getElementById('rename-error-same').style.display = 'block';
             } else {
-                const path = `http://${host}:${port}/v1/UI/analysis/rename`;
+                const path = `http://${engineHost}:${enginePort}/v1/UI/analysis/rename`;
                 var params = {name: this.currFileName, newName: this.newFileName};
                 axios.get(path, {params: params}, {'Access-Control-Allow-Origin': '*'}).then((res) => {
                     if (typeof(res.data) === 'string') {
@@ -81,7 +81,7 @@ export default {
             if (uid === null || uid === '') {
                 return;
             }
-            const path = `http://${host}:${port}/v1/UI/analysis/initialPage`;
+            const path = `http://${engineHost}:${enginePort}/v1/UI/analysis/initialPage`;
             var params = {uid, uid};
             axios.get(path, {params: params}, {'Access-Control-Allow-Origin': '*'}).then((res) => {
                 if (typeof(res.data) === 'string') {
@@ -102,7 +102,7 @@ export default {
             if (this.optionCompare.indexOf(file.name) > -1) {
                 this.optionCompare.splice(this.optionCompare.indexOf(file.name), 1);
             }
-            const path = `http://${host}:${port}/v1/UI/analysis/chooseFile`;
+            const path = `http://${engineHost}:${enginePort}/v1/UI/analysis/chooseFile`;
             var params = {name: file.name};
             axios.get(path, {params: params}, {'Access-Control-Allow-Origin': '*'}).then((res) => {
                 if (typeof(res.data) === 'string') {
