@@ -15,7 +15,7 @@
 
 import echarts from 'echarts';
 import axios from 'axios';
-import {deleteChild, host, port} from './utils.js';
+import {deleteChild, engineHost, enginePort} from './utils.js';
 
 export default {
     data() {
@@ -50,7 +50,7 @@ export default {
                     chart.setOption(option, true);
                 }
             }
-            const path = `http://${host}:${port}/v1/UI/tuning/compareWith`;
+            const path = `http://${engineHost}:${enginePort}/v1/UI/tuning/compareWith`;
             var params = {name: file, line: line};
             axios.get(path, {params: params}, {'Access-Control-Allow-Origin': '*'}).then((res) => {
                 if (typeof(res.data) === 'string') {
@@ -100,7 +100,7 @@ export default {
         },
 
         initialPage() {
-            const path = `http://${host}:${port}/v1/UI/tuning/initialChart`;
+            const path = `http://${engineHost}:${enginePort}/v1/UI/tuning/initialChart`;
             var params = {status: this.fileStatus, name: this.fileName};
             axios.get(path, {params: params}, {'Access-Control-Allow-Origin': '*'}).then((res) => {
                 if (typeof(res.data) === 'string') {
@@ -303,7 +303,7 @@ export default {
         },
 
         updateChart(res, line, stat) {
-            const path = `http://${host}:${port}/v1/UI/tuning/getTuningData`;
+            const path = `http://${engineHost}:${enginePort}/v1/UI/tuning/getTuningData`;
             var params = {status: res.data.status, name: res.data.file_name, line: line};
             axios.get(path, {params: params}, {'Access-Control-Allow-Origin': '*'}).then((res) => {
                 if (typeof(res.data) === 'string') {
@@ -346,7 +346,7 @@ export default {
         },
 
         findFile(filename, res, line) {
-            const path = `http://${host}:${port}/v1/UI/tuning/getTuningStatus`;
+            const path = `http://${engineHost}:${enginePort}/v1/UI/tuning/getTuningStatus`;
             var params = {name: filename};
             axios.get(path, {params: params}, {'Access-Control-Allow-Origin': '*'}).then((ret) => {
                 res.data = JSON.parse(res.data);
@@ -418,7 +418,7 @@ function updatePerformanceChart(name, times, value, fileName) {
         count++;
     }
     for (var i in times) {
-        if (count === 0) {
+        if (count === 0 || oldX.length - 1 < times[i]) {
             oldX.push(times[i]);
         }
         if (name === 'best evaluation') {
@@ -447,6 +447,7 @@ function updatePerformanceChart(name, times, value, fileName) {
         var oldSeries = chart.getOption().series;
         oldSeries[count].data = oldData;
         chart.setOption({
+            xAxis: {data: oldX},
             series: oldSeries
         });
     } else {
@@ -464,6 +465,9 @@ function deleteOldData(compareChartId) {
         var option = chart.getOption();
         for (var i = 1; i < oldSeries.length; i++) {
             option.series[i] = undefined;
+        }
+        while (option.series[0] !== undefined && option.xAxis[0].data.length > option.series[0].data.length) {
+            option.xAxis[0].data.pop();
         }
         chart.setOption(option, true);
     }

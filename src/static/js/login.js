@@ -12,7 +12,7 @@
  * See the Mulan PSL v2 for more details.
  * Create: 2020-12-21
 */
-import {host, port} from './utils.js';
+import {engineHost, enginePort} from './utils.js';
 import axios from 'axios';
 import crypto from 'crypto';
 
@@ -52,7 +52,7 @@ export default{
                 this.fakeLogin();
                 return;
             }
-            const path = `http://${host}:${port}/v1/UI/user/login`;
+            const path = `http://${engineHost}:${enginePort}/v1/UI/user/login`;
             var pwd = crypto.createHash('sha256').update(this.password).digest('base64');
             var params = {email: this.email, password: pwd};
             axios.get(path, {params: params}, {'Access-Control-Allow-Origin': '*'}).then((res) => {
@@ -74,7 +74,7 @@ export default{
         },
         checkSignup() {
             this.clearAll();
-            const path = `http://${host}:${port}/v1/UI/user/signup`;
+            const path = `http://${engineHost}:${enginePort}/v1/UI/user/signup`;
             var pwd = crypto.createHash('sha256').update(this.password).digest('base64');
             var params = {email: this.email, password: pwd, name: this.username};
             axios.get(path, {params: params}, {'Access-Control-Allow-Origin': '*'}).then((res) => {

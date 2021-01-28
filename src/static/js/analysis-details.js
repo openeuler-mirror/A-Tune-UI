@@ -15,7 +15,7 @@
 
 import echarts from 'echarts';
 import axios from 'axios';
-import {host, port, engineHost, enginePort} from './utils.js';
+import {engineHost, enginePort} from './utils.js';
 
 export default {
     data() {
@@ -145,7 +145,7 @@ export default {
         },
 
         addCompareFileInfo(file, line, fileNum) {
-            const path = `http://${host}:${port}/v1/UI/analysis/compareWith`;
+            const path = `http://${engineHost}:${enginePort}/v1/UI/analysis/compareWith`;
             var params = {name: file, csvLine: line};
             axios.get(path, {params: params}, {'Access-Control-Allow-Origin': '*'}).then((res) => {
                 if (typeof(res.data) === 'string') {
@@ -185,7 +185,7 @@ export default {
         },
 
         initialDetailInfo(file, csvLine, logLine) {
-            const path = `http://${host}:${port}/v1/UI/analysis/getAnalysisData`;
+            const path = `http://${engineHost}:${enginePort}/v1/UI/analysis/getAnalysisData`;
             var params = {name: file, csvLine: csvLine, logLine: logLine};
             axios.get(path, {params: params}, {'Access-Control-Allow-Origin': '*'}).then((res) => {
                 if (typeof(res.data) === 'string') {
@@ -460,11 +460,14 @@ function deleteOldData(fileChartId, compareChartId, fileName) {
             }
             option.series[i] = undefined;
         }
+        while (option.series[0] !== undefined && option.xAxis[0].data.length > option.series[0].data.length) {
+            option.xAxis[0].data.pop();
+        }
         chart.setOption(option, true);
     }
     for (var e in compareChartId) {
         var element = document.getElementById(compareChartId[e]);
-        if (element !== undefined) {
+        if (element !== undefined && element != null) {
             element.remove();
         }
     }
@@ -472,17 +475,15 @@ function deleteOldData(fileChartId, compareChartId, fileName) {
 
 function addSeriesForChart(id, fileName) {
     var chart = echarts.init(document.getElementById(id));
-    var series = chart.getOption().series;
-    series.push({
+    var option = chart.getOption();
+    option.series.push({
         name: fileName,
         type: 'line',
         symbolSize: 5,
         barGap: 0,
         data: []
     });
-    chart.setOption({
-        series: series
-    });
+    chart.setOption(option, true);
 }
 
 function getTotal(list) {
