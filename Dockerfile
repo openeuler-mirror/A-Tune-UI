@@ -14,8 +14,6 @@ FROM node:10-alpine
 
 ENV ENG_HOST=localhost
 ENV ENG_PORT=3838
-ENV DATA_HOST=localhost
-ENV DATA_PORT=5000
 
 RUN apk add --no-cache git && \
     git -c http.sslVerify=false clone https://gitee.com/openeuler/A-Tune-UI.git && \
@@ -29,6 +27,4 @@ RUN sed -i 's/quasar dev -H localhost/quasar dev -H 0.0.0.0/g' A-Tune-UI/package
 
 CMD sed -i "s/ENGINE_HOST/$ENG_HOST/g" A-Tune-UI/src/static/js/utils.js && \
     sed -i "s/ENGINE_PORT/$ENG_PORT/g" A-Tune-UI/src/static/js/utils.js && \
-    sed -i "s/HOST/$DATA_HOST/g" A-Tune-UI/src/static/js/utils.js && \
-    sed -i "s/PORT/$DATA_PORT/g" A-Tune-UI/src/static/js/utils.js && \
     cd A-Tune-UI && npm run start
