@@ -91,11 +91,11 @@
 
           <q-item to="/profile" clickable v-ripple v-if="loginSuccess">
             <q-item-section avatar>
-              <q-icon name="analytics" />
+              <q-icon name="person" />
             </q-item-section>
 
             <q-item-section>
-              Analysis
+              Profile
             </q-item-section>
           </q-item>
 
