@@ -37,7 +37,9 @@ export default{
         },
         displayRegist() {
             this.clearAll();
+            this.resetLogin();
             this.signUp = !this.signUp;
+            document.getElementById('initial').style.display = 'none';
             if (this.signUp) {
                 document.getElementById('login').style.display = 'none';
                 document.getElementById('signup').style.display = 'block';
@@ -46,12 +48,62 @@ export default{
                 document.getElementById('signup').style.display = 'none';
             }
         },
+        resetLogin() {
+            this.email = '';
+            this.username = '';
+            this.password = '';
+            this.$refs.emailInput.resetValidation();
+            this.$refs.nameInput.resetValidation();
+            this.$refs.pwdInput.resetValidation();
+        },
+        initialLoginPage() {
+            const path = `http://${engineHost}:${enginePort}/v1/UI/user/initialPage`;
+            axios.get(path, {'Access-Control-Allow-Origin': '*'}).then((res) => {
+                if (typeof(res.data) === 'string') {
+                    res.data = JSON.parse(res.data);
+                }
+                localStorage.setItem('connectDB', res.data.connectDB);
+                if (res.data.connectDB) {
+                    document.getElementById('signup').style.display = 'none';
+                    if (!res.data.hasUser) {
+                        document.getElementById('admin-create-error').style.display = 'none';
+                        document.getElementById('initial').style.display = 'block';
+                        document.getElementById('login').style.display = 'none';
+                    } else {
+                        document.getElementById('login').style.display = 'block';
+                        document.getElementById('initial').style.display = 'none';
+                    }
+                } else {
+                    this.$router.push({
+                        path: '/index',
+                        name: 'Index'
+                    });
+                }
+            });
+        },
+        createAdmin() {
+            document.getElementById('admin-create-error').style.display = 'none';
+            const path = `http://${engineHost}:${enginePort}/v1/UI/user/createAdmin`;
+            var params = {password: crypto.createHash('sha256').update(this.password).digest('base64')};
+            axios.get(path, {params: params}, {'Access-Control-Allow-Origin': '*'}).then((res) => {
+                if (typeof(res.data) === 'string') {
+                    res.data = JSON.parse(res.data);
+                }
+                if (res.data.success) {
+                    this.$q.notify('Create Admin Account Successfully!');
+                    this.signUp = true;
+                    this.displayRegist();
+                } else if (res.data.reason === 'duplicate') {
+                    this.$q.notify('Admin Account Already Exists');
+                    this.signUp = true;
+                    this.displayRegist();
+                } else if (res.data.reason === 'failed') {
+                    document.getElementById('admin-create-error').style.display = 'block';
+                }
+            });
+        },
         checkLogin() {
             this.clearAll();
-            if (this.email === 'admin' && this.password === 'admin') {
-                this.fakeLogin();
-                return;
-            }
             const path = `http://${engineHost}:${enginePort}/v1/UI/user/login`;
             var pwd = crypto.createHash('sha256').update(this.password).digest('base64');
             var params = {email: this.email, password: pwd};
@@ -82,21 +134,13 @@ export default{
                     res.data = JSON.parse(res.data);
                 }
                 if (res.data.signup) {
-                    this.$q.notify('Registration successful');
+                    this.$q.notify('Create Account Successfully');
                     this.displayRegist();
                 } else if (res.data.duplicate) {
                     document.getElementById('signup-email-dup-error').style.display = 'block';
                 } else {
                     document.getElementById('signup-create-error').style.display = 'block';
                 }
-            });
-        },
-        fakeLogin() {
-            localStorage.setItem('userId', 0);
-            localStorage.setItem('userName', 'admin');
-            this.$router.push({
-                path: '/index',
-                name: 'Index'
             });
         }
     },
@@ -106,6 +150,8 @@ export default{
                 path: '/index',
                 name: 'Index'
             });
+        } else {
+            this.initialLoginPage();
         }
     }
 };
