@@ -32,7 +32,11 @@ build_err()
 build_finished()
 {
     echo "build finished"
-    echo "please change IP under package.json file and then using 'npm run start' to start UI"
+    val=`hostname -I|awk -F ' ' '{print $1}'`
+    echo "If $val is your current ip, build finished"
+    echo "Otherwise, please change IP under package.json file line 10 to current ip."
+    echo "============="
+    echo "You can use command 'npm run start' to start UI"
     rm -f $LOG_FILE
 }
 
@@ -66,4 +70,7 @@ cd ..
 mv node-sass A-Tune-UI/node_modules/
 rm -f $LOG_FILE
 cd A-Tune-UI
+
+val=`hostname -I|awk -F ' ' '{print $1}'
+sed -i "10s/localhost/$val/" package.json
 build_finished
