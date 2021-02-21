@@ -170,7 +170,7 @@ export default {
     }
   },
   created() {
-    if (localStorage.getItem('userName') !== null && localStorage.getItem('userId') !== null) {
+    if ((localStorage.getItem('userName') !== null && localStorage.getItem('userId') !== null) || localStorage.getItem('connectDB') === 'false') {
         this.loginSuccess = true;
     }
   }

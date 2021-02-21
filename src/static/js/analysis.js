@@ -78,9 +78,6 @@ export default {
         getAnalysisList() {
             this.optionCompare = [];
             var uid = localStorage.getItem('userId');
-            if (uid === null || uid === '') {
-                return;
-            }
             const path = `http://${engineHost}:${enginePort}/v1/UI/analysis/initialPage`;
             var params = {uid, uid};
             axios.get(path, {params: params}, {'Access-Control-Allow-Origin': '*'}).then((res) => {
@@ -126,7 +123,7 @@ export default {
         },
     },
     created() {
-        if (localStorage.getItem('userId') === null) {
+        if (localStorage.getItem('userId') === null && localStorage.getItem('connectDB') !== 'false') {
             this.$router.push({
                 path: '/index',
                 name: 'Index'
