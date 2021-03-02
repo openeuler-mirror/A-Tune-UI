@@ -26,6 +26,14 @@ Before installing, you should add openeuler-everything to your yum repo:
 ```bash
 sh install.sh
 ```
+
+This script will clone node-sass from gitee by default, user can change the url of node-sass package by themselves:
+```bash
+sh install.sh [git_url]
+# for example, you can use github url to clone code
+# sh install.sh https://github.com/sass/node-sass.git
+```
+
 > If shell end with error, please follow the install manual
 
 

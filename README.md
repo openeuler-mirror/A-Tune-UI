@@ -26,7 +26,14 @@ A-Tune-UI是作用于A-Tune的可视化web界面，需要搭配[A-Tune](https://
 ```bash
 sh install.sh
 ```
-如果安装失败，请参考手动安装。
+
+自动化脚本默认从gitee拉取node-sass依赖仓的代码，用户可以自行更换拉取地址（如替换为github仓地址），具体运行方法如下：
+```bash
+sh install.sh [git_url]
+# 例：sh install.sh https://github.com/sass/node-sass.git
+```
+
+> 如果安装失败，请参考手动安装。
 
 
 #### 2-2、手动安装

@@ -40,6 +40,7 @@ build_finished()
     rm -f $LOG_FILE
 }
 
+url=$1
 
 yum install -y make nodejs npm patch gcc-c++ >& $LOG_FILE
 build_err $? "yum install"
@@ -50,7 +51,10 @@ build_err $? "install dependency"
 
 cd ..
 rm -rf node-sass
-git clone -b v5 --recursive https://github.com/sass/node-sass.git >& $LOG_FILE
+if [ -z "$url" ]; then
+    url=https://gitee.com/mirrors/node-sass.git
+fi
+git clone -b v5 --recursive $url >& $LOG_FILE
 build_err $? "clone repo"
 
 cd node-sass
