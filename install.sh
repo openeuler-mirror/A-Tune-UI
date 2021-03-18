@@ -75,6 +75,6 @@ mv node-sass A-Tune-UI/node_modules/
 rm -f $LOG_FILE
 cd A-Tune-UI
 
-val=`hostname -I|awk -F ' ' '{print $1}'
+val=`hostname -I|awk -F ' ' '{print $1}'`
 sed -i "10s/localhost/$val/" package.json
 build_finished
