@@ -95,7 +95,7 @@ sed -i "10s/-H .*/-H [YOUR_IP]\"/" package.json
 ```shell
 # 请将[YOUR_ENGINE_HOST]和[YOUR_ENGINE_PORT]替换为具体ip和端口号
 sed -i "s/ENGINE_HOST/[YOUR_ENGINE_HOST]/g" src/static/js/utils.js
-sed -i "s/ENGINE_HOST/[YOUR_ENGINE_PORT]/g" src/static/js/utils.js
+sed -i "s/ENGINE_PORT/[YOUR_ENGINE_PORT]/g" src/static/js/utils.js
 ```
 
 **步骤 6**   运行。
