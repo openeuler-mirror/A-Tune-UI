@@ -8,7 +8,7 @@ English | [简体中文](./README.md)
 
 ## Installation & Usage
 
-### Approach #1: Install and use locally
+### Approach 1: Install and use locally
 
 #### 1. Prepare
 
@@ -84,7 +84,7 @@ This command will return the URL of the web page.
 
 Note: This project is in the development phase. If you encounter any problem during installation or running, locate the problem by referring to section 4 "FAQs" in the [A-Tune-UI Operation Guide](./Documentation/A-Tune-UI操作指南.md). If the problem persists, submit an issue in the code repository.
 
-### Approach #2: Install and use the docker image
+### Approach 2: Install and use the docker image
 
 #### 1. Prepare
 
