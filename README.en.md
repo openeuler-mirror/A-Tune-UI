@@ -2,42 +2,42 @@ English | [简体中文](./README.md)
 
 ## Introduction
 
-**A-Tune-UI** is a Web project relys on [A-Tune](https://gitee.com/openeuler/A-Tune), support for openEuler-20.09 or higher version.
+**A-Tune-UI** is a web project that relies on [A-Tune](https://gitee.com/openeuler/A-Tune). It supports openEuler-20.09 or later.
 
 
 
 ## Installation & Usage
 
-### Approach #1: Install and use locally
+### Approach 1: Install and use locally
 
 #### 1. Prepare
 
-Please remind that some required packages for UI such as nodejs and npm can only find in openeuler-everything.iso.  
-Before installing, you should add openeuler-everything to your yum repo:  
+Some packages required for the UI, such as **nodejs** and **npm**, can only be found in **openeuler-everything.iso**.  
+Before the installation, add **openeuler-everything** to your Yum repo:  
 
-1. Open [openeuler.org](https://openeuler.org/en/), click download, then go to corresponding iso.   
-2. Click `everything`, then choose architecture (`x86_64/aarch64`), the page address should be yum repo url.  
-3. Setting yum repo using url.  
+1. Open [openeuler.org](https://openeuler.org/en/) and choose **Download** > **Software Packages**. On the page that is displayed, locate the desired image source and click **Download**.   
+2. Click **everything** and click the desired architecture (`x86_64/aarch64`). The page address is the Yum repo URL.  
+3. Configure the Yum repo using the URL.  
 
-#### 2. Installation
+#### 2. Install
 
-#### 2-1. Install using shell script
+#### 2-1. Install using the shell script
 
 ```bash
 sh install.sh
 ```
 
-This script will clone node-sass from gitee by default, user can change the url of node-sass package by themselves:
+This script will clone node-sass from Gitee by default. Users can change the URL of the node-sass package by themselves.
 ```bash
 sh install.sh [git_url]
-# for example, you can use github url to clone code
+# For example, you can use the GitHub URL to clone code.
 # sh install.sh https://github.com/sass/node-sass.git
 ```
 
-> If shell end with error, please follow the install manual
+If the installation fails, install it manually.
 
 
-#### 2-2. Install using manual 
+#### 2-2. Install manually
 
 ##### 1) Install dependent system software packages
 
@@ -50,7 +50,7 @@ yum install -y npm nodejs gcc-c++ make patch
 ```bash
 npm ci
 ```
-##### 3) Compile node-sass package
+##### 3) Compile the node-sass package
 
 ```bash
 git clone -b v5 --recursive https://github.com/sass/node-sass.git
@@ -68,51 +68,52 @@ mv node-sass A-Tune-UI/node_modules
 
 #### 3. (Optional) Change the IP address
 
-If your web page will not open in localhost, please follow this step to change your web IP address.
+If your web page does not open in the local host, change your web IP address as follows:
 
 ```bash
 hostname -I  # To get host IP
 ```
-Then open 'package.json' file, swap 'localhost' to your host IP in line 10.
+Open the **package.json** file and replace **localhost** with your host IP address in line 10.
 
-#### 4. Running
+#### 4. Run
 
 ```bash
 npm run start
 ```
-This command will return url for web page.
+This command will return the URL of the web page.
 
+Note: This project is in the development phase. If you encounter any problem during installation or running, locate the problem by referring to section 4 "FAQs" in the [A-Tune-UI Operation Guide](./Documentation/A-Tune-UI操作指南.md). If the problem persists, submit an issue in the code repository.
 
-### Approach #2: Installing and using docker image
+### Approach 2: Install and use the docker image
 
 #### 1. Prepare
 
-Before installing, make sure docker and wget tools have already been installed (no need to get all code, just get the Dockerfile):
+Before installation, make sure Docker and wget tools have already been installed: (You do not need to get all code. Just get the Dockerfile.)
 ```bash
 yum install -y docker wget
 wget https://gitee.com/openeuler/A-Tune-UI/Dockerfile
 ```
 
-#### 2. Generate docker image
+#### 2. Generate the Docker image
 
 ```bash
 docker build --network=host -t atune-ui:latest .
 ```
 
-#### 3. Running
+#### 3. Run
 
 ```bash
 docker run -p <local_ip>:<local_port>:8080 -e ENG_HOST=<engine-host> -e ENG_PORT=<engine-port> atune-ui
 ```
 
-Notes:
-- 'local_ip' should be your ip address and 'local_port' should be port that not been used. After running, you can open web page by using url: http://<local_ip>:<local_port>.
-- 'engine-host' and 'engine-port' are same as ip and port info you set in A-Tune engine.cnf file.
+Note:
+- **local_ip** should be your IP address and **local_port** should be a port that has not been used. After running, you can open the web page by using the URL: http://<local_ip>:<local_port>.
+- **engine-host** and **engine-port** are the same as the IP address and port information you set in the A-Tune engine.cnf file.
 
-> Note: If A-Tune is not running, you can still get the web page but has no data on your page.
+> Note: If A-Tune is not running, you can still get the web page but there is no data on your page.
 
 
-## Relate Information
+## Related Information
 
 ##### A-Tune
 A-Tune project: https://gitee.com/openeuler/A-Tune
