@@ -1,0 +1,28 @@
+.col-module-a {
+  background: url(../assets/home/banner-background.png) no-repeat;
+}
+.col-module-b {
+  background-color: #f5f6f8;
+}
+.col-module-c {
+  background: url(../assets/home/background.png) no-repeat;
+}
+.col-module-d {
+  background-color: #2c3554;
+}
+.row .introduce {
+  margin: 43px 7px;
+  background: #fff;
+  border: 1px solid #fff;
+  border-radius: 3px;
+  box-shadow: 1px 4px 6px 5px #dae2f0;
+  background: url(../assets/home/card-background.png) no-repeat;
+}
+.introduce-text {
+  font-size: 14px;
+  color: #222222;
+}
+.q-table th,
+.q-table td {
+  padding: 7px 10px;
+}

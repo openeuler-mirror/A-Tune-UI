@@ -1,0 +1,55 @@
+.btn-grp button {
+  background-color: #fff;
+  border: 1px solid #cccccc;
+  padding: 0px;
+  height: 32px;
+  width: 85px;
+  border-radius: 0px;
+  cursor: pointer;
+  margin: 32px 0px 32px 0px;
+}
+
+.btn-grp:after {
+  content: "";
+  clear: both;
+  display: table;
+}
+.btn-grp button:not(:last-child) {
+  border-right: none;
+}
+
+.btn-grp button:hover {
+  background-color: #3781de;
+  color: #fff;
+  border: 1px solid #3781de;
+}
+.container {
+  height: 70px;
+  width: 300px;
+  margin-top: 32px;
+  margin-right: 32px;
+}
+.parent {
+  position: absolute;
+}
+.search {
+  width: 300px;
+  height: 32px;
+  border-radius: 18px;
+  outline: none;
+  border: 1px solid #ccc;
+  padding-left: 20px;
+}
+.btn {
+  height: 35px;
+  width: 35px;
+  position: absolute;
+  background: url("../assets/layout/search-1.png") no-repeat;
+  top: 4px;
+  left: 265px;
+  border: none;
+  cursor: pointer;
+}
+.btn:hover{
+  background: url("../assets/layout/search-2.png") no-repeat;
+}

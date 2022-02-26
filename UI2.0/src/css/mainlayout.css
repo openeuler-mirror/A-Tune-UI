@@ -1,0 +1,26 @@
+.q-toolbar {
+  padding: 16px 0px;
+}
+.button-group {
+  position: absolute;
+  right: 0%;
+  /* background-color: antiquewhite; */
+}
+.search-input {
+  border-radius: 20px;
+  height: 32px;
+  border: 1px solid #cccccc;
+  padding-left: 10px;
+  display: none;
+  outline: none;
+}
+.search-img {
+  background: url(../assets/layout/search-1.png) no-repeat;
+  width: 24px;
+  height: 24px;
+  margin-right: 24px;
+  margin-top: 5px;
+}
+.search-img:hover {
+  background: url(../assets/layout/search-2.png) no-repeat;
+}
