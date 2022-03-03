@@ -1,0 +1,39 @@
+.q-toolbar {
+    padding: 16px 0px;
+  }
+  .menu-group {
+    text-align: center;
+  }
+  .menu-btn {
+    color: #222222;
+    font-size: 16px;
+    margin: 0px 24px;
+    padding: 0px;
+    height: 48px;
+    border: 0px;
+    background-color: #ffffff;
+    border-radius: 0px;
+  }
+  .menu-btn:hover {
+    color: #3781de;
+    background-color: #ffffff;
+    border-bottom: 2px solid #3781de;
+  }
+  .search-input {
+    border-radius: 20px;
+    height: 32px;
+    border: 1px solid #cccccc;
+    padding-left: 10px;
+    display: none;
+    outline: none;
+  }
+  .search-img {
+    background: url(../assets/layout/search-1.png) no-repeat;
+    width: 24px;
+    height: 24px;
+    margin-right: 24px;
+    margin-top: 3px;
+  }
+  .search-img:hover {
+    background: url(../assets/layout/search-2.png) no-repeat;
+  }
