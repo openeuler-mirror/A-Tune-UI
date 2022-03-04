@@ -56,7 +56,27 @@ const routes = [
       { path: '', component: () => import('pages/Contact-us.vue') }
     ]
   },
-
+  {
+    path: '/personal',
+    component: () => import('layouts/UserLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/Personal.vue') }
+    ]
+  },
+  {
+    path: '/offline',
+    component: () => import('layouts/UserLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/Offline-tuning.vue') }
+    ]
+  },
+  {
+    path: '/online',
+    component: () => import('layouts/UserLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/Online-tuning.vue') }
+    ]
+  },
   // Always leave this as last one,
   // but you can also remove it
   {

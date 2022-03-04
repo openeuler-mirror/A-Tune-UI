@@ -1,7 +1,7 @@
 <template>
   <q-page>
     <div class="row" style="width: 1920px; background-color: #f1f2f6">
-      <div class="col-12 col-mod-a" style="width: 1920px; height:108px;">
+      <div class="col-12 col-mod-a" style="width: 1920px; height: 108px">
         <div style="padding-left: 204px; float: left">
           <div
             style="
@@ -142,17 +142,24 @@
             <div style="float: left">
               <button class="new-command-btn">新建命令</button>
             </div>
-            <div style="overflow: auto; width: 1356px; height: 400px">
+            <div
+              style="
+                overflow-y: auto;
+                overflow-x: hidden;
+                width: 1356px;
+                height: 400px;
+              "
+            >
               <table class="task-list">
                 <tr>
-                  <th style="padding-left: 24px">序号</th>
-                  <th style="padding-left: 13px">
+                  <th style="padding-left: 24px; width: 90px">序号</th>
+                  <th style="padding-left: 13px; width: 150px">
                     <a style="margin-right: 8px">|</a>任务名称
                   </th>
-                  <th style="padding-left: 13px">
+                  <th style="padding-left: 13px; width: 150px">
                     <a style="margin-right: 8px">|</a>IP地址
                   </th>
-                  <th style="padding-left: 13px">
+                  <th style="padding-left: 13px; width: 150px">
                     <a style="margin-right: 8px">|</a>命令
                     <q-icon
                       name="help"
@@ -168,51 +175,31 @@
                     </q-icon>
                     <!-- <img src="../assets/默认-帮助.png" /> -->
                   </th>
-                  <th style="padding-left: 13px">
+                  <th style="padding-left: 13px; width: 150px">
                     <a style="margin-right: 8px">|</a>任务状态
                     <img src="../assets/control-panel/filter-default.png" />
                   </th>
-                  <th style="padding-left: 13px">
+                  <th style="padding-left: 13px; width: 180px">
                     <a style="margin-right: 8px">|</a>开始时间
                     <q-icon
                       name="unfold_more"
                       style="font-size: 17px; margin-left: 2px"
                     ></q-icon>
                   </th>
-                  <th style="padding-left: 13px; width: 150px">
+                  <th style="padding-left: 13px; width: 100px">
                     <a style="margin-right: 8px">|</a>操作
                   </th>
                 </tr>
                 <tr>
                   <td>1</td>
-                  <td>
-                    <q-icon name="edit"></q-icon>Test1
-                    <!-- <input
-                      class="input-Taskname"
-                      type="text"
-                      placeholder="输入任务名称"
-                      style="
-                        outline: none;
-                        border-radius: 4px;
-                        border: 1px solid #cccccc;
-                        padding-left: 16px;
-                        height:32px;
-                      "
-                    /> -->
-                  </td>
+                  <td><q-icon name="edit"></q-icon>Test1</td>
                   <td>9.10.33.13</td>
                   <td style="color: #559ff8">在线调优</td>
                   <td>
                     <div class="row">
                       <div
-                        style="
-                          border-radius: 4px;
-                          margin-right: 8px;
-                          margin-top: 6px;
-                          width: 8px;
-                          height: 8px;
-                          background-color: #3781de;
-                        "
+                        class="state-icon"
+                        style="background-color: #3781de"
                       ></div>
                       <div>运行中</div>
                     </div>
@@ -231,14 +218,8 @@
                   <td>
                     <div class="row">
                       <div
-                        style="
-                          border-radius: 4px;
-                          margin-right: 8px;
-                          margin-top: 6px;
-                          width: 8px;
-                          height: 8px;
-                          background-color: #5ce59d;
-                        "
+                        class="state-icon"
+                        style="background-color: #5ce59d"
                       ></div>
                       <div>已完成</div>
                     </div>
@@ -257,14 +238,8 @@
                   <td>
                     <div class="row">
                       <div
-                        style="
-                          border-radius: 4px;
-                          margin-right: 8px;
-                          margin-top: 6px;
-                          width: 8px;
-                          height: 8px;
-                          background-color: #f8a758;
-                        "
+                        class="state-icon"
+                        style="background-color: #f8a758"
                       ></div>
                       <div>失败</div>
                     </div>
@@ -283,14 +258,8 @@
                   <td>
                     <div class="row">
                       <div
-                        style="
-                          border-radius: 4px;
-                          margin-right: 8px;
-                          margin-top: 6px;
-                          width: 8px;
-                          height: 8px;
-                          background-color: #3781de;
-                        "
+                        class="state-icon"
+                        style="background-color: #3781de"
                       ></div>
                       <div>运行中</div>
                     </div>
@@ -309,14 +278,8 @@
                   <td>
                     <div class="row">
                       <div
-                        style="
-                          border-radius: 4px;
-                          margin-right: 8px;
-                          margin-top: 6px;
-                          width: 8px;
-                          height: 8px;
-                          background-color: #5ce59d;
-                        "
+                        class="state-icon"
+                        style="background-color: #5ce59d"
                       ></div>
                       <div>已完成</div>
                     </div>
@@ -335,14 +298,8 @@
                   <td>
                     <div class="row">
                       <div
-                        style="
-                          border-radius: 4px;
-                          margin-right: 8px;
-                          margin-top: 6px;
-                          width: 8px;
-                          height: 8px;
-                          background-color: #f8a758;
-                        "
+                        class="state-icon"
+                        style="background-color: #f8a758"
                       ></div>
                       <div>失败</div>
                     </div>
@@ -361,14 +318,8 @@
                   <td>
                     <div class="row">
                       <div
-                        style="
-                          border-radius: 4px;
-                          margin-right: 8px;
-                          margin-top: 6px;
-                          width: 8px;
-                          height: 8px;
-                          background-color: #3781de;
-                        "
+                        class="state-icon"
+                        style="background-color: #3781de"
                       ></div>
                       <div>运行中</div>
                     </div>
@@ -387,14 +338,8 @@
                   <td>
                     <div class="row">
                       <div
-                        style="
-                          border-radius: 4px;
-                          margin-right: 8px;
-                          margin-top: 6px;
-                          width: 8px;
-                          height: 8px;
-                          background-color: #5ce59d;
-                        "
+                        class="state-icon"
+                        style="background-color: #5ce59d"
                       ></div>
                       <div>已完成</div>
                     </div>
@@ -413,14 +358,8 @@
                   <td>
                     <div class="row">
                       <div
-                        style="
-                          border-radius: 4px;
-                          margin-right: 8px;
-                          margin-top: 6px;
-                          width: 8px;
-                          height: 8px;
-                          background-color: #f8a758;
-                        "
+                        class="state-icon"
+                        style="background-color: #f8a758"
                       ></div>
                       <div>失败</div>
                     </div>
@@ -439,14 +378,8 @@
                   <td>
                     <div class="row">
                       <div
-                        style="
-                          border-radius: 4px;
-                          margin-right: 8px;
-                          margin-top: 6px;
-                          width: 8px;
-                          height: 8px;
-                          background-color: #3781de;
-                        "
+                        class="state-icon"
+                        style="background-color: #3781de"
                       ></div>
                       <div>运行中</div>
                     </div>
@@ -465,14 +398,8 @@
                   <td>
                     <div class="row">
                       <div
-                        style="
-                          border-radius: 4px;
-                          margin-right: 8px;
-                          margin-top: 6px;
-                          width: 8px;
-                          height: 8px;
-                          background-color: #5ce59d;
-                        "
+                        class="state-icon"
+                        style="background-color: #5ce59d"
                       ></div>
                       <div>已完成</div>
                     </div>
@@ -491,14 +418,8 @@
                   <td>
                     <div class="row">
                       <div
-                        style="
-                          border-radius: 4px;
-                          margin-right: 8px;
-                          margin-top: 6px;
-                          width: 8px;
-                          height: 8px;
-                          background-color: #f8a758;
-                        "
+                        class="state-icon"
+                        style="background-color: #f8a758"
                       ></div>
                       <div>失败</div>
                     </div>
@@ -774,7 +695,6 @@
           </div>
         </div>
       </div>
-
       <!-- 第四栏 -->
       <div
         class="col-12 col-module row"

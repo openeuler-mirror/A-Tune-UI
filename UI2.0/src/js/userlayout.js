@@ -44,20 +44,18 @@ export default defineComponent({
         path: "/login",
       });
     },
+    onPersonalClick() {
+      this.$router.push({
+        path: "/personal",
+      });
+    },
     showSearchInput() {
       document.getElementById("search-input").style.display = "block";
     },
   },
-
   setup() {
-    // const leftDrawerOpen = ref(false);
-
-    return {
-      // essentialLinks: linksList,
-      // leftDrawerOpen,
-      // toggleLeftDrawer() {
-      //   leftDrawerOpen.value = !leftDrawerOpen.value;
-      // },
+     return {
+     
     };
   },
 });

@@ -75,7 +75,6 @@
               </button>
             </div>
           </div>
-
           <!-- 第二行 -->
           <div id="click-mode" style="display: block">
             <div class="row" style="margin-left: 248px">
@@ -143,7 +142,6 @@
               </div>
             </div>
           </div>
-
           <!-- 第三行 -->
           <div class="row">
             <a
@@ -231,7 +229,6 @@
                 placeholder="请输入"
               />
             </div>
-
             <!-- 第六行 -->
             <div class="row">
               <input
