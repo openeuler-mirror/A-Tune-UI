@@ -209,7 +209,8 @@
             "
             >具体部署方法请参考</span
           >
-          <a href="http://gitee.com/openeuler/A-Tune/blob/master/README.md"
+          <a
+            href="http://gitee.com/openeuler/A-Tune/blob/master/README.md"
             style="
               font-size: 14px;
               color: #3781de;

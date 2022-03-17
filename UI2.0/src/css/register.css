@@ -1,0 +1,16 @@
+.col-mod-a {
+  background-color: #f1f2f6;
+}
+.login-Interface {
+  height: 300px;
+  width: 200px;
+  background-color: #fff;
+  border-radius: 3px;
+  box-shadow: 2px 2px 5px 2px #c2d9f8;
+  margin: 40px 80px;
+}
+.register-card {
+  width: 400px;
+  height: 440px;
+  margin: 180px 250px;
+}

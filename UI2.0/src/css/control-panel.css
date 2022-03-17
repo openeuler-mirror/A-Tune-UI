@@ -27,7 +27,6 @@
 .control-add-a:hover,
 .control-add-b:hover {
   background: url(../assets/control-panel/add-highlight.png) no-repeat;
-  /* background-color: antiquewhite; */
 }
 .control-delete {
   background: url(../assets/control-panel/delete-default.png) no-repeat;
@@ -51,7 +50,6 @@
   border-radius: 4px;
   padding: 0;
 }
-
 .task-list {
   width: 1310px;
   margin: 0px 32px;
@@ -81,7 +79,6 @@
   padding: 1px 0px;
   margin: 0px 16px 0px 0px;
 }
-
 .rate-table {
   margin: 0px 32px;
   width: 388px;
@@ -111,7 +108,7 @@
   display: none;
   position: absolute;
   top: 35%;
-  left: 30%;
+  left: 38%;
   width: 472px;
   height: 440px;
   border: 1px solid #fff;
@@ -160,11 +157,9 @@ ul.pagination {
   padding: 0;
   margin: 0;
 }
-
 ul.pagination li {
   display: inline;
 }
-
 ul.pagination li a {
   color: black;
   float: left;
@@ -172,12 +167,10 @@ ul.pagination li a {
   text-decoration: none;
   border-radius: 4px;
 }
-
 ul.pagination li a.active {
   background-color: #3781de;
   color: white;
 }
-
 ul.pagination li a:hover:not(.active) {
   background-color: #ddd;
 }
@@ -214,7 +207,8 @@ ul.pagination li a:hover:not(.active) {
   background-color: #fff;
   padding: 0;
 }
-.card-button:hover {
+.card-button:hover,
+.card-button:focus {
   color: #3781de;
 }
 .input-Taskname::-webkit-input-placeholder {
@@ -243,4 +237,11 @@ ul.pagination li a:hover:not(.active) {
 ::-webkit-scrollbar-thumb {
   border-radius: 10px;
   background: #cccccc;
+}
+.state-icon {
+  border-radius: 4px;
+  margin-right: 8px;
+  margin-top: 6px;
+  width: 8px;
+  height: 8px;
 }

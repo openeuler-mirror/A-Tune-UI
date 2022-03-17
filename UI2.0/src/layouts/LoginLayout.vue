@@ -12,31 +12,21 @@
         <div class="button-group">
           <q-btn
             flat
-            style="color: #222222; font-size: 14px; margin: 0px; padding: 0px 24px; height: 32px"
+            style="
+              color: #222222;
+              font-size: 16px;
+              margin: 0px;
+              padding: 0px 24px;
+              height: 32px;
+            "
             label="首页"
             size="sm"
             @click="onMainClick"
           ></q-btn>
-          <q-btn-dropdown
-            flat
-            round
-            style="color: #222222; font-size: 14px; padding: 0px; margin: 0px 32px 0px 0px"
-            label="简体中文"
-          >
-            <q-list>
-              <q-item clickable v-close-popup @click="onItemClick">
-                <q-item-section>
-                  <q-item-label style="font-size: 12px">简体中文</q-item-label>
-                </q-item-section>
-              </q-item>
-
-              <q-item clickable v-close-popup @click="onItemClick">
-                <q-item-section>
-                  <q-item-label style="font-size: 12px">英文</q-item-label>
-                </q-item-section>
-              </q-item>
-            </q-list>
-          </q-btn-dropdown>
+          <select class="select-lang">
+            <option selected>简体中文</option>
+            <option>English</option>
+          </select>
         </div>
       </q-toolbar>
     </q-header>
@@ -46,32 +36,8 @@
   </q-layout>
 </template>
 
-<script>
-import { defineComponent, ref } from "vue";
+<script src="../js/loginlayout.js" language="JavaScript" type="text/javascript"></script>
 
-export default defineComponent({
-  name: "LoginLayout",
-
-  components: {},
-
-  methods: {
-    onItemClick() {
-      // console.log('Clicked on an Item')
-    },
-    onMainClick() {
-      this.$router.push({
-        path: "/",
-      });
-    },
-  },
-
-  setup() {},
-});
-</script>
-
-<style>
-.button-group {
-  position: absolute;
-  right: 0%;
-}
+<style scoped>
+@import "../css/loginlayout.css";
 </style>

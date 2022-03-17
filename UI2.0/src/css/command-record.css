@@ -6,9 +6,8 @@
   width: 85px;
   border-radius: 0px;
   cursor: pointer;
-  margin: 32px 0px 32px 0px;
+  margin: 32px 0px 16px 0px;
 }
-
 .btn-grp:after {
   content: "";
   clear: both;
@@ -17,14 +16,13 @@
 .btn-grp button:not(:last-child) {
   border-right: none;
 }
-
-.btn-grp button:hover {
+.btn-grp button:hover,
+.btn-grp button:focus {
   background-color: #3781de;
   color: #fff;
   border: 1px solid #3781de;
 }
 .container {
-  height: 70px;
   width: 300px;
   margin-top: 32px;
   margin-right: 32px;
@@ -35,10 +33,13 @@
 .search {
   width: 300px;
   height: 32px;
-  border-radius: 18px;
+  border-radius: 4px;
   outline: none;
   border: 1px solid #ccc;
   padding-left: 20px;
+}
+.search::-webkit-input-placeholder {
+  color: #cccccc;
 }
 .btn {
   height: 35px;
@@ -50,6 +51,87 @@
   border: none;
   cursor: pointer;
 }
-.btn:hover{
+.btn:hover {
   background: url("../assets/layout/search-2.png") no-repeat;
+}
+.record-list {
+  width: 1792px;
+  margin: 0px 32px;
+  border-collapse: collapse;
+}
+.record-list td {
+  font-size: 14px;
+  border-bottom: 1px solid #cfcfcf;
+  height: 48px;
+  padding-left: 24px;
+}
+.record-list th {
+  font-size: 14px;
+  text-align: left;
+  background-color: #f5f5f5;
+  color: #bcbcbc;
+  height: 32px;
+}
+.record-list img {
+  margin-left: 8px;
+}
+ul.pagination {
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+}
+ul.pagination li {
+  display: inline;
+}
+ul.pagination li a {
+  color: black;
+  float: left;
+  padding: 5px 12px;
+  text-decoration: none;
+  border-radius: 4px;
+}
+ul.pagination li a.active {
+  background-color: #3781de;
+  color: white;
+}
+ul.pagination li a:hover:not(.active) {
+  background-color: #ddd;
+}
+ul.pagination li a.active {
+  background-color: #3781de;
+  color: white;
+}
+ul.pagination li a:hover:not(.active) {
+  background-color: #ddd;
+}
+.select_page {
+  width: 90px;
+  height: 32px;
+  margin-right: 32px;
+  border: 1px solid #e6e6e6;
+  border-radius: 4px;
+  outline: none;
+}
+.state-icon {
+  border-radius: 4px;
+  margin-right: 8px;
+  margin-top: 6px;
+  width: 8px;
+  height: 8px;
+}
+.table-button {
+  background-color: #fff;
+  border: none;
+  color: #3781de;
+  font-size: 14px;
+  padding: 1px 0px;
+  margin: 0px 16px 0px 0px;
+  cursor: pointer;
+}
+.record-list > tr > td > input {
+  border: 0;
+  outline: none;
+}
+.record-list > tr > td > input::-webkit-input-placeholder {
+  color: #bcbcbc;
 }

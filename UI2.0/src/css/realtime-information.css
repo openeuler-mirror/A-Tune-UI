@@ -1,0 +1,62 @@
+.model-realtime {
+  justify-content: flex-start;
+  width: 1920px;
+  background-color: #f1f2f6;
+}
+.model-realtime > a {
+  color: #222222;
+  font-size: 20px;
+  margin: 24px 0px 16px 32px;
+  font-weight: bold;
+}
+.model-realtime-a {
+  margin: 0px 32px 16px 32px;
+  background-color: #ffffff;
+}
+.select-first {
+  margin: 0px 32px 32px 16px;
+  padding: 0px 16px;
+  height: 32px;
+  width: 200px;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  color: #222222;
+  font-size: 14px;
+  outline: none;
+}
+.control-delete {
+  background: url(../assets/control-panel/delete-default.png) no-repeat;
+  width: 24px;
+  height: 24px;
+  margin: 39px 8px 0px 0px;
+}
+.control-delete:hover {
+  background: url(../assets/control-panel/delete-highlight.png) no-repeat;
+}
+.picture-alignment {
+  justify-content: space-between;
+}
+.title {
+  color: #222222;
+  font-size: 20px;
+  margin-left: 32px;
+  margin-top: 32px;
+  margin-bottom: 24px;
+  font-weight: bold;
+}
+.module-size {
+  width: 436px;
+  height: 300px;
+  border: 2px solid #e6e6e6;
+  margin-right: 16px;
+}
+.echarts-element {
+  margin-right: 16px;
+  width: 452px;
+  height: 262px;
+  margin-top: -44px;
+}
+.echarts-model {
+  margin: 0px 32px 32px 32px;
+  background-color: #ffffff;
+}

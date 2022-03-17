@@ -4,7 +4,6 @@
 .button-group {
   position: absolute;
   right: 0%;
-  /* background-color: antiquewhite; */
 }
 .search-input {
   border-radius: 20px;
@@ -23,4 +22,12 @@
 }
 .search-img:hover {
   background: url(../assets/layout/search-2.png) no-repeat;
+}
+.select-lang {
+  height: 32px;
+  outline: none;
+  border: 0;
+  font-size: 16px;
+  color: #222222;
+  margin-top: 4px;
 }
