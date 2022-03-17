@@ -77,6 +77,13 @@ const routes = [
       { path: '', component: () => import('pages/Online-tuning.vue') }
     ]
   },
+  {
+    path: '/about',
+    component: () => import('layouts/UserLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/About-A-Tune.vue') }
+    ]
+  },
   // Always leave this as last one,
   // but you can also remove it
   {

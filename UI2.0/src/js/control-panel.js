@@ -53,7 +53,7 @@ export default defineComponent({
           color: "#999999",
           padding: [0, 0, 0, -21],
         },
-        nameGap: 15, //kb/s与坐标轴的距离
+        nameGap: 15, //"kb/s"与坐标轴的距离
         type: "value",
         max: 60,
         min: 0,

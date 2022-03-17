@@ -11,14 +11,8 @@
         <!-- <q-toolbar-title class="text-dark"> A-Tune </q-toolbar-title> -->
         <div class="button-group">
           <q-btn
+            class="btn-loginlayout"
             flat
-            style="
-              color: #222222;
-              font-size: 16px;
-              margin: 0px;
-              padding: 0px 24px;
-              height: 32px;
-            "
             label="首页"
             size="sm"
             @click="onMainClick"

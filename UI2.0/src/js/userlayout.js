@@ -14,6 +14,11 @@ export default defineComponent({
         path: "/",
       });
     },
+    onAboutClick() {
+      this.$router.push({
+        path: "/about",
+      });
+    },
     onContactClick() {
       this.$router.push({
         path: "/contact",

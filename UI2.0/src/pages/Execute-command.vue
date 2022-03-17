@@ -328,7 +328,7 @@
           </div>
           <!-- 第十行 -->
           <div style="z-index: auto; position: absolute; margin-top: 10px">
-            <button
+            <!-- <button
               style="
                 height: 32px;
                 width: 32px;
@@ -344,10 +344,24 @@
                 name="fullscreen"
                 style="font-size: 28px; color: #999999"
               ></q-icon>
-            </button>
+            </button> -->
+            <q-btn
+              @click="toggle"
+              :icon="$q.fullscreen.isActive ? 'fullscreen_exit' : 'fullscreen'"
+              style="
+                height: 32px;
+                width: 32px;
+                padding: 0px;
+                margin: 5px 20px 0px 1760px;
+                background-color: #fff;
+                box-shadow: 4px 4px 3px #e6e6e6;
+                border: none;
+                border-radius: 4px;
+              "
+            />
           </div>
           <div class="textbox-div">
-            <textarea class="command-textbox" readonly="readonly">
+            <textarea id="command-textbox" class="command-textbox" readonly="readonly">
 Iroot@localhost   atuned-adm-info
 Inco rrect Isage
 NAME

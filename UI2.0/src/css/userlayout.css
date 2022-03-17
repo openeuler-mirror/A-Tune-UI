@@ -13,6 +13,7 @@
   border: 0px;
   background-color: #ffffff;
   border-radius: 0px;
+  cursor: pointer;
 }
 .menu-btn:hover,
 .menu-btn:focus {
