@@ -25,7 +25,9 @@
           <button class="menu-btn" label="联系我们" @click="onContactClick">
             联系我们
           </button>
-          <button class="menu-btn" label="关于A-Tune">关于A-Tune</button>
+          <button class="menu-btn" label="关于A-Tune" @click="onAboutClick">
+            关于A-Tune
+          </button>
         </div>
         <div>
           <div class="row">

@@ -29,5 +29,19 @@ export default defineComponent({
       document.getElementById("tunning-select").style.display = "block";
       document.getElementById("add-parameter-1").style.display = "none";
     },
+    toggle () {
+      // const target = e.target.parentNode.parentNode.parentNode
+      const target = document.getElementById("command-textbox")
+
+      this.$q.fullscreen.toggle(target)
+        .then(() => {
+          // success!
+        })
+        .catch((err) => {
+          alert(err)
+          // uh, oh, error!!
+          // console.error(err)
+        })
+    },
   },
 });
