@@ -581,11 +581,12 @@
                 margin-top: 32px;
                 margin-bottom: 24px;
                 font-weight: bold;
+                z-index: 1;
               "
             >
               运行中的任务列表
             </div>
-            <div class="control-delete"></div>
+            <div class="control-delete" style="z-index: 1"></div>
           </div>
           <div
             id="main1"
