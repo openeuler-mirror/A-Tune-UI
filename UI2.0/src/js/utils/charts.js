@@ -6,7 +6,8 @@ const colorList = [
   ['#F7A757', '#F7DA4B', '#BF6E1D', '#B39812', '#8C4500', '#806A00'],
   ['#F75757', '#F757A8', '#BF1D1D', '#BF1D6F', '#8C0000', '#8C0047'],
   ['#9966FF', '#F757F7', '#5E29CC', '#BF1DBF', '#320099', '#8C008C'],
-  ['#5CE5E5', '#5CE59D', '#24B3B3', '#24B367', '#008080', '#00803C']];
+  ['#5CE5E5', '#5CE59D', '#24B3B3', '#24B367', '#008080', '#00803C'],
+  ['#559FF8', '#5CE55C', '#F7A757', '#F75757', '#9966FF', '#5CE5E5']];
 
 function getColorGroup(colors) {
   if (colors.toLowerCase() === "cpu") {
@@ -27,7 +28,10 @@ function getColorGroup(colors) {
   if (colors.toLowerCase() === "system") {
     return colorList[5];
   }
-  return colorList[utils.getRandomInt(0, 7)];
+  if (colors.toLowerCase() === "tuning") {
+    return colorList[6];
+  }
+  return colorList[utils.getRandomInt(0, 6)];
 }
 
 function addLegend(legend, names) {
@@ -87,6 +91,19 @@ function addBarSeries(series, names) {
     };
     series.push(barInfo);
   });
+
+  if (names.length === 0) {
+    let barInfo = {
+      "data": [],
+      "type": "bar",
+      "barWidth": 10,
+      "barGap": "50%",
+      "itemStyle": {
+        "borderRadius": [10, 10, 10, 10],
+      },
+    };
+    series.push(barInfo);
+  }
   return series;
 }
 
@@ -293,6 +310,45 @@ export function initPieChart(chart, pieText, pieSubtext, seriesName, colors) {
   chart.setOption(pieOption);
 }
 
+export function initCircleChart(chart, cirText, type) {
+  let cirOption = {
+    title: {
+      text: cirText + "%",
+      left: 'center',
+      top: 75,
+      subtext: type.toUpperCase(),
+    },
+    series: [
+      {
+        type: 'pie',
+        radius: ['50%', '70%'],
+        center: ['50%', '50%'],
+        data: [
+          { value: 100 - cirText,
+            itemStyle: { color: '#f1f1f1' }
+          },
+          { value: cirText,
+            itemStyle: { color: getColorGroup(type)[0] }
+          },
+        ],
+        label: {
+          show: false,
+        },
+        itemStyle: {
+          borderWidth: 6,
+          borderColor: '#fff'
+        },
+        animationType: 'scale',
+        animationEasing: 'elasticOut',
+        animationDelay: function (idx) {
+          return Math.random() * 200;
+        }
+      }
+    ],
+  };
+  chart.setOption(cirOption);
+}
+
 function appendChartData(type, chart, newXData, yName, newYData) {
   let xData = chart.getOption().xAxis[0].data;
   xData = xData.concat(newXData);
@@ -355,6 +411,38 @@ export function appendPieChart(pieChart, pieNames, pieValues) {
   });
 }
 
+function appendTuningEvalData(series, yData, i, j) {
+  if (yData[i].length === 2) {
+    series[j]["data"][0] = yData[i][0];
+    series[j]["data"][1] = yData[i][1];
+    return;
+  }
+  series[j]["data"][0] = 0;
+  series[j]["data"][1] = yData[i][0];
+}
+
+export function updateTuningEvalData(chart, yName, yData) {
+  let series = chart.getOption().series;
+  for (let i = 0; i < yName.length; i++) {
+    let getY = false;
+    for (let j = 0; j < series.length; j++) {
+      if (series[j]["name"] === yName[i]) {
+        getY = true;
+        appendTuningEvalData(series, yData, i, j);
+        break;
+      }
+    }
+    if (!getY) {
+      series = addBarSeries(series, [yName[i]]);
+      appendTuningEvalData(series, yData, i, series.length - 1);
+    }
+  }
+
+  chart.setOption({
+    series: series,
+  });
+}
+
 export function deleteChartData(chart, delYName) {
   let yData = deleteSeries(chart.getOption().series, delYName);
   let legend = deleteLegend(chart.getOption().legend, delYName);
@@ -396,4 +484,13 @@ export function deletePieChart(pieChart, pieNames) {
   pieChart.setOption({
     series: newSeries,
   });
+}
+
+export function addOptions(chart, sec, ind, value) {
+  let options = chart.getOption();
+  if (ind === -1)
+    Object.assign(options[sec], value);
+  else
+    Object.assign(options[sec][ind], value);
+  chart.setOption(options);
 }
