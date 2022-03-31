@@ -269,7 +269,7 @@
                 </td>
                 <td>D:\Ccde\mkcert</td>
                 <td>UTF-8</td>
-                <td><button class="table-button">删除</button></td>
+                <td><button class="operation-btn">删除</button></td>
               </tr>
               <tr>
                 <td style="text-align: center; padding-left: 0px">
@@ -277,7 +277,7 @@
                 </td>
                 <td>D:\Ccde\python3</td>
                 <td>UTF-8</td>
-                <td><button class="table-button">删除</button></td>
+                <td><button class="operation-btn">删除</button></td>
               </tr>
             </table>
             <!-- 第八行 -->
@@ -384,5 +384,5 @@ Iroot@localhost~] #atune-adm list
 
 <style scoped>
 @import "../css/execute-command.css";
+@import "../css/common.css";
 </style>
-    

@@ -112,22 +112,6 @@ ul.pagination li a:hover:not(.active) {
   border-radius: 4px;
   outline: none;
 }
-.state-icon {
-  border-radius: 4px;
-  margin-right: 8px;
-  margin-top: 6px;
-  width: 8px;
-  height: 8px;
-}
-.table-button {
-  background-color: #fff;
-  border: none;
-  color: #3781de;
-  font-size: 14px;
-  padding: 1px 0px;
-  margin: 0px 16px 0px 0px;
-  cursor: pointer;
-}
 .record-list > tr > td > input {
   border: 0;
   outline: none;

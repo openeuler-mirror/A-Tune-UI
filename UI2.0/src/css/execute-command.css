@@ -68,14 +68,6 @@
 .please-input::-webkit-input-placeholder {
   color: #cccccc;
 }
-.table-button {
-  background-color: #fff;
-  border: none;
-  color: #3781de;
-  font-size: 14px;
-  padding: 1px 0px;
-  margin: 0px 16px 0px 0px;
-}
 .selectfile-table {
   border-collapse: collapse;
   margin-left: 248px;

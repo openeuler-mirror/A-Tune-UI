@@ -1,0 +1,85 @@
+.bg-white {
+  background-color: #ffffff;
+}
+.space-btw {
+  justify-content: space-between;
+}
+
+.main-bg-style {
+  justify-content: flex-start;
+  width: 1920px;
+  background-color: #f1f2f6;
+}
+
+/* btn */
+.confirm-btn {
+  background: #3781de;
+  color: white;
+  font-size: 14px;
+  margin-right: 32px;
+  margin-bottom: 16px;
+  margin-top: 32px;
+  height: 32px;
+  width: 90px;
+  border: none;
+  border-radius: 4px;
+  padding: 0;
+}
+.cancel-btn {
+  background: #fff;
+  font-size: 14px;
+  margin-right: 32px;
+  margin-bottom: 16px;
+  margin-top: 32px;
+  height: 32px;
+  width: 90px;
+  border-radius: 4px;
+  border: 1px solid #cfcfcf;
+  padding: 0;
+}
+.operation-btn {
+  background-color: #fff;
+  border: none;
+  color: #3781de;
+  font-size: 14px;
+  padding: 1px 0px;
+  margin: 0px 16px 0px 0px;
+  cursor: pointer;
+}
+
+.state-icon {
+  border-radius: 4px;
+  margin-right: 8px;
+  margin-top: 6px;
+  width: 8px;
+  height: 8px;
+}
+.state-icon-finish {
+  background-color: #5ce59d;
+}
+.state-icon-running {
+  background-color: #3781de;
+}
+.state-icon-failed {
+  background-color: #f8a758;
+}
+
+/* pic */
+.delete-pic {
+  background: url(../assets/common/delete-default.png) no-repeat;
+  width: 24px;
+  height: 24px;
+  margin: 39px 32px 0 0;
+}
+.delete-pic:hover {
+  background: url(../assets/common/delete-highlight.png) no-repeat;
+}
+.close-pic {
+  height: 24px;
+  width: 24px;
+  margin-top: 18px;
+  background: url(../assets/common/close-default.png) no-repeat;
+}
+.close-pic:hover {
+  background: url(../assets/common/close-highlight.png) no-repeat;
+}

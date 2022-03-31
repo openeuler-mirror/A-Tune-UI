@@ -21,8 +21,18 @@ export default defineComponent({
       document.getElementById("history").style.display = "block";
     },
     addCardColumn() {
-      document.getElementById("add-cardcolumn").style.display = "block";
+      if (document.getElementById("cards-column-1").style.display === "block") {
+        document.getElementById("cards-column-2").style.display = "block";
+        document.getElementById("add-card-column").style.display = "none";
+      } else {
+        document.getElementById("cards-column-1").style.display = "block";
+      }
     },
+    onCommandClick() {
+      this.$router.push({
+        path: "/command",
+      });
+    }
   },
   mounted() {
     var echarts = require("echarts");
@@ -37,7 +47,7 @@ export default defineComponent({
     charts.initBarChart(myChart2, "", "", ["test1", "test2"], "STORage");
     charts.appendBarChartData(myChart2, [6, 7, 8, 9, 10 ,11], ["test1", "test2", "test3"], [[10, 11, 12, 13, 7, 5], [1, 2, 3, 4], [5, 4, 6, 7]]);
     charts.deleteChartData(myChart2, ["test3"]);
-    
+
     charts.initPieChart(myChart3, "text", "subtext", "seriesName",  "PERF");
     charts.appendPieChart(myChart3, ["test1", "test2", "Test1"], [500, 100, 100]);
     charts.deletePieChart(myChart3, ["test1", "Test2"]);

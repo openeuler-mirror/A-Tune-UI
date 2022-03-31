@@ -25,13 +25,13 @@
   outline: none;
 }
 .control-delete {
-  background: url(../assets/control-panel/delete-default.png) no-repeat;
+  background: url(../assets/common/delete-default.png) no-repeat;
   width: 24px;
   height: 24px;
   margin: 39px 8px 0px 0px;
 }
 .control-delete:hover {
-  background: url(../assets/control-panel/delete-highlight.png) no-repeat;
+  background: url(../assets/common/delete-highlight.png) no-repeat;
 }
 .picture-alignment {
   justify-content: space-between;
