@@ -1,90 +1,90 @@
-.col-mod-a {
-  width: 1856px;
+/* column info */
+#col-info-mod {
+  width: 1920px;
   height: 108px;
   margin-left: 32px;
   margin-top: 16px;
   margin-bottom: 16px;
   background: url(../assets/control-panel/card.png) no-repeat;
 }
-.col-mod {
+
+#col-info-left-text {
+  color: #1d68c4;
+  font-size: 20px;
+  margin-bottom: 8px;
+  padding-top: 32px;
+}
+#col-info-left-subtext {
+  color: #1d68c4;
+  font-size: 14px;
+  padding-bottom: 32px
+}
+
+.col-info-right-ti {
+  color: #e6e6e6;
+  font-size: 14px;
+  margin-bottom: 8px;
+  margin-right: 48px;
+}
+.col-info-right-num {
+  font-size: 24px;
+  margin-right: 48px;
+}
+
+
+/* column table */
+#col-table-mod {
+  height: 580px;
+  width: 1856px;
+  margin: 0 32px 16px 32px;
   background-color: #f1f2f6;
 }
-.control-add-a {
-  background: url(../assets/control-panel/add-default.png) no-repeat;
-  width: 24px;
-  height: 24px;
-  margin-top: 134px;
-  margin-left: 214px;
-  cursor: pointer;
+#col-table-left {
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 1356px;
+  height: 400px;
 }
-.control-add-b {
-  background: url(../assets/control-panel/add-default.png) no-repeat;
-  width: 24px;
-  height: 24px;
-  float: left;
-  cursor: pointer;
+.col-table-hyper-color {
+  color: #559ff8;
 }
-.control-add-a:hover,
-.control-add-b:hover {
-  background: url(../assets/control-panel/add-highlight.png) no-repeat;
-}
-.control-delete {
-  background: url(../assets/control-panel/delete-default.png) no-repeat;
-  width: 24px;
-  height: 24px;
-  margin: 39px 32px 0px 0px;
-}
-.control-delete:hover {
-  background: url(../assets/control-panel/delete-highlight.png) no-repeat;
-}
-.new-command-btn {
-  background: #3781de;
-  color: white;
-  font-size: 14px;
-  margin-right: 32px;
-  margin-bottom: 16px;
-  margin-top: 32px;
-  height: 32px;
-  width: 90px;
-  border: none;
-  border-radius: 4px;
-  padding: 0;
-}
-.task-list {
+
+.task-table {
   width: 1310px;
-  margin: 0px 32px;
+  margin: 0 32px;
   border-collapse: collapse;
 }
-.task-list td {
+.task-table th {
+  font-size: 14px;
+  padding-left: 13px;
+  text-align: left;
+  background-color: #f5f5f5;
+  color: #bcbcbc;
+  width: 90px;
+  height: 32px;
+}
+.task-table td {
   font-size: 14px;
   border-bottom: 1px solid #cfcfcf;
   height: 48px;
   padding-left: 24px;
 }
-.task-list th {
-  font-size: 14px;
-  text-align: left;
-  background-color: #f5f5f5;
-  color: #bcbcbc;
-  height: 32px;
+.task-table a {
+  margin-right: 8px;
 }
-.task-list img {
-  margin-left: 8px;
+.task-table img {
+  font-size: 17px;
+  margin-left: 2px;
+  vertical-align: middle;
 }
-.table-button {
-  background-color: #fff;
-  border: none;
-  color: #3781de;
-  font-size: 14px;
-  padding: 1px 0px;
-  margin: 0px 16px 0px 0px;
-}
+
 .rate-table {
-  margin: 0px 32px;
+  margin: 0 32px;
   width: 388px;
   border-collapse: collapse;
 }
 .rate-table th {
+  padding-left: 13px;
   font-size: 14px;
   text-align: left;
   background-color: #f5f5f5;
@@ -98,60 +98,16 @@
   padding-left: 24px;
 }
 .rate-table img {
-  margin: 7px 0px;
+  margin: 7px 0;
+}
+.rate-table a {
+  margin-right: 8px;
 }
 .rate-column {
   padding-right: 24px;
   text-align: right;
 }
-.pop-win {
-  display: none;
-  position: absolute;
-  top: 35%;
-  left: 38%;
-  width: 472px;
-  height: 440px;
-  border: 1px solid #fff;
-  background-color: white;
-  overflow: auto;
-  border-radius: 4px;
-}
-.black_overlay {
-  display: none;
-  position: absolute;
-  top: 0%;
-  left: 0%;
-  width: 100%;
-  height: 100%;
-  background-color: rgb(185, 184, 184);
-  opacity: 0.5;
-}
-.select-model {
-  margin-left: 32px;
-  justify-content: space-between;
-  margin-bottom: 16px;
-}
-.select-tip {
-  color: #222222;
-  font-size: 14px;
-  padding-top: 6px;
-}
-.select_type {
-  width: 316px;
-  height: 32px;
-  float: right;
-  margin-right: 32px;
-  border: 1px solid #e6e6e6;
-  border-radius: 4px;
-}
-.select_page {
-  width: 90px;
-  height: 32px;
-  margin-right: 32px;
-  border: 1px solid #e6e6e6;
-  border-radius: 4px;
-  outline: none;
-}
+
 ul.pagination {
   display: inline-block;
   padding: 0;
@@ -174,55 +130,176 @@ ul.pagination li a.active {
 ul.pagination li a:hover:not(.active) {
   background-color: #ddd;
 }
-.button-add-chart-no {
-  background: #fff;
-  font-size: 14px;
-  border-radius: 4px;
-  border: 1px solid #cfcfcf;
-  width: 96px;
-  height: 32px;
-  margin: 8px 8px 24px 0px;
+
+
+/* column chart */
+#col-chart-mod {
+  height: 300px;
+  width: 1856px;
+  margin: 0 32px 16px 32px;
 }
-.button-add-chart-yes {
-  background: #3781de;
-  color: white;
-  font-size: 14px;
-  border: 0;
-  border-radius: 4px;
-  width: 96px;
-  height: 32px;
-  margin: 8px 0px 24px 0px;
+.widget-chart-div {
+  margin-right: 16px;
+  width: 452px;
+  height: 300px;
 }
-.close-card {
-  height: 24px;
+
+.line-chart {
+  width: 452px;
+  height: 297px;
+  margin-top: -50px;
+}
+.bar-chart {
+  width: 452px;
+  height: 272px;
+  margin-top: -25px;
+}
+.circle-chart {
+  margin-right: 16px;
+  width: 452px;
+  height: 298px;
+  margin-top: -55px;
+}
+
+/* add chart */
+.add-chart-icon {
+  background: url(../assets/control-panel/add-default.png) no-repeat;
   width: 24px;
-  margin-top: 18px;
-  background: url(../assets/control-panel/close-default.png) no-repeat;
+  height: 24px;
+  margin-top: 134px;
+  margin-left: 214px;
+  cursor: pointer;
 }
-.close-card:hover {
-  background: url(../assets/control-panel/close-highlight.png) no-repeat;
-}
-.card-button {
-  border: 0;
-  background-color: #fff;
-  padding: 0;
-}
-.card-button:hover,
-.card-button:focus {
-  color: #3781de;
-}
-.input-Taskname::-webkit-input-placeholder {
-  color: #cccccc;
-}
-.add-chart {
+.add-chart-btn {
   color: #999999;
   font-size: 14px;
-  margin: 16px 198px 0px 190px;
-  background-color: #fff;
+  margin: 16px 198px 0 190px;
   border: 0;
   width: 70px;
   cursor: pointer;
 }
+
+/* add card */
+.add-card-div {
+  height: 300px;
+  width: 1856px;
+  margin: 0 32px 16px 32px;
+}
+.add-card-icon {
+  background: url(../assets/control-panel/add-default.png) no-repeat;
+  width: 24px;
+  height: 24px;
+  float: left;
+  cursor: pointer;
+}
+.add-card-btn {
+  float: left;
+  color: #999999;
+  font-size: 14px;
+  margin-top: 3px;
+  margin-left: 16px;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+#add-card-column {
+  height: 80px;
+  width: 1856px;
+  margin: 0 32px 16px 32px;
+}
+
+
+/* common */
+.text-title {
+  color: #222222;
+  font-size: 20px;
+  margin-left: 32px;
+  margin-top: 32px;
+  margin-bottom: 24px;
+  font-weight: bold;
+}
+.add-chart-icon:hover,
+.add-card-icon:hover {
+  background: url(../assets/control-panel/add-highlight.png) no-repeat;
+}
+
+
+/* pop up window */
+.black_overlay {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(185, 184, 184);
+  opacity: 0.5;
+}
+.popup-win {
+  display: none;
+  position: fixed;
+  top: 30%;
+  left: 38%;
+  width: 472px;
+  height: 440px;
+  border: 1px solid #ffffff;
+  background-color: white;
+  overflow: auto;
+  border-radius: 4px;
+}
+#popup-title {
+  color: #222222;
+  font-size: 20px;
+  padding: 14px 0 8px 14px;
+}
+.popup-card-button {
+  border: 0;
+  background-color: #fff;
+  padding: 0;
+}
+.popup-card-button:hover,
+.popup-card-button:focus {
+  color: #3781de;
+}
+.popup-btn {
+  position: absolute;
+  bottom: 16px;
+  left: 28%;
+}
+
+.select-model {
+  margin-left: 32px;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.select-tip {
+  color: #222222;
+  font-size: 14px;
+  padding-top: 6px;
+}
+.select_type {
+  width: 316px;
+  height: 32px;
+  float: right;
+  margin-right: 32px;
+  padding-left: 16px;
+  border: 1px solid #e6e6e6;
+  border-radius: 4px;
+}
+.select_page {
+  width: 90px;
+  height: 32px;
+  margin-right: 32px;
+  border: 1px solid #e6e6e6;
+  border-radius: 4px;
+  outline: none;
+}
+
+
+.input-Taskname::-webkit-input-placeholder {
+  color: #cccccc;
+}
+
 /* 设置滚动条的样式 */
 ::-webkit-scrollbar {
   width: 12px;
@@ -237,11 +314,4 @@ ul.pagination li a:hover:not(.active) {
 ::-webkit-scrollbar-thumb {
   border-radius: 10px;
   background: #cccccc;
-}
-.state-icon {
-  border-radius: 4px;
-  margin-right: 8px;
-  margin-top: 6px;
-  width: 8px;
-  height: 8px;
 }

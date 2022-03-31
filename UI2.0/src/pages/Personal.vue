@@ -64,7 +64,7 @@
             <td>9.10.33.13</td>
             <td><input class="remarks" placeholder="请输入备注" /></td>
             <td>
-              <button class="table-button">删除</button>
+              <button class="operation-btn">删除</button>
             </td>
           </tr>
           <tr class="alt">
@@ -72,7 +72,7 @@
             <td>9.10.33.13</td>
             <td><input class="remarks" placeholder="请输入备注" /></td>
             <td>
-              <button class="table-button">删除</button>
+              <button class="operation-btn">删除</button>
             </td>
           </tr>
           <tr>
@@ -80,7 +80,7 @@
             <td>9.10.33.13</td>
             <td><input class="remarks" placeholder="请输入备注" /></td>
             <td>
-              <button class="table-button">删除</button>
+              <button class="operation-btn">删除</button>
             </td>
           </tr>
           <tr>
@@ -88,7 +88,7 @@
             <td>9.10.33.13</td>
             <td><input class="remarks" placeholder="请输入备注" /></td>
             <td>
-              <button class="table-button">删除</button>
+              <button class="operation-btn">删除</button>
             </td>
           </tr>
           <tr>
@@ -96,7 +96,7 @@
             <td>9.10.33.13</td>
             <td><input class="remarks" placeholder="请输入备注" /></td>
             <td>
-              <button class="table-button">删除</button>
+              <button class="operation-btn">删除</button>
             </td>
           </tr>
           <tr>
@@ -104,7 +104,7 @@
             <td>9.10.33.13</td>
             <td><input class="remarks" placeholder="请输入备注" /></td>
             <td>
-              <button class="table-button">删除</button>
+              <button class="operation-btn">删除</button>
             </td>
           </tr>
         </table>
@@ -188,5 +188,5 @@
 
 <style scoped>
 @import "../css/personal.css";
+@import "../css/common.css";
 </style>
-    

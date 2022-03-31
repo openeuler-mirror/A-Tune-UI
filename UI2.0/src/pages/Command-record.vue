@@ -1,13 +1,6 @@
 <template>
   <q-page>
-    <div
-      class="row"
-      style="
-        justify-content: flex-start;
-        width: 1920px;
-        background-color: #f1f2f6;
-      "
-    >
+    <div class="row main-bg-style">
       <a
         style="
           color: #222222;
@@ -66,7 +59,7 @@
               </th>
               <th style="padding-left: 13px">
                 <a style="margin-right: 8px">|</a>任务状态
-                <img src="../assets/control-panel/filter-default.png" />
+                <img src="../assets/common/filter-default.png" />
               </th>
               <th style="padding-left: 13px">
                 <a style="margin-right: 8px">|</a>开始时间
@@ -88,20 +81,17 @@
               <td>9.10.33.13</td>
               <td>
                 <div class="row">
-                  <div
-                    class="state-icon"
-                    style="background-color: #3781de"
-                  ></div>
+                  <div class="state-icon state-icon-running"></div>
                   <div>运行中</div>
                 </div>
               </td>
               <td>2021-11-22 11:23:00</td>
               <td><input type="text" placeholder="--双击输入描述信息--" /></td>
               <td>
-                <button class="table-button" @click="onOfflineClick">
+                <button class="operation-btn" @click="onOfflineClick">
                   详情
                 </button>
-                <button class="table-button">删除</button>
+                <button class="operation-btn">删除</button>
               </td>
             </tr>
             <tr class="alt">
@@ -110,20 +100,17 @@
               <td>9.10.33.13</td>
               <td>
                 <div class="row">
-                  <div
-                    class="state-icon"
-                    style="background-color: #5ce59d"
-                  ></div>
+                  <div class="state-icon state-icon-finish"></div>
                   <div>已完成</div>
                 </div>
               </td>
               <td>2021-11-22 11:23:00</td>
               <td><input type="text" placeholder="--双击输入描述信息--" /></td>
               <td>
-                <button class="table-button" @click="onOnlineClick">
+                <button class="operation-btn" @click="onOnlineClick">
                   详情
                 </button>
-                <button class="table-button">删除</button>
+                <button class="operation-btn">删除</button>
               </td>
             </tr>
             <tr>
@@ -132,18 +119,15 @@
               <td>9.10.33.13</td>
               <td>
                 <div class="row">
-                  <div
-                    class="state-icon"
-                    style="background-color: #f8a758"
-                  ></div>
+                  <div class="state-icon state-icon-running"></div>
                   <div>失败</div>
                 </div>
               </td>
               <td>2021-11-22 11:23:00</td>
               <td><input type="text" placeholder="--双击输入描述信息--" /></td>
               <td>
-                <button class="table-button">详情</button>
-                <button class="table-button">删除</button>
+                <button class="operation-btn">详情</button>
+                <button class="operation-btn">删除</button>
               </td>
             </tr>
             <tr>
@@ -152,18 +136,15 @@
               <td>9.10.33.13</td>
               <td>
                 <div class="row">
-                  <div
-                    class="state-icon"
-                    style="background-color: #3781de"
-                  ></div>
+                  <div class="state-icon state-icon-running"></div>
                   <div>运行中</div>
                 </div>
               </td>
               <td>2021-11-22 11:23:00</td>
               <td><input type="text" placeholder="--双击输入描述信息--" /></td>
               <td>
-                <button class="table-button">详情</button>
-                <button class="table-button">删除</button>
+                <button class="operation-btn">详情</button>
+                <button class="operation-btn">删除</button>
               </td>
             </tr>
             <tr>
@@ -172,18 +153,15 @@
               <td>9.10.33.13</td>
               <td>
                 <div class="row">
-                  <div
-                    class="state-icon"
-                    style="background-color: #5ce59d"
-                  ></div>
+                  <div class="state-icon state-icon-finish"></div>
                   <div>已完成</div>
                 </div>
               </td>
               <td>2021-11-22 11:23:00</td>
               <td><input type="text" placeholder="--双击输入描述信息--" /></td>
               <td>
-                <button class="table-button">详情</button>
-                <button class="table-button">删除</button>
+                <button class="operation-btn">详情</button>
+                <button class="operation-btn">删除</button>
               </td>
             </tr>
             <tr>
@@ -192,18 +170,15 @@
               <td>9.10.33.13</td>
               <td>
                 <div class="row">
-                  <div
-                    class="state-icon"
-                    style="background-color: #f8a758"
-                  ></div>
+                  <div class="state-icon state-icon-failed"></div>
                   <div>失败</div>
                 </div>
               </td>
               <td>2021-11-22 11:23:00</td>
               <td><input type="text" placeholder="--双击输入描述信息--" /></td>
               <td>
-                <button class="table-button">详情</button>
-                <button class="table-button">删除</button>
+                <button class="operation-btn">详情</button>
+                <button class="operation-btn">删除</button>
               </td>
             </tr>
             <tr>
@@ -212,18 +187,15 @@
               <td>9.10.33.13</td>
               <td>
                 <div class="row">
-                  <div
-                    class="state-icon"
-                    style="background-color: #3781de"
-                  ></div>
+                  <div class="state-icon state-icon-running"></div>
                   <div>运行中</div>
                 </div>
               </td>
               <td>2021-11-22 11:23:00</td>
               <td><input type="text" placeholder="--双击输入描述信息--" /></td>
               <td>
-                <button class="table-button">详情</button>
-                <button class="table-button">删除</button>
+                <button class="operation-btn">详情</button>
+                <button class="operation-btn">删除</button>
               </td>
             </tr>
             <tr class="alt">
@@ -232,18 +204,15 @@
               <td>9.10.33.13</td>
               <td>
                 <div class="row">
-                  <div
-                    class="state-icon"
-                    style="background-color: #5ce59d"
-                  ></div>
+                  <div class="state-icon state-icon-finish"></div>
                   <div>已完成</div>
                 </div>
               </td>
               <td>2021-11-22 11:23:00</td>
               <td><input type="text" placeholder="--双击输入描述信息--" /></td>
               <td>
-                <button class="table-button">详情</button>
-                <button class="table-button">删除</button>
+                <button class="operation-btn">详情</button>
+                <button class="operation-btn">删除</button>
               </td>
             </tr>
             <tr>
@@ -252,18 +221,15 @@
               <td>9.10.33.13</td>
               <td>
                 <div class="row">
-                  <div
-                    class="state-icon"
-                    style="background-color: #f8a758"
-                  ></div>
+                  <div class="state-icon state-icon-failed"></div>
                   <div>失败</div>
                 </div>
               </td>
               <td>2021-11-22 11:23:00</td>
               <td><input type="text" placeholder="--双击输入描述信息--" /></td>
               <td>
-                <button class="table-button">详情</button>
-                <button class="table-button">删除</button>
+                <button class="operation-btn">详情</button>
+                <button class="operation-btn">删除</button>
               </td>
             </tr>
             <tr>
@@ -272,18 +238,15 @@
               <td>9.10.33.13</td>
               <td>
                 <div class="row">
-                  <div
-                    class="state-icon"
-                    style="background-color: #3781de"
-                  ></div>
+                  <div class="state-icon state-icon-running"></div>
                   <div>运行中</div>
                 </div>
               </td>
               <td>2021-11-22 11:23:00</td>
               <td><input type="text" placeholder="--双击输入描述信息--" /></td>
               <td>
-                <button class="table-button">详情</button>
-                <button class="table-button">删除</button>
+                <button class="operation-btn">详情</button>
+                <button class="operation-btn">删除</button>
               </td>
             </tr>
             <tr class="alt">
@@ -292,18 +255,15 @@
               <td>9.10.33.13</td>
               <td>
                 <div class="row">
-                  <div
-                    class="state-icon"
-                    style="background-color: #5ce59d"
-                  ></div>
+                  <div class="state-icon state-icon-finish"></div>
                   <div>已完成</div>
                 </div>
               </td>
               <td>2021-11-22 11:23:00</td>
               <td><input type="text" placeholder="--双击输入描述信息--" /></td>
               <td>
-                <button class="table-button">详情</button>
-                <button class="table-button">删除</button>
+                <button class="operation-btn">详情</button>
+                <button class="operation-btn">删除</button>
               </td>
             </tr>
             <tr>
@@ -312,18 +272,15 @@
               <td>9.10.33.13</td>
               <td>
                 <div class="row">
-                  <div
-                    class="state-icon"
-                    style="background-color: #f8a758"
-                  ></div>
+                  <div class="state-icon state-icon-failed"></div>
                   <div>失败</div>
                 </div>
               </td>
               <td>2021-11-22 11:23:00</td>
               <td><input type="text" placeholder="--双击输入描述信息--" /></td>
               <td>
-                <button class="table-button">详情</button>
-                <button class="table-button">删除</button>
+                <button class="operation-btn">详情</button>
+                <button class="operation-btn">删除</button>
               </td>
             </tr>
             <tr>
@@ -332,18 +289,15 @@
               <td>9.10.33.13</td>
               <td>
                 <div class="row">
-                  <div
-                    class="state-icon"
-                    style="background-color: #f8a758"
-                  ></div>
+                  <div class="state-icon state-icon-failed"></div>
                   <div>失败</div>
                 </div>
               </td>
               <td>2021-11-22 11:23:00</td>
               <td><input type="text" placeholder="--双击输入描述信息--" /></td>
               <td>
-                <button class="table-button">详情</button>
-                <button class="table-button">删除</button>
+                <button class="operation-btn">详情</button>
+                <button class="operation-btn">删除</button>
               </td>
             </tr>
             <tr>
@@ -352,18 +306,15 @@
               <td>9.10.33.13</td>
               <td>
                 <div class="row">
-                  <div
-                    class="state-icon"
-                    style="background-color: #3781de"
-                  ></div>
+                  <div class="state-icon state-icon-running"></div>
                   <div>运行中</div>
                 </div>
               </td>
               <td>2021-11-22 11:23:00</td>
               <td><input type="text" placeholder="--双击输入描述信息--" /></td>
               <td>
-                <button class="table-button">详情</button>
-                <button class="table-button">删除</button>
+                <button class="operation-btn">详情</button>
+                <button class="operation-btn">删除</button>
               </td>
             </tr>
             <tr>
@@ -372,18 +323,15 @@
               <td>9.10.33.13</td>
               <td>
                 <div class="row">
-                  <div
-                    class="state-icon"
-                    style="background-color: #f8a758"
-                  ></div>
+                  <div class="state-icon state-icon-failed"></div>
                   <div>失败</div>
                 </div>
               </td>
               <td>2021-11-22 11:23:00</td>
               <td><input type="text" placeholder="--双击输入描述信息--" /></td>
               <td>
-                <button class="table-button">详情</button>
-                <button class="table-button">删除</button>
+                <button class="operation-btn">详情</button>
+                <button class="operation-btn">删除</button>
               </td>
             </tr>
           </table>
@@ -427,4 +375,5 @@
 
 <style scoped>
 @import "../css/command-record.css";
+@import "../css/common.css";
 </style>
