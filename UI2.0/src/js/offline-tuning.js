@@ -1,49 +1,190 @@
-import {defineComponent} from "vue";
-import * as charts from './utils/charts.js';
-import {updateTuningEvalData} from "./utils/charts.js";
+import { defineComponent } from "vue";
+import * as charts from "./utils/charts.js";
+import { updateTuningEvalData } from "./utils/charts.js";
 
 export default defineComponent({
-  methods: {},
+  data() {
+    return {
+      a: [],
+      b: [],
+      myChart1: null,
+      myChart2: null,
+      myChart3: null,
+      myChart4: null,
+      shift: false,
+      timer: null,
+      ind: 2,
+      xValue: [],
+      yNames: ["test1", "test2"],
+      yValue: [],
+      yValue1: [],
+      yValue2: [],
+      yValue3: []
+    };
+  },
+  methods: {
+    initialData() {
+      for (let i = 0; i < this.yNames.length; i++) {
+        this.xValue = [1, 2];
+        this.yValue[i] = [];
+        this.yValue1[i] = [];
+        this.yValue2[i] = [];
+        this.yValue3[i] = [];
+        var randomValue = Math.floor(
+          Math.random() * 10000 + Math.random() * 1000
+        );
+        this.yValue[i].push(randomValue);
+        this.yValue1[i].push(randomValue);
+        this.yValue1[i].push(randomValue);
+        this.yValue2[i].push(randomValue);
+        this.yValue3[i].push(randomValue);
+        var randomValue = Math.floor(
+          Math.random() * 10000 + Math.random() * 1000
+        );
+        this.yValue[i].push(randomValue);
+        this.yValue1[i][1] = Math.max(
+          this.yValue1[i][1],
+          this.yValue[i][this.yValue[i].length - 1]
+        );
+        console.log(this.yValue1);
+        this.yValue3[i].push(randomValue);
+        this.yValue2[i].push(Math.max(this.yValue[i][0], this.yValue[i][1]));
+      }
+    },
+    start() {
+      this.timer = setInterval(() => {
+        this.ind += 1;
+        for (var i = 0; i < this.yNames.length; i++) {
+          this.a[i] = Math.floor(Math.random() * 10000 + Math.random() * 1000);
+          this.b[i] = Math.floor(Math.random() * 10000 + Math.random() * 1000);
+        }
+      }, 1000);
+    },
+    end() {
+      clearInterval(this.timer);
+      this.timer = null;
+    }
+  },
+  created() {
+    this.start();
+    this.initialData();
+  },
   mounted() {
     var echarts = require("echarts");
-    var myChart1 = echarts.init(document.getElementById("offline1"));
-    var myChart2 = echarts.init(document.getElementById("offline2"));
-    var myChart3 = echarts.init(document.getElementById("offline3"));
-    var myChart4 = echarts.init(document.getElementById("offline4"));
+    this.myChart1 = echarts.init(document.getElementById("offline1"));
+    this.myChart2 = echarts.init(document.getElementById("offline2"));
+    this.myChart3 = echarts.init(document.getElementById("offline3"));
+    this.myChart4 = echarts.init(document.getElementById("offline4"));
+    // chart1
+    charts.initBarChart(this.myChart1, "", "", [], "tuning");
+    charts.appendBarChartData(
+      this.myChart1,
+      ["before", "after"],
+      this.yNames,
+      this.yValue1
+    );
+    charts.addOptions(this.myChart1, "grid", 0, { top: "30" });
+    charts.addOptions(this.myChart1, "legend", 0, { top: "0" });
 
-    let xValue = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13',
-      '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27',
-      '28', '29', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '40'];
-    let yValue = [[
-      60000, 62000, 60000, 70000, 68000, 72000, 61000, 60000, 66000, 58000,
-      60000, 58000, 70000, 64000, 70000, 73000, 74000, 68000, 75000, 74000,
-      120000, 75000, 74500, 68000, 110000, 75000, 68000, 59000, 83000, 88000,
-      75000, 60000, 80000, 80000, 60000, 58000, 110000, 80000, 120000, 65000,
-    ], [
-      50000, 40000, 75000, 50000, 52000, 70000, 40000, 45000, 40000, 51000,
-      35000, 60000, 43000, 60000, 66000, 58000, 60000, 58000, 70000, 38000,
-      37000, 43000, 60000, 66000, 58000, 60000, 58000, 70000, 42000, 43000,
-      53000, 45000, 43000, 54000, 47000, 45000, 58000, 55000, 38000, 40000
-    ]];
-    charts.initBarChart(myChart1, "", "", [], "tuning");
-    charts.appendBarChartData(myChart1, ["before", "after"], ["test1"], [[0,5]]);
-    charts.updateTuningEvalData(myChart1, ["test1", "test2", "test3"], [[10], [1,7], [4]]);
-    charts.addOptions(myChart1, "grid", 0,{"top": "30"});
-    charts.addOptions(myChart1, "legend", 0,{"top": "0"});
+    // chart2
+    charts.initLineChart(this.myChart2, "", "", [], "tuning");
+    charts.addOptions(this.myChart2, "grid", 0, { top: "30" });
+    charts.addOptions(this.myChart2, "legend", 0, { top: "0" });
+    charts.appendLineChartData(
+      this.myChart2,
+      this.xValue,
+      this.yNames,
+      this.yValue2
+    );
 
-    charts.initLineChart(myChart2, "", "", ["test1", "test2"], "tuning");
-    charts.appendLineChartData(myChart2, xValue, ["test1", "test2"], yValue);
-    charts.addOptions(myChart2, "grid", 0,{"top": "30"});
-    charts.addOptions(myChart2, "legend", 0,{"top": "0"});
+    // chart3
+    charts.initLineChart(this.myChart3, "", "", [], "tuning");
+    charts.addOptions(this.myChart3, "grid", 0, { top: "30" });
+    charts.addOptions(this.myChart3, "legend", 0, { top: "0" });
+    charts.appendLineChartData(
+      this.myChart3,
+      this.xValue,
+      this.yNames,
+      this.yValue3
+    );
 
-    charts.initLineChart(myChart3, "", "", ["test1", "test2"], "tuning");
-    charts.appendLineChartData(myChart3, xValue, ["test1", "test2"], yValue);
-    charts.addOptions(myChart3, "grid", 0,{"top": "30"});
-    charts.addOptions(myChart3, "legend", 0,{"top": "0"});
-
-    charts.initLineChart(myChart4, "", "", ["test1", "test2"], "tuning");
-    charts.appendLineChartData(myChart4, xValue, ["test1", "test2"], yValue);
-    charts.addOptions(myChart4, "grid", 0,{"top": "30"});
-    charts.addOptions(myChart4, "legend", 0,{"top": "0"});
+    // chart4
+    charts.initLineChart(this.myChart4, "", "", [], "tuning");
+    charts.addOptions(this.myChart4, "grid", 0, { top: "30" });
+    charts.addOptions(this.myChart4, "legend", 0, { top: "0" });
+    charts.appendLineChartData(
+      this.myChart4,
+      this.xValue,
+      this.yNames,
+      this.yValue
+    );
   },
+  watch: {
+    ind: function(newVal, oldVal) {
+      // if (this.ind >= 10) {
+      //   this.shift = true;
+      // }
+      this.xValue.push(this.ind.toString());
+      if (this.ind == 20) {
+        this.end();
+      }
+    },
+    a: {
+      handler: function(newVal, oldVal) {
+        if (this.a !== null) {
+          for (var i = 0; i < this.yNames.length; i++) {
+            this.yValue[i].push(this.a[i]);
+            this.yValue2[i].push(
+              Math.max(
+                this.yValue2[i][this.yValue2[i].length - 1],
+                this.yValue[i][this.yValue[i].length - 1]
+              )
+            );
+            this.yValue1[i][1] = Math.max(
+              this.yValue1[i][1],
+              this.yValue[i][this.yValue[i].length - 1]
+            );
+          }
+          charts.deleteChartData(this.myChart2, this.yNames);
+          charts.deleteChartData(this.myChart4, this.yNames);
+          charts.updateTuningEvalData(this.myChart1, this.yNames, this.yValue1);
+          charts.appendLineChartData(
+            this.myChart2,
+            this.xValue,
+            this.yNames,
+            this.yValue2
+          );
+          charts.appendLineChartData(
+            this.myChart4,
+            this.xValue,
+            this.yNames,
+            this.yValue
+          );
+        }
+      },
+      deep: true
+    },
+    b: {
+      handler: function(newVal, oldVal) {
+        if (this.b !== null) {
+          for (var i = 0; i < this.yNames.length; i++) {
+            this.yValue3[i].push(this.b[i]);
+          }
+          charts.deleteChartData(this.myChart3, this.yNames);
+
+          charts.appendLineChartData(
+            this.myChart3,
+            this.xValue,
+            this.yNames,
+            this.yValue3
+          );
+        }
+      },
+      deep: true
+    }
+  },
+  beforeDestroy() {
+    // js提供的clearInterval方法用来清除定时器
+    clearInterval(this.timer);
+  }
 });
