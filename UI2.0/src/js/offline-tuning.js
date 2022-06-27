@@ -1,6 +1,7 @@
 import { defineComponent } from "vue";
 import * as charts from "./utils/charts.js";
 import { updateTuningEvalData } from "./utils/charts.js";
+import { getRandomInt } from "./utils/utils.js";
 
 export default defineComponent({
   data() {
@@ -11,11 +12,10 @@ export default defineComponent({
       myChart2: null,
       myChart3: null,
       myChart4: null,
-      shift: false,
       timer: null,
       ind: 2,
       xValue: [],
-      yNames: ["test1", "test2"],
+      yNames: ["test1", "test2", "test3"],
       yValue: [],
       yValue1: [],
       yValue2: [],
@@ -23,6 +23,33 @@ export default defineComponent({
     };
   },
   methods: {
+    updateChart1Data() {
+      charts.updateTuningEvalData(this.myChart1, this.yNames, this.yValue1);
+    },
+    updateChart2Data(newData) {
+      charts.appendLineChartData(
+        this.myChart2,
+        [this.ind],
+        this.yNames,
+        newData
+      );
+    },
+    updateChart3Data() {
+      charts.appendLineChartData(
+        this.myChart3,
+        [this.ind],
+        this.yNames,
+        this.b
+      );
+    },
+    updateChart4Data() {
+      charts.appendLineChartData(
+        this.myChart4,
+        [this.ind],
+        this.yNames,
+        this.a
+      );
+    },
     initialData() {
       for (let i = 0; i < this.yNames.length; i++) {
         this.xValue = [1, 2];
@@ -30,17 +57,13 @@ export default defineComponent({
         this.yValue1[i] = [];
         this.yValue2[i] = [];
         this.yValue3[i] = [];
-        var randomValue = Math.floor(
-          Math.random() * 10000 + Math.random() * 1000
-        );
+        var randomValue = getRandomInt(100, 1000);
         this.yValue[i].push(randomValue);
         this.yValue1[i].push(randomValue);
         this.yValue1[i].push(randomValue);
         this.yValue2[i].push(randomValue);
         this.yValue3[i].push(randomValue);
-        var randomValue = Math.floor(
-          Math.random() * 10000 + Math.random() * 1000
-        );
+        var randomValue = getRandomInt(100, 1000);
         this.yValue[i].push(randomValue);
         this.yValue1[i][1] = Math.max(
           this.yValue1[i][1],
@@ -55,8 +78,8 @@ export default defineComponent({
       this.timer = setInterval(() => {
         this.ind += 1;
         for (var i = 0; i < this.yNames.length; i++) {
-          this.a[i] = Math.floor(Math.random() * 10000 + Math.random() * 1000);
-          this.b[i] = Math.floor(Math.random() * 10000 + Math.random() * 1000);
+          this.a[i] = getRandomInt(100, 1000);
+          this.b[i] = getRandomInt(100, 1000);
         }
       }, 1000);
     },
@@ -131,8 +154,10 @@ export default defineComponent({
     },
     a: {
       handler: function(newVal, oldVal) {
+        let newData = [];
         if (this.a !== null) {
           for (var i = 0; i < this.yNames.length; i++) {
+            newData[i] = [];
             this.yValue[i].push(this.a[i]);
             this.yValue2[i].push(
               Math.max(
@@ -140,26 +165,16 @@ export default defineComponent({
                 this.yValue[i][this.yValue[i].length - 1]
               )
             );
+            newData.push(this.yValue2[i][this.yValue2[i].length - 1]);
+            newData[i][0] = this.yValue2[i][this.yValue2[i].length - 1];
             this.yValue1[i][1] = Math.max(
               this.yValue1[i][1],
               this.yValue[i][this.yValue[i].length - 1]
             );
           }
-          charts.deleteChartData(this.myChart2, this.yNames);
-          charts.deleteChartData(this.myChart4, this.yNames);
-          charts.updateTuningEvalData(this.myChart1, this.yNames, this.yValue1);
-          charts.appendLineChartData(
-            this.myChart2,
-            this.xValue,
-            this.yNames,
-            this.yValue2
-          );
-          charts.appendLineChartData(
-            this.myChart4,
-            this.xValue,
-            this.yNames,
-            this.yValue
-          );
+          this.updateChart1Data();
+          this.updateChart2Data(newData);
+          this.updateChart4Data();
         }
       },
       deep: true
@@ -170,14 +185,7 @@ export default defineComponent({
           for (var i = 0; i < this.yNames.length; i++) {
             this.yValue3[i].push(this.b[i]);
           }
-          charts.deleteChartData(this.myChart3, this.yNames);
-
-          charts.appendLineChartData(
-            this.myChart3,
-            this.xValue,
-            this.yNames,
-            this.yValue3
-          );
+          this.updateChart3Data();
         }
       },
       deep: true
