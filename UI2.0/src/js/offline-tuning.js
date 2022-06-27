@@ -1,6 +1,5 @@
 import { defineComponent } from "vue";
 import * as charts from "./utils/charts.js";
-import { updateTuningEvalData } from "./utils/charts.js";
 import { getRandomInt } from "./utils/utils.js";
 
 export default defineComponent({
@@ -69,7 +68,6 @@ export default defineComponent({
           this.yValue1[i][1],
           this.yValue[i][this.yValue[i].length - 1]
         );
-        console.log(this.yValue1);
         this.yValue3[i].push(randomValue);
         this.yValue2[i].push(Math.max(this.yValue[i][0], this.yValue[i][1]));
       }
@@ -83,6 +81,7 @@ export default defineComponent({
         }
       }, 1000);
     },
+
     end() {
       clearInterval(this.timer);
       this.timer = null;
@@ -144,9 +143,6 @@ export default defineComponent({
   },
   watch: {
     ind: function(newVal, oldVal) {
-      // if (this.ind >= 10) {
-      //   this.shift = true;
-      // }
       this.xValue.push(this.ind.toString());
       if (this.ind == 20) {
         this.end();
@@ -192,7 +188,6 @@ export default defineComponent({
     }
   },
   beforeDestroy() {
-    // js提供的clearInterval方法用来清除定时器
     clearInterval(this.timer);
   }
 });
