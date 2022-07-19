@@ -28,11 +28,18 @@ const routes = [
       { path: '', component: () => import('pages/Control-panel.vue') }
     ]
   },
+  // {
+  //   path: '/command',
+  //   component: () => import('layouts/UserLayout.vue'),
+  //   children: [
+  //     { path: '', component: () => import('pages/Execute-command.vue') }
+  //   ]
+  // },
   {
     path: '/command',
     component: () => import('layouts/UserLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/Execute-command.vue') }
+      { path: '', component: () => import('pages/NewCommand/NewCommand.vue') }
     ]
   },
   {
