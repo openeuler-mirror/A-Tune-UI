@@ -5,7 +5,7 @@
       <div id="col-info-mod">
         <div class="float-left" style="padding-left: 204px;">
           <div id="col-info-left-text">
-            上午好，张三jWX1084983愿您事事顺心，快乐相随！
+            嗨，{{ userName }}愿您事事顺心，快乐相随！
           </div>
           <div id="col-info-left-subtext">
             长风破浪会有时，直挂云帆济沧海
@@ -17,7 +17,7 @@
               IP数量
             </div>
             <div class="text-right text-white col-info-right-num">
-              14711
+              {{ ipNum }}
             </div>
           </div>
           <div class="float-left">
@@ -25,7 +25,7 @@
               analysis数量
             </div>
             <div class="text-right text-white col-info-right-num">
-              200
+              {{ analysisNum }}
             </div>
           </div>
           <div class="float-left">
@@ -33,23 +33,7 @@
               tuning数量
             </div>
             <div class="text-right text-white col-info-right-num">
-              0
-            </div>
-          </div>
-          <div class="float-left">
-            <div class="text-right col-info-right-ti">
-              tuning数量
-            </div>
-            <div class="text-right text-white col-info-right-num">
-              0
-            </div>
-          </div>
-          <div class="float-left">
-            <div class="text-right col-info-right-ti">
-              tuning数量
-            </div>
-            <div class="text-right text-white col-info-right-num">
-              0
+              {{ tuningNum }}
             </div>
           </div>
         </div>
@@ -65,7 +49,7 @@
               <button class="confirm-btn" @click="onCommandClick">新建命令</button>
             </div>
             <div id="col-table-left">
-              <table class="task-table">
+              <table id="task-table">
                 <tr>
                   <th style="padding-left: 24px; width: 50px">序号</th>
                   <th style="width: 180px;"><a>|</a>任务名称</th>
@@ -344,147 +328,139 @@
               </tr>
               <tr>
                 <td><img src="../assets/control-panel/1.png" /></td>
-                <td>CPU</td>
-                <td class="rate-column">15</td>
+                <td>{{ rateTableName[0] }}</td>
+                <td class="rate-column">{{ rateTableData[0] }}</td>
               </tr>
               <tr>
                 <td><img src="../assets/control-panel/2.png" /></td>
-                <td>Mem</td>
-                <td class="rate-column">14</td>
+                <td>{{ rateTableName[1] }}</td>
+                <td class="rate-column">{{ rateTableData[1] }}</td>
               </tr>
               <tr>
                 <td><img src="../assets/control-panel/3.png" /></td>
-                <td>主硬盘</td>
-                <td class="rate-column">13</td>
+                <td>{{ rateTableName[2] }}</td>
+                <td class="rate-column">{{ rateTableData[2] }}</td>
               </tr>
               <tr>
                 <td><img src="../assets/control-panel/4.png" /></td>
-                <td>显示器</td>
-                <td class="rate-column">12</td>
+                <td>{{ rateTableName[3] }}</td>
+                <td class="rate-column">{{ rateTableData[3] }}</td>
               </tr>
               <tr>
                 <td><img src="../assets/control-panel/5.png" /></td>
-                <td>网卡</td>
-                <td class="rate-column">11</td>
+                <td>{{ rateTableName[4] }}</td>
+                <td class="rate-column">{{ rateTableData[4] }}</td>
               </tr>
               <tr>
                 <td><img src="../assets/control-panel/6.png" /></td>
-                <td>声卡</td>
-                <td class="rate-column">10</td>
+                <td>{{ rateTableName[5] }}</td>
+                <td class="rate-column">{{ rateTableData[5] }}</td>
               </tr>
               <tr>
                 <td><img src="../assets/control-panel/7.png" /></td>
-                <td>光驱</td>
-                <td class="rate-column">9</td>
+                <td>{{ rateTableName[6] }}</td>
+                <td class="rate-column">{{ rateTableData[6] }}</td>
               </tr>
               <tr>
                 <td><img src="../assets/control-panel/8.png" /></td>
-                <td>网卡</td>
-                <td class="rate-column">8</td>
+                <td>{{ rateTableName[7] }}</td>
+                <td class="rate-column">{{ rateTableData[7] }}</td>
               </tr>
               <tr>
                 <td><img src="../assets/control-panel/9.png" /></td>
-                <td>声卡</td>
-                <td class="rate-column">7</td>
+                <td>{{ rateTableName[8] }}</td>
+                <td class="rate-column">{{ rateTableData[8] }}</td>
               </tr>
               <tr>
                 <td><img src="../assets/control-panel/10.png" /></td>
-                <td>光驱</td>
-                <td class="rate-column">6</td>
+                <td>{{ rateTableName[9] }}</td>
+                <td class="rate-column">{{ rateTableData[9] }}</td>
               </tr>
             </table>
           </div>
         </div>
       </div>
-      <!-- column chart -->
-      <div class="row" id="col-chart-mod">
-        <div class="col bg-white widget-chart-div">
-          <div>
-            <div class="add-chart-icon" @click="popWin"></div>
-            <button class="bg-white add-chart-btn" @click="popWin">新增图表</button>
-          </div>
-        </div>
-        <div class="col bg-white widget-chart-div">
-          <div class="row space-btw">
-            <div class="text-title" style="margin-bottom: 0px">
-              运行中的任务列表
-            </div>
-            <div class="delete-pic" style=""></div>
-          </div>
-          <div id="main1" class="col line-chart"></div>
-        </div>
-        <div class="col bg-white widget-chart-div">
-          <div class="row space-btw">
-            <div class="text-title" style="margin-bottom: 0px;">
-              Test1XX使用对比情况
-            </div>
-            <div class="delete-pic"></div>
-          </div>
-          <div id="main2" class="col bar-chart"></div>
-        </div>
-        <div class="col bg-white widget-chart-div" style="margin-right: 0px;">
-          <div class="row space-btw">
-            <div class="text-title" style="margin-bottom: 0px;">
-              Test1XX占比情况
-            </div>
-            <div class="delete-pic"></div>
-          </div>
-          <div id="main3" class="col circle-chart"></div>
-        </div>
-      </div>
       <!-- cards column -->
-      <div id="cards-column-1" style="display: none">
-        <div class="row add-card-div">
-          <div class="col bg-white widget-chart-div">
+      <div id="cards-column-1">
+        <div class="row col-chart-mod">
+          <div id="ctrl-chart-div-11" class="col bg-white widget-chart-div">
             <div>
-              <div class="add-chart-icon" @click="popWin"></div>
-              <button class="add-chart-btn" @click="popWin">新增图表</button>
+              <div class="add-chart-icon" @click="openPopUp('ctrl-chart-div-11')"></div>
+              <button class="bg-white add-chart-btn" @click="openPopUp('ctrl-chart-div-11')">新增图表</button>
             </div>
           </div>
-          <div class="col bg-white widget-chart-div">
+          <div id="ctrl-chart-div-12" class="col bg-white widget-chart-div">
             <div>
-              <div class="add-chart-icon" @click="popWin"></div>
-              <button class="add-chart-btn" @click="popWin">新增图表</button>
+              <div class="add-chart-icon" @click="openPopUp('ctrl-chart-div-12')"></div>
+              <button class="bg-white add-chart-btn" @click="openPopUp('ctrl-chart-div-12')">新增图表</button>
             </div>
           </div>
-          <div class="col bg-white widget-chart-div">
+          <div id="ctrl-chart-div-13" class="col bg-white widget-chart-div">
             <div>
-              <div class="add-chart-icon" @click="popWin"></div>
-              <button class="add-chart-btn" @click="popWin">新增图表</button>
+              <div class="add-chart-icon" @click="openPopUp('ctrl-chart-div-13')"></div>
+              <button class="bg-white add-chart-btn" @click="openPopUp('ctrl-chart-div-13')">新增图表</button>
             </div>
           </div>
-          <div class="col bg-white widget-chart-div" style="margin-right: 0;">
+          <div id="ctrl-chart-div-14" class="col bg-white widget-chart-div" style="margin-right: 0;">
             <div>
-              <div class="add-chart-icon" @click="popWin"></div>
-              <button class="add-chart-btn" @click="popWin">新增图表</button>
+              <div class="add-chart-icon" @click="openPopUp('ctrl-chart-div-14')"></div>
+              <button class="bg-white add-chart-btn" @click="openPopUp('ctrl-chart-div-14')">新增图表</button>
             </div>
           </div>
         </div>
       </div>
       <div id="cards-column-2" style="display: none">
-        <div class="row add-card-div">
-          <div class="col bg-white widget-chart-div">
+        <div class="row col-chart-mod">
+          <div id="ctrl-chart-div-21" class="col bg-white widget-chart-div">
             <div>
-              <div class="add-chart-icon" @click="popWin"></div>
-              <button class="add-chart-btn" @click="popWin">新增图表</button>
+              <div class="add-chart-icon" @click="openPopUp('ctrl-chart-div-21')"></div>
+              <button class="bg-white add-chart-btn" @click="openPopUp('ctrl-chart-div-21')">新增图表</button>
             </div>
           </div>
-          <div class="col bg-white widget-chart-div">
+          <div id="ctrl-chart-div-22" class="col bg-white widget-chart-div">
             <div>
-              <div class="add-chart-icon" @click="popWin"></div>
-              <button class="add-chart-btn" @click="popWin">新增图表</button>
+              <div class="add-chart-icon" @click="openPopUp('ctrl-chart-div-22')"></div>
+              <button class="bg-white add-chart-btn" @click="openPopUp('ctrl-chart-div-22')">新增图表</button>
             </div>
           </div>
-          <div class="col bg-white widget-chart-div">
+          <div id="ctrl-chart-div-23" class="col bg-white widget-chart-div">
             <div>
-              <div class="add-chart-icon" @click="popWin"></div>
-              <button class="add-chart-btn" @click="popWin">新增图表</button>
+              <div class="add-chart-icon" @click="openPopUp('ctrl-chart-div-23')"></div>
+              <button class="bg-white add-chart-btn" @click="openPopUp('ctrl-chart-div-23')">新增图表</button>
             </div>
           </div>
-          <div class="col bg-white widget-chart-div" style="margin-right: 0;">
+          <div id="ctrl-chart-div-24" class="col bg-white widget-chart-div" style="margin-right: 0;">
             <div>
-              <div class="add-chart-icon" @click="popWin"></div>
-              <button class="add-chart-btn" @click="popWin">新增图表</button>
+              <div class="add-chart-icon" @click="openPopUp('ctrl-chart-div-24')"></div>
+              <button class="bg-white add-chart-btn" @click="openPopUp('ctrl-chart-div-24')">新增图表</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="cards-column-3" style="display: none">
+        <div class="row col-chart-mod">
+          <div id="ctrl-chart-div-31" class="col bg-white widget-chart-div">
+            <div>
+              <div class="add-chart-icon" @click="openPopUp('ctrl-chart-div-31')"></div>
+              <button class="bg-white add-chart-btn" @click="openPopUp('ctrl-chart-div-31')">新增图表</button>
+            </div>
+          </div>
+          <div id="ctrl-chart-div-32" class="col bg-white widget-chart-div">
+            <div>
+              <div class="add-chart-icon" @click="openPopUp('ctrl-chart-div-32')"></div>
+              <button class="bg-white add-chart-btn" @click="openPopUp('ctrl-chart-div-32')">新增图表</button>
+            </div>
+          </div>
+          <div id="ctrl-chart-div-33" class="col bg-white widget-chart-div">
+            <div>
+              <div class="add-chart-icon" @click="openPopUp('ctrl-chart-div-33')"></div>
+              <button class="bg-white add-chart-btn" @click="openPopUp('ctrl-chart-div-33')">新增图表</button>
+            </div>
+          </div>
+          <div id="ctrl-chart-div-34" class="col bg-white widget-chart-div" style="margin-right: 0;">
+            <div>
+              <div class="add-chart-icon" @click="openPopUp('ctrl-chart-div-34')"></div>
+              <button class="bg-white add-chart-btn" @click="openPopUp('ctrl-chart-div-34')">新增图表</button>
             </div>
           </div>
         </div>
@@ -508,13 +484,13 @@
     <q-card id="light" class="popup-win">
       <q-card-section class="row space-btw">
         <div id="popup-title">新增图表</div>
-        <div class="close-pic" @click="closeWin"></div>
+        <div class="close-pic" @click="closePopUp"></div>
       </q-card-section>
       <div class="row">
         <button
           class="popup-card-button"
           style="margin: 0 24px 24px 32px"
-          @click="showHistory"
+          @click="showHistoryOptions"
         >
           历史记录图表
         </button>
@@ -522,115 +498,115 @@
         <button
           class="popup-card-button"
           style="margin: 0 0 24px 24px"
-          @click="showRealtime"
+          @click="showRealtimeOptions"
         >
           实时监控图表
         </button>
       </div>
       <div id="history" style="display: block">
         <div class="row select-model">
-          <a class="select-tip">选项功能</a>
-          <div>
-            <select class="select_type">
-              <option class="option-tip" disabled selected hidden>
-                --请选择--
-              </option>
-              <option class="option-tip">选项1</option>
-              <option>选项2</option>
-            </select>
+          <a class="select-tip">选择功能</a>
+          <div class="q-gutter-xs">
+            <q-select
+              outlined dense options-dense
+              color="light-blue-6"
+              v-model="historyFunc"
+              :options="historyFuncOptions"
+              class="select-type"
+            />
           </div>
         </div>
         <div class="row select-model">
           <a class="select-tip">任务名称</a>
-          <div>
-            <select class="select_type">
-              <option class="option-tip" disabled selected hidden>
-                --请选择--
-              </option>
-              <option>选项1</option>
-              <option>选项2</option>
-            </select>
+          <div class="q-gutter-xs">
+            <q-select
+              outlined dense options-dense
+              color="light-blue-6"
+              v-model="historyName"
+              :options="historyNameOptions"
+              class="select-type"
+            />
           </div>
         </div>
         <div class="row select-model">
-          <a class="select-tip">选项图表</a>
-          <div>
-            <select class="select_type">
-              <option class="option-tip" disabled selected hidden>
-                --请选择--
-              </option>
-              <option>选项1</option>
-              <option>选项2</option>
-            </select>
+          <a class="select-tip">选择图表</a>
+          <div class="q-gutter-xs">
+            <q-select
+              outlined dense options-dense
+              color="light-blue-6"
+              v-model="historyChart"
+              :options="historyChartOptions"
+              class="select-type"
+            />
           </div>
         </div>
       </div>
       <div id="realtime" style="display: none">
         <div class="row select-model">
           <a class="select-tip">分类</a>
-          <div>
-            <select class="select_type">
-              <option class="option-tip" disabled selected hidden>
-                --请选择--
-              </option>
-              <option class="option-tip">选项1</option>
-              <option>选项2</option>
-            </select>
+          <div class="q-gutter-xs">
+            <q-select
+              outlined dense options-dense
+              color="light-blue-6"
+              v-model="realtimeCategorize"
+              :options="realtimeCategorizeOptions"
+              class="select-type"
+            />
           </div>
         </div>
         <div class="row select-model">
           <a class="select-tip">参数</a>
-          <div>
-            <select class="select_type">
-              <option class="option-tip" disabled selected hidden>
-                --请选择--
-              </option>
-              <option>选项1</option>
-              <option>选项2</option>
-            </select>
+          <div class="q-gutter-xs">
+            <q-select
+              outlined dense options-dense
+              color="light-blue-6"
+              v-model="realtimeParams"
+              :options="realtimeParamsOptions"
+              class="select-type"
+            />
           </div>
         </div>
         <div class="row select-model">
           <a class="select-tip">区间</a>
-          <div>
-            <select class="select_type">
-              <option class="option-tip" disabled selected hidden>
-                --请选择--
-              </option>
-              <option>选项1</option>
-              <option>选项2</option>
-            </select>
+          <div class="q-gutter-xs">
+            <q-select
+              outlined dense options-dense
+              color="light-blue-6"
+              v-model="realtimeInterval"
+              :options="realtimeIntervalOptions"
+              class="select-type"
+            />
           </div>
         </div>
         <div class="row select-model">
           <a class="select-tip">周期</a>
-          <div>
-            <select class="select_type">
-              <option class="option-tip" disabled selected hidden>
-                --请选择--
-              </option>
-              <option>选项1</option>
-              <option>选项2</option>
-            </select>
+          <div class="q-gutter-xs">
+            <q-select
+              outlined dense options-dense
+              color="light-blue-6"
+              v-model="realtimePeriod"
+              :options="realtimePeriodOptions"
+              class="select-type"
+            />
           </div>
         </div>
         <div class="row select-model">
           <a class="select-tip">图表样式</a>
-          <div>
-            <select class="select_type">
-              <option class="option-tip" disabled selected hidden>
-                --请选择--
-              </option>
-              <option>选项1</option>
-              <option>选项2</option>
-            </select>
+          <div class="q-gutter-xs">
+            <q-select
+              outlined dense options-dense
+              color="light-blue-6"
+              v-model="realtimeChart"
+              :options="realtimeChartOptions"
+              class="select-type"
+            />
           </div>
         </div>
       </div>
       <!-- --------------------------- -->
       <div class="row popup-btn">
-        <button class="cancel-btn" @click="closeWin">取消</button>
-        <button class="confirm-btn" @click="">确定</button>
+        <button class="cancel-btn" @click="closePopUp">取消</button>
+        <button class="confirm-btn" @click="confirmPopUp">确定</button>
       </div>
     </q-card>
   </div>

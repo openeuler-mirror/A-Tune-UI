@@ -49,12 +49,12 @@
   color: #559ff8;
 }
 
-.task-table {
+#task-table {
   width: 1310px;
   margin: 0 32px;
   border-collapse: collapse;
 }
-.task-table th {
+#task-table th {
   font-size: 14px;
   padding-left: 13px;
   text-align: left;
@@ -63,16 +63,16 @@
   width: 90px;
   height: 32px;
 }
-.task-table td {
+#task-table td {
   font-size: 14px;
   border-bottom: 1px solid #cfcfcf;
   height: 48px;
   padding-left: 24px;
 }
-.task-table a {
+#task-table a {
   margin-right: 8px;
 }
-.task-table img {
+#task-table img {
   font-size: 17px;
   margin-left: 2px;
   vertical-align: middle;
@@ -133,7 +133,7 @@ ul.pagination li a:hover:not(.active) {
 
 
 /* column chart */
-#col-chart-mod {
+.col-chart-mod {
   height: 300px;
   width: 1856px;
   margin: 0 32px 16px 32px;
@@ -180,11 +180,6 @@ ul.pagination li a:hover:not(.active) {
 }
 
 /* add card */
-.add-card-div {
-  height: 300px;
-  width: 1856px;
-  margin: 0 32px 16px 32px;
-}
 .add-card-icon {
   background: url(../assets/control-panel/add-default.png) no-repeat;
   width: 24px;
@@ -275,15 +270,13 @@ ul.pagination li a:hover:not(.active) {
 .select-tip {
   color: #222222;
   font-size: 14px;
-  padding-top: 6px;
+  padding-top: 10px;
 }
-.select_type {
+.select-type {
   width: 316px;
   height: 32px;
   float: right;
   margin-right: 32px;
-  padding-left: 16px;
-  border: 1px solid #e6e6e6;
   border-radius: 4px;
 }
 .select_page {
