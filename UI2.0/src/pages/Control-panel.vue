@@ -510,8 +510,11 @@
             <q-select
               outlined dense options-dense
               color="light-blue-6"
+              ref="historyFunc"
               v-model="historyFunc"
-              :options="historyFuncOptions"
+              :options="historyGraph.func"
+              :lazy-rules="true"
+              :rules="[v => Boolean(Object.keys(v || {})[0]) || 'Field is required']"
               class="select-type"
             />
           </div>
@@ -522,8 +525,11 @@
             <q-select
               outlined dense options-dense
               color="light-blue-6"
+              ref="historyName"
               v-model="historyName"
-              :options="historyNameOptions"
+              :options="historyGraph.name"
+              :lazy-rules="true"
+              :rules="[v => Boolean(Object.keys(v || {})[0]) || 'Field is required']"
               class="select-type"
             />
           </div>
@@ -534,8 +540,11 @@
             <q-select
               outlined dense options-dense
               color="light-blue-6"
+              ref="historyChart"
               v-model="historyChart"
-              :options="historyChartOptions"
+              :options="historyGraph.chart"
+              :lazy-rules="true"
+              :rules="[v => Boolean(Object.keys(v || {})[0]) || 'Field is required']"
               class="select-type"
             />
           </div>
@@ -548,8 +557,11 @@
             <q-select
               outlined dense options-dense
               color="light-blue-6"
+              ref="realtimeCategorize"
               v-model="realtimeCategorize"
-              :options="realtimeCategorizeOptions"
+              :options="realtimeGraph.categorize"
+              :lazy-rules="true"
+              :rules="[v => Boolean(Object.keys(v || {})[0]) || 'Field is required']"
               class="select-type"
             />
           </div>
@@ -560,8 +572,11 @@
             <q-select
               outlined dense options-dense
               color="light-blue-6"
+              ref="realtimeParams"
               v-model="realtimeParams"
-              :options="realtimeParamsOptions"
+              :options="realtimeGraph.params"
+              :lazy-rules="true"
+              :rules="[v => Boolean(Object.keys(v || {})[0]) || 'Field is required']"
               class="select-type"
             />
           </div>
@@ -572,8 +587,11 @@
             <q-select
               outlined dense options-dense
               color="light-blue-6"
+              ref="realtimeInterval"
               v-model="realtimeInterval"
-              :options="realtimeIntervalOptions"
+              :options="realtimeGraph.interval"
+              :lazy-rules="true"
+              :rules="[v => Boolean(Object.keys(v || {})[0]) || 'Field is required']"
               class="select-type"
             />
           </div>
@@ -584,8 +602,11 @@
             <q-select
               outlined dense options-dense
               color="light-blue-6"
+              ref="realtimePeriod"
               v-model="realtimePeriod"
-              :options="realtimePeriodOptions"
+              :options="realtimeGraph.period"
+              :lazy-rules="true"
+              :rules="[v => Boolean(Object.keys(v || {})[0]) || 'Field is required']"
               class="select-type"
             />
           </div>
@@ -596,8 +617,11 @@
             <q-select
               outlined dense options-dense
               color="light-blue-6"
+              ref="realtimeChart"
               v-model="realtimeChart"
-              :options="realtimeChartOptions"
+              :options="realtimeGraph.chart"
+              :lazy-rules="true"
+              :rules="[v => Boolean(Object.keys(v || {})[0]) || 'Field is required']"
               class="select-type"
             />
           </div>
