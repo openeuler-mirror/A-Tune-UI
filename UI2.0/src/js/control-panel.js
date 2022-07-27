@@ -21,30 +21,47 @@ export default defineComponent({
       // cards column
       ctrlChartId: undefined,
       // pop up -- history
-      historyFunc: ref(undefined),
-      historyFuncOptions: ['Option1', 'Option2'],
-      historyName: ref(undefined),
-      historyNameOptions: ['Option1', 'Option2'],
-      historyChart: ref(undefined),
-      historyChartOptions: ['Option1', 'Option2'],
+      historyGraph: {
+        'func': [],
+        'name': [],
+        'chart': [],
+      },
+      historyFunc: undefined,
+      historyName: undefined,
+      historyChart: undefined,
       // pop up -- realtime
-      realtimeCategorize: ref(undefined),
-      realtimeCategorizeOptions: ['Option1', 'Option2'],
-      realtimeParams: ref(undefined),
-      realtimeParamsOptions: ['Option1', 'Option2'],
-      realtimeInterval: ref(undefined),
-      realtimeIntervalOptions: ['Option1', 'Option2'],
-      realtimePeriod: ref(undefined),
-      realtimePeriodOptions: ['Option1', 'Option2'],
-      realtimeChart: ref(undefined),
-      realtimeChartOptions: ['Option1', 'Option2'],
+      realtimeGraph: {
+        'categorize': [],
+        'params': [],
+        'interval': [],
+        'period': [],
+        'chart': [],
+      },
+      realtimeCategorize: undefined,
+      realtimeParams: undefined,
+      realtimeInterval: undefined,
+      realtimePeriod: undefined,
+      realtimeChart: undefined,
     };
   },
   methods: {
+    resetValidation() {
+      this.$refs.historyFunc.resetValidation();
+      this.$refs.historyName.resetValidation();
+      this.$refs.historyChart.resetValidation();
+      this.$refs.realtimeCategorize.resetValidation();
+      this.$refs.realtimeParams.resetValidation();
+      this.$refs.realtimeInterval.resetValidation();
+      this.$refs.realtimePeriod.resetValidation();
+      this.$refs.realtimeChart.resetValidation();
+    },
     resetHistoryOptions() {
       this.historyFunc = undefined;
       this.historyName = undefined;
       this.historyChart = undefined;
+      this.historyGraph.func = [];
+      this.historyGraph.name = [];
+      this.historyGraph.chart = [];
     },
     resetRealtimeOptions() {
       this.realtimeCategorize = undefined;
@@ -52,31 +69,79 @@ export default defineComponent({
       this.realtimeInterval = undefined;
       this.realtimePeriod = undefined;
       this.realtimeChart = undefined;
+      this.realtimeGraph.categorize = [];
+      this.realtimeGraph.params = [];
+      this.realtimeGraph.interval = [];
+      this.realtimeGraph.period = [];
+      this.realtimeGraph.chart = [];
     },
     openPopUp(chartDivId) {
       this.ctrlChartId = chartDivId;
+      /* add options to select */
+      this.historyGraph.func.push('func1', 'func2');
+      this.historyGraph.name.push('name1', 'name2');
+      this.historyGraph.chart.push('chart1', 'chart2');
+      this.realtimeGraph.categorize.push('categorize1', 'categorize2');
+      this.realtimeGraph.params.push('params1', 'params2');
+      this.realtimeGraph.interval.push('interval1', 'interval2');
+      this.realtimeGraph.period.push('period1', 'period2');
+      this.realtimeGraph.chart.push('chart1', 'chart2');
+      /* display pop up */
       document.getElementById('light').style.display = 'block';
       document.getElementById('fade').style.display = 'block';
-    },
-    closePopUp() {
-      this.ctrlChartId = undefined;
-      this.resetHistoryOptions();
-      this.resetRealtimeOptions();
-      document.getElementById('light').style.display = 'none';
-      document.getElementById('fade').style.display = 'none';
     },
     showRealtimeOptions() {
       document.getElementById('realtime').style.display = 'block';
       document.getElementById('history').style.display = 'none';
+      this.resetHistoryOptions();
+    },
+    checkRealtimeValidate() {
+      let res1 = this.$refs.realtimeCategorize.validate();
+      let res2 = this.$refs.realtimeParams.validate();
+      let res3 = this.$refs.realtimeInterval.validate();
+      let res4 = this.$refs.realtimePeriod.validate();
+      let res5 = this.$refs.realtimeChart.validate();
+      return res1 && res2 && res3 && res4 && res5;
     },
     showHistoryOptions() {
       document.getElementById('realtime').style.display = 'none';
       document.getElementById('history').style.display = 'block';
+      this.resetRealtimeOptions();
+    },
+    checkHistoryValidate() {
+      let res1 = this.$refs.historyFunc.validate();
+      let res2 = this.$refs.historyName.validate();
+      let res3 = this.$refs.historyChart.validate();
+      return res1 && res2 && res3;
+    },
+    closePopUp() {
+      this.ctrlChartId = undefined;
+      document.getElementById('light').style.display = 'none';
+      document.getElementById('fade').style.display = 'none';
+      this.resetHistoryOptions();
+      this.resetRealtimeOptions();
+      this.resetValidation();
     },
     confirmPopUp() {
-      console.log('click confirm:', this.ctrlChartId);
       let isRealTime = document.getElementById('realtime').style.display === 'block';
-
+      let val = {};
+      if (isRealTime && this.checkRealtimeValidate()) {
+        val['display'] = 'realtime';
+        val['categorize'] = this.realtimeCategorize;
+        val['params'] = this.realtimeParams;
+        val['interval'] = this.realtimeInterval;
+        val['period'] = this.realtimePeriod;
+        val['chart'] = this.realtimeChart;
+        this.closePopUp();
+      } else if (!isRealTime && this.checkHistoryValidate()) {
+        val['display'] = 'history';
+        val['func'] = this.historyFunc;
+        val['name'] = this.historyName;
+        val['chart'] = this.historyChart;
+        this.closePopUp();
+      } else {
+        return;
+      }
     },
     deleteChart(chartDivId) {
       let div = document.getElementById(chartDivId);
@@ -100,23 +165,5 @@ export default defineComponent({
     this.ipNum = 5;
     this.analysisNum = 10;
     this.tuningNum = 20;
-
-
-    var echarts = require('echarts');
-    var myChart1 = echarts.init(document.getElementById('main1'));
-    var myChart2 = echarts.init(document.getElementById('main2'));
-    var myChart3 = echarts.init(document.getElementById('main3'));
-
-    charts.initLineChart(myChart1, '', '-', ['test1', 'test2'], 'cpu');
-    charts.appendLineChartData(myChart1, [6, 7, 8, 9, 10, 11], ['test1', 'test2', 'test3'], [[10, 11, 12, 13], [1, 2, 3, 4], [5, 4, 6, 7, 1, 3]]);
-    charts.deleteChartData(myChart1, ['test1']);
-
-    charts.initBarChart(myChart2, '', '', ['test1', 'test2'], 'STORage');
-    charts.appendBarChartData(myChart2, [6, 7, 8, 9, 10, 11], ['test1', 'test2', 'test3'], [[10, 11, 12, 13, 7, 5], [1, 2, 3, 4], [5, 4, 6, 7]]);
-    charts.deleteChartData(myChart2, ['test3']);
-
-    charts.initPieChart(myChart3, 'text', 'subtext', 'seriesName',  'PERF');
-    charts.appendPieChart(myChart3, ['test1', 'test2', 'Test1'], [500, 100, 100]);
-    charts.deletePieChart(myChart3, ['test1', 'Test2']);
   },
 });
