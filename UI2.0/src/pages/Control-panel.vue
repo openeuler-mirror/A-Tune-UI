@@ -465,12 +465,23 @@
           </div>
         </div>
       </div>
-      <!-- add card -->
-      <div id="add-card-column" class="row">
+      <!-- delete card -->
+      <div id="delete-card-column" style="display: none" class="card-column row">
         <div class="col bg-white">
           <div style="margin: 28px 0 0 916px">
-            <div class="add-card-icon" @click="addCardColumn"></div>
-            <button class="bg-white add-card-btn" @click="addCardColumn">
+            <div class="delete-card-icon card-icon" @click="deleteCardColumn"></div>
+            <button class="bg-white card-btn" @click="deleteCardColumn">
+              删除卡片
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- add card -->
+      <div id="add-card-column" class="card-column row">
+        <div class="col bg-white">
+          <div style="margin: 28px 0 0 916px">
+            <div class="add-card-icon card-icon" @click="addCardColumn"></div>
+            <button class="bg-white card-btn" @click="addCardColumn">
               添加卡片
             </button>
           </div>

@@ -179,15 +179,14 @@ ul.pagination li a:hover:not(.active) {
   cursor: pointer;
 }
 
-/* add card */
-.add-card-icon {
-  background: url(../assets/control-panel/add-default.png) no-repeat;
+/* card column */
+.card-icon {
   width: 24px;
   height: 24px;
   float: left;
   cursor: pointer;
 }
-.add-card-btn {
+.card-btn {
   float: left;
   color: #999999;
   font-size: 14px;
@@ -197,12 +196,20 @@ ul.pagination li a:hover:not(.active) {
   padding: 0;
   cursor: pointer;
 }
-#add-card-column {
+.card-column {
   height: 80px;
   width: 1856px;
   margin: 0 32px 16px 32px;
 }
 
+/* add card */
+.add-card-icon {
+  background: url(../assets/control-panel/add-default.png) no-repeat;
+}
+/* delete card */
+.delete-card-icon {
+  background: url(../assets/control-panel/delete-default.png) no-repeat;
+}
 
 /* common */
 .text-title {
@@ -217,7 +224,9 @@ ul.pagination li a:hover:not(.active) {
 .add-card-icon:hover {
   background: url(../assets/control-panel/add-highlight.png) no-repeat;
 }
-
+.delete-card-icon:hover {
+  background: url(../assets/control-panel/delete-highlight.png) no-repeat;
+}
 
 /* pop up window */
 .black_overlay {

@@ -123,6 +123,7 @@ export default defineComponent({
       this.resetValidation();
     },
     confirmPopUp() {
+      let currentDiv = this.ctrlChartId;
       let isRealTime = document.getElementById('realtime').style.display === 'block';
       let val = {};
       if (isRealTime && this.checkRealtimeValidate()) {
@@ -142,9 +143,23 @@ export default defineComponent({
       } else {
         return;
       }
+
+      document.getElementById(currentDiv).innerHTML = '';
+      let appendDiv = getChartDiv(currentDiv, 'title', 'circle-chart');
+      document.getElementById(currentDiv).appendChild(appendDiv.titleDiv);
+      document.getElementById(currentDiv).appendChild(appendDiv.chartDiv);
+
+      let echarts = require('echarts');
+      let myChart = echarts.init(document.getElementById(appendDiv.chartDiv.id));
+
+      charts.initPieChart(myChart, 'text', 'subtext', 'seriesName',  'PERF');
+      charts.appendPieChart(myChart, ['test1', 'test2', 'Test1'], [500, 100, 100]);
+      charts.deletePieChart(myChart, ['test1', 'Test2']);
     },
-    deleteChart(chartDivId) {
-      let div = document.getElementById(chartDivId);
+    deleteChart(currentDiv) {
+      document.getElementById(currentDiv).innerHTML = '';
+      let newDiv = getRenewDiv(currentDiv);
+      document.getElementById(currentDiv).appendChild(newDiv);
     },
     addCardColumn() {
       if (document.getElementById('cards-column-2').style.display === 'block') {
@@ -152,6 +167,16 @@ export default defineComponent({
         document.getElementById('add-card-column').style.display = 'none';
       } else {
         document.getElementById('cards-column-2').style.display = 'block';
+        document.getElementById('delete-card-column').style.display = 'flex';
+      }
+    },
+    deleteCardColumn() {
+      if (document.getElementById('cards-column-3').style.display === 'block') {
+        document.getElementById('cards-column-3').style.display = 'none';
+        document.getElementById('add-card-column').style.display = 'flex';
+      } else {
+        document.getElementById('cards-column-2').style.display = 'none';
+        document.getElementById('delete-card-column').style.display = 'none';
       }
     },
     onCommandClick() {
@@ -165,5 +190,52 @@ export default defineComponent({
     this.ipNum = 5;
     this.analysisNum = 10;
     this.tuningNum = 20;
+    window.deleteChartWin = this.deleteChart;
+    window.openPopUpWin = this.openPopUp;
   },
 });
+
+function getChartDiv(currentDiv, title, chartType) {
+  let titleVal = document.createElement('div');
+  titleVal.classList.add('text-title');
+  titleVal.style.marginBottom = '0';
+  titleVal.append(title);
+  let delDiv = document.createElement('div');
+  delDiv.classList.add('delete-pic');
+  delDiv.style.zIndex = '100';
+  delDiv.onclick = function () {
+    deleteChartWin(currentDiv);
+  };
+  let titleDiv = document.createElement('div');
+  titleDiv.classList.add('row');
+  titleDiv.classList.add('space-btw');
+  titleDiv.appendChild(titleVal);
+  titleDiv.appendChild(delDiv);
+
+  let chartDiv = document.createElement('div');
+  chartDiv.id = 'chart-' + currentDiv;
+  chartDiv.classList.add('col');
+  chartDiv.classList.add(chartType);
+  return {'titleDiv': titleDiv, 'chartDiv': chartDiv};
+}
+
+function getRenewDiv(currentDiv) {
+  let childDiv = document.createElement('div');
+  let iconDiv = document.createElement('div');
+  iconDiv.classList.add('add-chart-icon');
+  iconDiv.onclick = function () {
+    openPopUpWin(currentDiv);
+  }
+
+  let addBtn = document.createElement('button');
+  addBtn.classList.add('bg-white');
+  addBtn.classList.add('add-chart-btn');
+  addBtn.onclick = function () {
+    openPopUpWin(currentDiv);
+  }
+
+  addBtn.append('新增图表');
+  childDiv.appendChild(iconDiv);
+  childDiv.appendChild(addBtn);
+  return childDiv;
+}
