@@ -122,10 +122,11 @@
                         <div class="col-12 col-sm-4 text-subtitle1 text-weight-bolder">
                             命令
                         </div>
-                        <div class="col-12 col-sm-8">
+                        <div class="col-12 col-sm-8 flex justify-between">
                             <q-card dark bordered class="bg-grey-9 ">
                                 <div class="q-pa-md text-h5">{{ commandString }}</div>
                             </q-card>
+                            <q-btn label="发送" @click="sendCommand" />
                         </div>
                     </div>
                     <div class="row q-pa-sm">
@@ -158,7 +159,7 @@ import { ref, onMounted } from "vue"
 import 'xterm/css/xterm.css'
 import { Terminal } from 'xterm'
 import argumentRadio from './ArgumentRadio.vue'
-
+import Tuning from "../../js/service/tuning"
 
 
 let tuningMode = ref()
@@ -234,8 +235,20 @@ const updateXtrem = () => {
     setInterval(() => { term.write(' 发送心跳包 \r\n') }, 5000);
 }
 
+const sendCommand = () => {
+    let data = {}
+    data.command = tuningMode.value
+    data.options = argumentList.value
+    data.yaml = configFile.value
+    Tuning.sendCommand()
+}
+
+const updateConfig = () => {
+    Tuning.updateConfig(configFile.value)
+}
 
 </script>
 
 <style>
+
 </style>

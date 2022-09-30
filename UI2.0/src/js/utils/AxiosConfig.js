@@ -1,0 +1,112 @@
+import axios from "axios";
+
+import { Notify } from "quasar";
+
+axios.defaults.baseURL = "/api";
+
+axios.defaults.headers.post["Content-Type"] = "application/json;charset=UTF-8";
+axios.defaults.timeout = 10000;
+
+axios.interceptors.request.use(
+  config => {
+    const token = sessionStorage.getItem("access_token");
+    config.headers.authorization = token;
+    return config;
+  },
+  error => {
+    return Promise.reject(error);
+  }
+);
+
+axios.interceptors.response.use(
+  response => {
+    
+    return response;
+  },
+  error => {
+    const defaultNotify = {
+      title: "网络错误",
+      message: "未知错误",
+      icon: "warning",
+      color: "warning",
+      position: "top",
+      duration: 1500,
+    };
+    if (error.code === "ECONNABORTED" || error.message.indexOf("timeout") !== -1 || error.message === "Network Error") {
+      defaultNotify.message = "网络异常";
+      Notify.create(defaultNotify);
+      return Promise.reject(error);
+    }
+    switch (error.response.status) {
+      case 403:
+        defaultNotify.message = "拒绝访问(403)";
+        Notify.create(defaultNotify);
+        break;
+      case 404:
+        defaultNotify.message = "资源不存在(404)";
+        Notify.create(defaultNotify);
+        break;
+      case 408:
+        defaultNotify.message = "请求超时(404)";
+        Notify.create(defaultNotify);
+        break;
+      case 500:
+        defaultNotify.message = "服务器错误(500)";
+        Notify.create(defaultNotify);
+        break;
+      case 501:
+        defaultNotify.message = "服务未实现(501)";
+        Notify.create(defaultNotify);
+        break;
+      case 502:
+        defaultNotify.message = "网络错误(502)";
+        Notify.create(defaultNotify);
+        break;
+      case 503:
+        defaultNotify.message = "服务不可用(503)";
+        Notify.create(defaultNotify);
+        break;
+      case 504:
+        defaultNotify.message = "网络超时(504)";
+        Notify.create(defaultNotify);
+        break;
+      case 505:
+        defaultNotify.message = "HTTP版本不受支持(505)";
+        Notify.create(defaultNotify);
+        break;
+      default:
+        break;
+    }
+    return Promise.reject(error);
+  }
+);
+
+export default function axiosApi(url, data, method) {
+  return new Promise((resolve, reject) => {
+    if (method === "get") {
+      axios({
+        method,
+        url,
+        params: data,
+      })
+        .then(res => {
+          resolve(res.data);
+        })
+        .catch(err => {
+          reject(err);
+        });
+    } else {
+      axios({
+        method,
+        url,
+        data,
+      })
+        .then(res => {
+          resolve(res.data);
+        })
+        .catch(err => {
+          reject(err);
+        });
+    }
+  });
+}
