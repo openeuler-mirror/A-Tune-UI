@@ -20,6 +20,7 @@
             <option>English</option>
           </select>
           <q-btn
+            v-show="DBCollect"
             flat
             style="
               color: #000000;
@@ -33,6 +34,7 @@
             @click="onLoginClick"
           ></q-btn>
           <q-btn
+            v-show="DBCollect"
             flat
             style="
               background: #3681de;

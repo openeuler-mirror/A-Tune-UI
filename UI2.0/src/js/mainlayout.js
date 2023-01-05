@@ -1,5 +1,6 @@
 import EssentialLink from "components/EssentialLink.vue";
 import { defineComponent, ref } from "vue";
+import axios from "./utils/AxiosConfig";
 
 const linksList = [
   {
@@ -13,6 +14,14 @@ export default defineComponent({
   name: "MainLayout",
   components: {
     EssentialLink,
+  },
+  data() {
+    return {
+      DBCollect: false,
+    }
+  },
+  mounted() {
+    this.connectDatabase()
   },
   methods: {
     onItemClick() {
@@ -41,6 +50,19 @@ export default defineComponent({
     showSearchInput() {
       document.getElementById("search-input").style.display = "block";
     },
+    connectDatabase() {
+      axios("/v1/UI/user/initialPage", {}, "get")
+        .then(res => {
+          res = JSON.parse(res)
+          if (res.connectDB) {
+            this.DBCollect = true
+          } else {
+            this.DBCollect = false
+          }
+        }).catch(err => {
+          console.log(err)
+        })
+    }
   },
   setup() {
     const leftDrawerOpen = ref(false);

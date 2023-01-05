@@ -55,7 +55,7 @@
                 padding: 0px;
                 padding-right: 32px;
               "
-              label="zhangsan"
+              :label="$store.state.user.name"
               dropdown-icon="expand_more"
             >
               <q-list>

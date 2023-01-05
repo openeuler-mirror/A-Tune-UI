@@ -15,10 +15,11 @@
         </div>
         <q-card class="login-card">
           <q-card-section>
-            <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
+            <q-form class="q-gutter-md">
               <div class="text-login text-center">登录</div>
-              <input class="login-input" placeholder="请输入账号" />
-              <input class="login-input" placeholder="请输入密码" />
+              <input class="login-input" placeholder="请输入账号" type="text" v-model="user.email"/>
+              <input class="login-input" placeholder="请输入密码" type="password" v-model="user.password"/>
+              <p class="login-hint">{{hint}}</p>
               <div
                 class="row"
                 style="justify-content: space-between; margin-bottom: 32px"
