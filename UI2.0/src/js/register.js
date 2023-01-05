@@ -31,7 +31,7 @@ export default defineComponent({
                 return
             }
             this.user.password = CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse(this.user.password));
-            axios("/v1/UI/user/signup", this.user, "get")
+            axios("/v1/UI/user/signup", this.user, "post")
                 .then(res => {
                     res = JSON.parse(res)
                     if (res.signup) {
