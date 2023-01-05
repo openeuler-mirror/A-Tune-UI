@@ -14,6 +14,18 @@ import { createStore } from 'vuex'
 
 export default store(function (/* { ssrContext } */) {
   const Store = createStore({
+    state() {
+      return {
+        user: {
+          name: "游客",
+        }
+      }
+    },
+    mutations: {
+      changeUserName(state, newName){
+        state.user.name = newName
+      }
+    },
     modules: {
       // example
     },

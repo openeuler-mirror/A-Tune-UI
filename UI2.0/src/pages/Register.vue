@@ -15,14 +15,15 @@
         </div>
         <q-card class="register-card">
           <q-card-section>
-            <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
+            <q-form class="q-gutter-md">
               <div class="text-center text-register">注册</div>
-              <input class="register-input" placeholder="请输入邮箱" />
-              <input class="register-input" placeholder="请输入用户名" />
-              <input class="register-input" placeholder="请输入密码" />
-              <input class="register-input" placeholder="请输入确认密码" />
+              <input class="register-input" placeholder="请输入邮箱" type="email" v-model="user.email" />
+              <input class="register-input" placeholder="请输入用户名" type="text" v-model="user.name" />
+              <input class="register-input" placeholder="请输入密码" type="password" v-model="user.password" />
+              <input class="register-input" placeholder="请输入确认密码" type="password" v-model="user.repassword" />
+              <p class="register-hint">{{hint}}</p>
               <div>
-                <q-btn class="btn-register" unelevated label="立即注册" />
+                <q-btn @click="onRegisterClick" class="btn-register" unelevated label="立即注册" />
                 <div
                   class="text-right row"
                   style="margin-bottom: 40px; justify-content: flex-end"

@@ -75,14 +75,13 @@ module.exports = configure(function (ctx) {
       open: true, // opens browser window automatically
       proxy: {
         "/api": {
-          target: "http://localhost:5000",
+          target: "http://localhost:3839",
           changeOrigin: true,
           pathRewrite: {
             "^/api": "",
           },
         },
       },
-      https: true,
     },
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-framework

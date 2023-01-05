@@ -29,7 +29,7 @@ export default defineComponent({
         path: "/record",
       });
     },
-    onInformationClick(){
+    onInformationClick() {
       this.$router.push({
         path: "/information",
       });
@@ -59,8 +59,8 @@ export default defineComponent({
     },
   },
   setup() {
-     return {
-     
+    return {
+
     };
   },
 });

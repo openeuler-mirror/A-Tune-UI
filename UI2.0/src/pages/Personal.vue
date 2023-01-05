@@ -23,7 +23,7 @@
                   margin-top: 16px;
                 "
               >
-                zhangsan
+                {{$store.state.user.name}}
               </div>
               <div style="color: #1d68c4; font-size: 14px">
                 长风破浪会有时，直挂云帆济沧海

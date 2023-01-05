@@ -18,6 +18,7 @@ import Notify from 'quasar';
 
 import routes from './router';
 
+
 Vue.use(VueRouter);
 Vue.use(Notify);
 
