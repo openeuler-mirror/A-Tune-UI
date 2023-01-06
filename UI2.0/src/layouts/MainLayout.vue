@@ -1,6 +1,6 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-header style="height: 64px; width: 1920px">
+    <q-header style="height: 64px; min-width: 1920px">
       <q-toolbar class="row" style="justify-content: space-between">
         <img
           alt="A-Tune logo"

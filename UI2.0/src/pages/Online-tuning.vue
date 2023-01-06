@@ -1,10 +1,8 @@
 <template>
   <q-page>
     <div
-      class="row"
+      class="row main-bg-style"
       style="
-        justify-content: space-between;
-        width: 1920px;
         background-color: #f1f2f6;
       "
     >

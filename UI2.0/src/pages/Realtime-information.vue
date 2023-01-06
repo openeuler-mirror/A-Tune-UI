@@ -1,7 +1,12 @@
 <template>
   <q-page>
     <div class="row model-realtime">
-      <a>数据实时监控</a>
+      <a style="
+        color: #222222;
+        font-size: 20px;
+        margin: 24px 0px 16px 32px;
+        font-weight: bold;
+      ">数据实时监控</a>
       <div class="col-12 model-realtime-a" style="width: 1856px">
         <div
           class="row"
@@ -101,5 +106,6 @@
 
 <style scoped>
 @import "../css/realtime-information.css";
+@import "../css/common.css";
 </style>
     

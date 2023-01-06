@@ -3,7 +3,7 @@
     <div
       class="row"
       style="
-        justify-content: flex-start;
+        margin: 0 auto;
         width: 1920px;
         background-color: #f1f2f6;
       "
