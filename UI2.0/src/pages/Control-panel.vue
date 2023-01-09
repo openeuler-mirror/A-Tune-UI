@@ -3,7 +3,7 @@
     <div class="row main-bg-style">
       <!-- column info -->
       <div id="col-info-mod">
-        <div class="float-left" style="padding-left: 204px;">
+        <div class="float-" style="padding-left: 204px;">
           <div id="col-info-left-text">
             嗨，{{$store.state.user.name}}愿您事事顺心，快乐相随！
           </div>

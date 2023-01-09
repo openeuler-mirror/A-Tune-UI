@@ -1,8 +1,8 @@
 <template>
   <q-page>
-    <div class="row">
+    <div class="row" style="min-width: 1920px; justify-content: center">
       <!-- 首页第一栏 -->
-      <div class="col-12 col-module-a row" style="height: 600px; width: 1920px">
+      <div class="col-12 col-module-a row" style="height: 600px; width: 1920px; ">
         <div
           class="float-left"
           style="margin-left: 188px; padding: 0px; float: left"
@@ -47,7 +47,7 @@
             <img
               alt="A-Tune piciure"
               src="~assets/home/AI-algorithm.png"
-              style="float: left; width: 43%"
+              style="float: left; width: 43%; height: 200px"
             />
             <div style="float: left">
               <p
@@ -69,7 +69,7 @@
             <img
               alt="A-Tune piciure"
               src="~assets/home/automation.png"
-              style="float: left; width: 43%"
+              style="float: left; width: 43%; height: 200px"
             />
             <div style="float: left">
               <p
@@ -93,7 +93,7 @@
             <img
               alt="A-Tune piciure"
               src="~assets/home/performance-optimizing.png"
-              style="float: left; width: 43%"
+              style="float: left; width: 43%; height: 200px"
             />
             <div style="float: left">
               <p

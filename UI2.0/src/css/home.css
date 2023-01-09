@@ -1,11 +1,13 @@
 .col-module-a {
-  background: url(../assets/home/banner-background.png) no-repeat;
+  background-image: url(../assets/home/banner-background.png);
+  background-size: cover;
 }
 .col-module-b {
   background-color: #f5f6f8;
 }
 .col-module-c {
-  background: url(../assets/home/background.png) no-repeat;
+  background: url(../assets/home/background.png);
+  background-size: cover;
 }
 .col-module-d {
   background-color: #2c3554;
