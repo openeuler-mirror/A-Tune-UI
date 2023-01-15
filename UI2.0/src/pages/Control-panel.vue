@@ -5,10 +5,10 @@
       <div id="col-info-mod">
         <div class="float-" style="padding-left: 204px;">
           <div id="col-info-left-text">
-            嗨，{{$store.state.user.name}}愿您事事顺心，快乐相随！
+            嗨，{{$store.state.User.userInfo.name}}愿您事事顺心，快乐相随！
           </div>
           <div id="col-info-left-subtext">
-            长风破浪会有时，直挂云帆济沧海
+            {{$store.state.User.userInfo.description}}
           </div>
         </div>
         <div class="float-right" style="margin: 32px 32px;">

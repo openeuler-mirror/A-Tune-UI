@@ -1,5 +1,8 @@
 import { store } from 'quasar/wrappers'
 import { createStore } from 'vuex'
+import createPersistedState from 'vuex-persistedstate'
+import User from './user/userInfo'
+
 
 // import example from './module-example'
 
@@ -15,24 +18,18 @@ import { createStore } from 'vuex'
 export default store(function (/* { ssrContext } */) {
   const Store = createStore({
     state() {
-      return {
-        user: {
-          name: "游客",
-        }
-      }
     },
     mutations: {
-      changeUserName(state, newName){
-        state.user.name = newName
-      }
     },
     modules: {
       // example
+      User,
     },
 
     // enable strict mode (adds overhead!)
     // for dev mode and --debug builds only
-    strict: process.env.DEBUGGING
+    strict: process.env.DEBUGGING,
+    plugins: [createPersistedState()]
   })
 
   return Store

@@ -23,7 +23,10 @@ export default defineComponent({
                 .then(res => {
                     res = JSON.parse(res)
                     if (res.login) {
-                        this.$store.commit("changeUserName", res.user_name)
+                        this.$store.commit("setUserInfo", {
+                            name: res.user_name,
+                            userId: res.user_id,
+                        })
                         this.$router.push({
                             path: "/user",
                         });

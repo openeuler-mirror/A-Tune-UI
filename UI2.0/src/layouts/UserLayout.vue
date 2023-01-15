@@ -55,7 +55,7 @@
                 padding: 0px;
                 padding-right: 32px;
               "
-              :label="$store.state.user.name"
+              :label="$store.state.User.userInfo.name"
               dropdown-icon="expand_more"
             >
               <q-list>

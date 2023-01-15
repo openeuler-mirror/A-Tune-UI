@@ -23,10 +23,10 @@
                   margin-top: 16px;
                 "
               >
-                {{$store.state.user.name}}
+                {{$store.state.User.userInfo.name}}
               </div>
               <div style="color: #1d68c4; font-size: 14px">
-                长风破浪会有时，直挂云帆济沧海
+                {{$store.state.User.userInfo.description}}
               </div>
             </div>
           </div>
@@ -128,6 +128,7 @@
         <div class="essential-info">
           <a>昵称：</a>
           <input
+            v-model="basicInfo.name"
             class="info-input"
             placeholder="请输入"
             style="margin-top: 24px; margin-bottom: 16px"
@@ -136,6 +137,7 @@
         <div class="essential-info row">
           <a>签名：</a>
           <textarea
+            v-model="basicInfo.description"
             class="info-input"
             placeholder="请输入"
             style="height: 100px"
@@ -145,40 +147,50 @@
       <!-- --------------------------- -->
       <div class="row" style="position: absolute; bottom: 0px; left: 30%">
         <button class="button-add-chart-no" @click="closeWin">取消</button>
-        <button class="button-add-chart-yes">确定</button>
+        <button class="button-add-chart-yes" @click="changeBasicInfo">确定</button>
       </div>
     </q-card>
     <q-card id="card-password" class="pop-win" style="height: 320px">
       <q-card-section class="row" style="justify-content: space-between">
-        <div class="card-title">修改密码</div>
+        <div class="card-title" @click="changePwd">修改密码</div>
         <div class="close-card" @click="closeWinpass"></div>
       </q-card-section>
       <div>
         <div class="essential-info">
           <a>旧密码</a>
           <input
+            v-model="password.oldPassword"
             class="info-password"
             placeholder="--请输入--"
             style="margin-top: 24px; margin-left: 44px"
+            type="password"
           />
         </div>
         <div class="essential-info">
           <a>新密码</a>
           <input
+            v-model="password.newPassword"
             class="info-password"
             placeholder="--请输入--"
             style="margin-left: 44px"
+            type="password"
           />
         </div>
         <div class="essential-info">
           <a>确认新密码</a>
-          <input class="info-password" placeholder="--请输入--" />
+          <input  
+            v-model="password.renewPassword" 
+            class="info-password" 
+            placeholder="--请输入--" 
+            type="password"
+          />
         </div>
+        <p style="margin-left: 31px; font-size: 16px; color: red;">{{ password.hint }}</p>
       </div>
       <!-- --------------------------- -->
       <div class="row" style="position: absolute; bottom: 0px; left: 30%">
         <button class="button-add-chart-no" @click="closeWinpass">取消</button>
-        <button class="button-add-chart-yes">确定</button>
+        <button class="button-add-chart-yes" @click="changePwd">确定</button>
       </div>
     </q-card>
   </div>
