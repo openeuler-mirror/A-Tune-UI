@@ -58,6 +58,9 @@ export default defineComponent({
       document.getElementById("search-input").style.display = "block";
     },
   },
+  mounted() {
+    this.$store.dispatch("getUserInfoFromBackend")
+  },
   setup() {
     return {
 
