@@ -173,3 +173,9 @@
   font-weight: bolder;
   padding: 14px 0px 8px 14px;
 }
+.addipInfo-info > img {
+  margin-left: 31px;
+}
+.disabled_button {
+  pointer-events: none;
+}

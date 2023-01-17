@@ -10,6 +10,15 @@ export default defineComponent({
         name: "",
         description: ""
       },
+      ipInfo: {
+        hint: "",
+        ipAddrs: "",
+        ipPort: "",
+        serverUser: "",
+        serverPassword: "",
+        description: "",
+        isConnect: false
+      },
       password: {
         hint: "",
         oldPassword: "",
@@ -35,6 +44,51 @@ export default defineComponent({
       document.getElementById("card-password").style.display = "none";
       document.getElementById("fade").style.display = "none";
     },
+    popAddIpWin() {
+      document.getElementById("card-addIP").style.display = "block";
+      document.getElementById("fade").style.display = "block";
+    },
+    closeAddIpWin() {
+      document.getElementById("card-addIP").style.display = "none";
+      document.getElementById("fade").style.display = "none";
+      this.ipInfo.isConnect = false;
+      this.ipInfo.hint = "";
+    },
+    deleteIp(index){
+      this.$store.dispatch("deleteIp", index)
+    },
+    testConnect(){
+      if(this.ipInfo.ipAddrs == "" || this.ipInfo.ipPort == "" ||
+        this.ipInfo.serverUser == "" || this.ipInfo.serverPassword == ""){
+          this.ipInfo.hint = "服务器信息请填完整"
+      } else {
+        axios("/v1/UI/user/testConnect", {
+          ipAddrs: this.ipInfo.ipAddrs,
+          ipPort: this.ipInfo.ipPort,
+          serverUser: this.ipInfo.serverUser,
+          serverPassword: base64Encode(this.ipInfo.serverPassword),
+        }, "post").then(res => {
+          res = JSON.parse(res)
+          this.ipInfo.hint = res.msg
+          if(res.success) {
+            this.ipInfo.isConnect = true
+          }
+        }).catch(err => {
+          console.log(err)
+        })
+      }
+    },
+    addNewIp(){
+      this.$store.dispatch("addNewip",{
+        userId: this.$store.state.User.userInfo.userId,
+        ipAddrs: this.ipInfo.ipAddrs,
+        ipPort: this.ipInfo.ipPort,
+        serverUser: this.ipInfo.serverUser,
+        serverPassword: base64Encode(this.ipInfo.serverPassword),
+        description: this.ipInfo.description
+      })
+      this.closeAddIpWin()
+    },
     changeBasicInfo(){
       if(this.basicInfo.name == this.$store.state.User.userInfo.name && 
         this.basicInfo.description == this.$store.state.User.userInfo.description) {
@@ -53,8 +107,6 @@ export default defineComponent({
           res = JSON.parse(res)
           if(!res.success) {
             console.log("修改失败")
-          } else {
-            console.log("修改成功")
           }
         }).catch(err => {
           console.log(err)
@@ -97,7 +149,9 @@ export default defineComponent({
   },
   
   mounted() {
+    this.$store.dispatch("getIpListFromBackend")
     this.basicInfo.name = this.$store.state.User.userInfo.name
     this.basicInfo.description = this.$store.state.User.userInfo.description
+    console.log(this.$store.state.User.ipList)
   },
 });
