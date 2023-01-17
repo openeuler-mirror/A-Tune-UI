@@ -8,6 +8,7 @@ const User = {
                 userId: 0,
                 description: "长风破浪会有时，直挂云帆济沧海",
             },
+            ipList: [],
         }
     },
     mutations: {
@@ -16,21 +17,50 @@ const User = {
             state.userInfo.name = user.name
             state.userInfo.description = user.description
         },
+        setIpList(state, ipList) {
+            state.ipList = ipList
+        }
     },
     actions: {
         getUserInfoFromBackend({state, commit}) {
             //通过userId获取用户完整信息
-            axios("/v1/UI/user/getBasicInfo",{
+            axios("/v1/UI/user/getBasicInfo", {
                 userId: state.userInfo.userId
             }, "post").then(res => {
                 res = JSON.parse(res)
                 commit("setUserInfo",{
                     userId: state.userInfo.userId,
                     name: res.name,
-                    description: res.description
+                    description: res.description,
                 })
+            })  
+        },
+        getIpListFromBackend({state, commit}) {
+            axios("/v1/UI/user/ipList", {userId: state.userInfo.userId}, "get").then(res => {
+                res = JSON.parse(res)
+                console.log(res)
+                commit("setIpList", res.ipList)
             })
-        }   
+        },
+        addNewip({dispatch}, ipinfo) {
+            axios("/v1/UI/user/addNewIp", ipinfo, "post").then(res => {
+                res = JSON.parse(res)
+                if(res.success) {
+                    dispatch("getIpListFromBackend")
+                }
+            })
+        },
+        deleteIp({state, dispatch}, index) {
+            axios("/v1/UI/user/deleteIp", {
+                userId: state.userInfo.userId,
+                ipAddrs: state.ipList[index].ipAddrs
+            }, "get").then(res => {
+                res = JSON.parse(res)
+                if(res.success) {
+                    dispatch("getIpListFromBackend")
+                }
+            })
+        }
     }
 }
 
