@@ -51,13 +51,34 @@ export default defineComponent({
     closeAddIpWin() {
       document.getElementById("card-addIP").style.display = "none";
       document.getElementById("fade").style.display = "none";
-      this.ipInfo.isConnect = false;
-      this.ipInfo.hint = "";
+      this.cleanIpInfo()
     },
-    deleteIp(index){
+    popUpdateIpWin(index) {
+      document.getElementById("card-editIP").style.display = "block"
+      document.getElementById("fade").style.display = "block";
+      this.ipInfo.ipAddrs = this.$store.state.User.ipList[index].ipAddrs
+      this.ipInfo.description = this.$store.state.User.ipList[index].description
+    },
+    closeUpdateIpWin() {
+      document.getElementById("card-editIP").style.display = "none"
+      document.getElementById("fade").style.display = "none";
+      this.cleanIpInfo()
+    },
+    updateIp() {
+      this.$store.dispatch("updateIp", {
+        userId: this.$store.state.User.userInfo.userId,
+        ipAddrs: this.ipInfo.ipAddrs,
+        ipPort: this.ipInfo.ipPort,
+        serverUser: this.ipInfo.serverUser,
+        serverPassword: base64Encode(this.ipInfo.serverPassword),
+        description: this.ipInfo.description
+      })
+      this.closeUpdateIpWin()
+    },
+    deleteIp(index) {
       this.$store.dispatch("deleteIp", index)
     },
-    testConnect(){
+    testConnect() {
       if(this.ipInfo.ipAddrs == "" || this.ipInfo.ipPort == "" ||
         this.ipInfo.serverUser == "" || this.ipInfo.serverPassword == ""){
           this.ipInfo.hint = "服务器信息请填完整"
@@ -78,7 +99,7 @@ export default defineComponent({
         })
       }
     },
-    addNewIp(){
+    addNewIp() {
       this.$store.dispatch("addNewip",{
         userId: this.$store.state.User.userInfo.userId,
         ipAddrs: this.ipInfo.ipAddrs,
@@ -89,7 +110,7 @@ export default defineComponent({
       })
       this.closeAddIpWin()
     },
-    changeBasicInfo(){
+    changeBasicInfo() {
       if(this.basicInfo.name == this.$store.state.User.userInfo.name && 
         this.basicInfo.description == this.$store.state.User.userInfo.description) {
           this.closeWin()
@@ -146,6 +167,16 @@ export default defineComponent({
         console.log(err)
       })
     },
+    cleanIpInfo() {
+      //关闭窗口清空ip信息
+      this.ipInfo.hint ="",
+      this.ipInfo.ipAddrs = "",
+      this.ipInfo.ipPort = "",
+      this.ipInfo.serverUser = "",
+      this.ipInfo.serverPassword = "",
+      this.ipInfo.description = "",
+      this.ipInfo.isConnect = false
+    }
   },
   
   mounted() {
