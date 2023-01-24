@@ -50,6 +50,14 @@ const User = {
                 }
             })
         },
+        updateIp({dispatch}, ipInfo) {
+            axios("/v1/UI/user/updateIp", ipInfo, "post").then(res => {
+                res = JSON.parse(res)
+                if(res.success) {
+                    dispatch("getIpListFromBackend")
+                }
+            })
+        },
         deleteIp({state, dispatch}, index) {
             axios("/v1/UI/user/deleteIp", {
                 userId: state.userInfo.userId,
