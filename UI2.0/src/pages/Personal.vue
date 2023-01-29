@@ -197,7 +197,7 @@
         </div>
         <div class="addipInfo-info">
           <img src="../assets/personal/star.png"/>
-          <a>登陆用户名</a>
+          <a>登录用户名</a>
           <input
             class="info-password"
             placeholder="--请输入--"
@@ -207,7 +207,7 @@
         </div>
         <div class="addipInfo-info">
           <img src="../assets/personal/star.png"/>
-          <a>登陆密码</a>
+          <a>登录密码</a>
           <input 
             class="info-password" 
             placeholder="--请输入--" 

@@ -1,4 +1,5 @@
 import { defineComponent, ref } from "vue";
+import axios from "./utils/AxiosConfig";
 
 export default defineComponent({
   name: "MainLayout",
@@ -6,10 +7,8 @@ export default defineComponent({
   components: {},
 
   methods: {
-    onItemClick() {
-      console.log("Clicked.");
-    },
     onMainClick() {
+      localStorage.clear()
       this.$router.push({
         path: "/",
       });
@@ -44,11 +43,6 @@ export default defineComponent({
         path: "/user",
       });
     },
-    onLoginClick() {
-      this.$router.push({
-        path: "/login",
-      });
-    },
     onPersonalClick() {
       this.$router.push({
         path: "/personal",
@@ -57,9 +51,29 @@ export default defineComponent({
     showSearchInput() {
       document.getElementById("search-input").style.display = "block";
     },
+    verifyToken() {
+      if(this.$store.state.User.userInfo.userId == 0 || !localStorage.getItem("token")){
+        this.$router.push({
+          path: "/"
+        })
+        return
+      }
+      axios("/v1/UI/user/userVerify", {
+        userId: this.$store.state.User.userInfo.userId
+      },"get").then(res => {
+        res = JSON.parse(res)
+        console.log(res)
+        if(!res.vaild) {
+          this.$router.push({
+            path: "/"
+          })
+        }
+      })
+    },
   },
   mounted() {
     this.$store.dispatch("getUserInfoFromBackend")
+    this.verifyToken()
   },
   setup() {
     return {

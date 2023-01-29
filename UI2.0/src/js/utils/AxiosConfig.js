@@ -9,7 +9,7 @@ axios.defaults.timeout = 10000;
 
 axios.interceptors.request.use(
   config => {
-    const token = sessionStorage.getItem("access_token");
+    const token = localStorage.getItem("token");
     config.headers.authorization = token;
     return config;
   },

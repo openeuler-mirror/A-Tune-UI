@@ -2,6 +2,7 @@ import EssentialLink from "components/EssentialLink.vue";
 import { defineComponent, ref } from "vue";
 import axios from "./utils/AxiosConfig";
 
+
 const linksList = [
   {
     title: "Docs",
@@ -22,6 +23,7 @@ export default defineComponent({
   },
   mounted() {
     this.connectDatabase()
+    this.verifyToken()
   },
   methods: {
     onItemClick() {
@@ -62,6 +64,22 @@ export default defineComponent({
         }).catch(err => {
           console.log(err)
         })
+    },
+    verifyToken() {
+      if(this.$store.state.User.userInfo.userId == 0 || !localStorage.getItem("token")){
+        return
+      }
+      axios("/v1/UI/user/userVerify", {
+        userId: this.$store.state.User.userInfo.userId
+      },"get").then(res => {
+        res = JSON.parse(res)
+        console.log(res)
+        if(res.vaild) {
+          this.$router.push({
+            path: "/user"
+          })
+        }
+      })
     }
   },
   setup() {
