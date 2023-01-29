@@ -59,18 +59,17 @@
               dropdown-icon="expand_more"
             >
               <q-list>
-                <q-item clickable v-close-popup @click="onItemClick">
+                <q-item clickable v-close-popup @click="onPersonalClick">
                   <q-item-section>
                     <q-item-label
                       style="font-size: 12px"
-                      @click="onPersonalClick"
                       >个人中心</q-item-label
                     >
                   </q-item-section>
                 </q-item>
-                <q-item clickable v-close-popup @click="onItemClick">
+                <q-item clickable v-close-popup @click="onMainClick">
                   <q-item-section>
-                    <q-item-label style="font-size: 12px" @click="onMainClick"
+                    <q-item-label style="font-size: 12px" 
                       >退出登录</q-item-label
                     >
                   </q-item-section>

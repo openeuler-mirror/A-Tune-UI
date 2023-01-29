@@ -27,6 +27,7 @@ export default defineComponent({
                             name: res.user_name,
                             userId: res.user_id,
                         })
+                        localStorage.setItem("token", res.token)
                         this.$router.push({
                             path: "/user",
                         });
