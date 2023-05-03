@@ -27,17 +27,17 @@
                 border-bottom-left-radius: 4px;
                 margin-left: 32px;
               "
-              @click="getRecord('command')"
+              @click="curPage = 1;getRecord('command')"
             >
               全部
             </button>
-            <button style="width: 95px" @click="getRecord('tuning')">离线调优</button>
+            <button style="width: 95px" @click="curPage = 1;getRecord('tuning');">离线调优</button>
             <button
               style="
                 border-top-right-radius: 4px;
                 border-bottom-right-radius: 4px;
               "
-              @click="getRecord('analysis')"
+              @click="curPage = 1;getRecord('analysis')"
             >
               在线调优
             </button>

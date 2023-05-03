@@ -16,7 +16,7 @@ export default defineComponent({
       var url = '/v1/UI/' + type + '/initialPage'
       axios(url, {
         uid: this.$store.state.User.userInfo.userId,
-      }, "get").then(res => {
+      }, 'get').then(res => {
         res = JSON.parse(res)
         this.recordNum = res.count
       })
@@ -27,7 +27,7 @@ export default defineComponent({
         uid: this.$store.state.User.userInfo.userId,
         pageNum: this.curPage,
         pageSize: 15
-      }, "get").then(res => {
+      }, 'get').then(res => {
         res = JSON.parse(res)
         this.recordList = res.data
         for(var i = 0; i < this.recordList.length; i++){
@@ -39,11 +39,10 @@ export default defineComponent({
       this.getRecordNum(type)
       this.getRecordList(type)
       this.recordType = type
-      this.curPage = 1
     },
     getRecordDetail(type, id, mid) {
       if(typeof(type) == 'undefined'){
-        if(this.recordType == 2) {
+        if(this.recordType == 'tuning') {
           this.$router.push({
             path: "/offline",
             query: {id: id}
@@ -75,7 +74,7 @@ export default defineComponent({
         axios(url, {
           tid: id,
           description: this.descriptionList[index]
-        }, "get").then(res => {
+        }, 'get').then(res => {
           res = JSON.parse(res)
           if(res.status) {
             this.recordList[index].description = this.descriptionList[index]
@@ -87,7 +86,7 @@ export default defineComponent({
         axios(url, {
           cid: id,
           description: this.descriptionList[index]
-        }, "get").then(res => {
+        }, 'get').then(res => {
           res = JSON.parse(res)
           if(res.status) {
             this.recordList[index].description = this.descriptionList[index]
