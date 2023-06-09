@@ -1,6 +1,6 @@
 import { defineComponent } from "vue";
 import axios from "./utils/AxiosConfig";
-import base64Encode from './utils/utils'
+import {base64Encode} from './utils/utils'
 
 export default defineComponent({
   name: "PageIndex",

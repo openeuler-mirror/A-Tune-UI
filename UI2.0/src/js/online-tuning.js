@@ -1,60 +1,169 @@
-import {defineComponent} from "vue";
+import {capitalize, defineComponent} from "vue";
 import * as charts from './utils/charts.js';
+import axios from "./utils/AxiosConfig";
+import { getAvgFromArray } from "./utils/utils.js";
 
 export default defineComponent({
-  methods: {},
+  data() {
+    return {
+      analysisData: {
+        workload: "",
+        round: [],
+        header: [],
+        csvData: [],
+        logData: [],
+      },
+      circleChartData: {
+        cpu: 0.0,
+        storage: 0.0,
+        network: 0.0,
+        memory: 0.0,
+      },
+      tableData: {
+        Rows: [],
+        Columns: [],
+      },
+      configuration: {
+        lists: [],
+        current: "",
+      },
+    }
+  },
+  methods: {
+    getAnalysisData(csvLine, logLine) {
+      axios('/v1/UI/analysis/getAnalysisData', {
+        cid: this.$route.query.id,
+        csvLine: csvLine,
+        logLine, logLine,
+      }, 'get').then(res => {
+        if (typeof(res) === 'string') {
+          res = JSON.parse(res);
+        }
+        if (!res.isExist) {
+          this.$router.push({
+            path: '/record',
+          });
+          return;
+        }
+        if (csvLine === 0) {
+          this.analysisData.round = res.round;
+          this.analysisData.header = res.table_header;
+          this.analysisData.csvData = res.csv_data;
+          this.analysisData.logData= res.log_data;
+          this.initTableColumns();
+          this.initConfiguration();
+        } else {
+          this.analysisData.round.push(...res.round);
+          for (var i = 0; i < this.analysisData.header.length; i++) {
+            this.analysisData.csvData[i].push(...res.csv_data[i]);
+          }
+          this.analysisData.logData.push(...res.log_data);
+        }
+        this.insertTableRows();
+        if (res.workload !== undefined) {
+          this.analysisData.workload = res.workload;
+        }
+        this.calCircleChartData();
+        this.updateCircleChart();
+        if (res.hasNext) {
+          setTimeout(this.getAnalysisData, res.interval, res.nextCsv, res.nextLog);
+        }
+      })
+    },
+    calCircleChartData() {
+      var cpuIndex = this.analysisData.header.findIndex(elem => elem === 'CPU.STAT.util');
+      var storageIndex = this.analysisData.header.findIndex(elem => elem === 'STORAGE.STAT.util');
+      var netIndex = this.analysisData.header.findIndex(elem => elem === 'NET.STAT.ifutil');
+      var memIndex = this.analysisData.header.findIndex(elem => elem === 'MEM.BANDWIDTH.Total_Util');
+      this.circleChartData.cpu = parseFloat(getAvgFromArray(this.analysisData.csvData[cpuIndex]).toFixed(2));
+      this.circleChartData.storage = parseFloat(getAvgFromArray(this.analysisData.csvData[storageIndex]).toFixed(2));
+      this.circleChartData.network = parseFloat(getAvgFromArray(this.analysisData.csvData[netIndex]).toFixed(2));
+      this.circleChartData.storage = parseFloat(getAvgFromArray(this.analysisData.csvData[memIndex]).toFixed(2));
+    },
+    updateCircleChart() {
+      var echarts = require("echarts");
+      for (var i = 1; i < 5; i++) {
+        var chartName = "percentage" + i;
+        var chartInstance = echarts.getInstanceByDom(document.getElementById(chartName));
+        if (chartInstance != "" && chartInstance != null && chartInstance != undefined) {
+          chartInstance.dispose();
+        }
+      }
+      var circleChart1 = echarts.init(document.getElementById("percentage1"));
+      var circleChart2 = echarts.init(document.getElementById("percentage2"));
+      var circleChart3 = echarts.init(document.getElementById("percentage3"));
+      var circleChart4 = echarts.init(document.getElementById("percentage4"));
+      charts.initCircleChart(circleChart1, this.circleChartData.cpu, "cpu");
+      charts.initCircleChart(circleChart2, this.circleChartData.storage, "storage");
+      charts.initCircleChart(circleChart3, this.circleChartData.network, "network");
+      charts.initCircleChart(circleChart4, this.circleChartData.memory, "memory");
+    },
+    updateLineChart() {
+      var echarts = require("echarts");
+      for (var i = 1; i < this.analysisData.header.length; i++) {
+        var chartName = "online" + i;
+        var chartInstance = echarts.getInstanceByDom(document.getElementById(chartName));
+        if (chartInstance != "" && chartInstance != null && chartInstance != undefined) {
+          chartInstance.dispose();
+        }
+        var chart = echarts.init(document.getElementById(chartName));
+        charts.initLineChart(chart, "", "", ["test1"], this.analysisData.header[i]);
+        charts.appendLineChartData(chart, this.analysisData.round, ["test1"], [this.analysisData.csvData[i]]);
+        charts.addOptions(chart, "grid", 0, {"top": 18});
+        charts.addOptions(chart, "legend", 0, {"top": "0"});
+      }
+    },
+    initConfiguration() {
+      for (var i = 1; i < this.analysisData.header.length; i++) {
+        var category = this.analysisData.header[i].split(".")[0];
+        var index = this.configuration.lists.indexOf(category)
+        if (index === -1) {
+          this.configuration.lists.push(category)
+        }
+      }
+      console.log(this.configuration.lists)
+    },
+    initTableColumns() {
+      this.tableData.Columns.push({
+        name: 'round',
+        require: true,
+        label: 'ROUND',
+        align: 'left',
+        sortable: true,
+        field: row => row.name,
+      })
+      for (var i = 0; i < this.analysisData.header.length; i++) {
+        this.tableData.Columns.push({
+          name: this.analysisData.header[i].toLowerCase(),
+          require: true,
+          label: this.analysisData.header[i].toUpperCase(),
+          align: 'center',
+          field: this.analysisData.header[i].toLowerCase(),
+        })
+      }
+    },
+    insertTableRows() {
+      for (var i = this.tableData.Rows.length + 1; i <= this.analysisData.round.length; i++) {
+        var obj = new Object();
+        obj["name"] = i;
+        for (var j = 0; j < this.analysisData.header.length;j++) {
+          obj[this.analysisData.header[j].toLowerCase()] = this.analysisData.csvData[j][i-1];
+        }
+        this.tableData.Rows.push(obj);
+      }
+    },
+  },
+  watch: {
+    "analysisData.round": {
+      deep: true,
+      handler:function(newVal) {
+        this.$nextTick(()=>{
+          this.updateLineChart();
+        })
+      } 
+    }
+  },
   mounted() {
-    var echarts = require("echarts");
-    var circleChart1 = echarts.init(document.getElementById("percentage1"));
-    var circleChart2 = echarts.init(document.getElementById("percentage2"));
-    var circleChart3 = echarts.init(document.getElementById("percentage3"));
-    var circleChart4 = echarts.init(document.getElementById("percentage4"));
-    var myChart1 = echarts.init(document.getElementById("online1"));
-    var myChart2 = echarts.init(document.getElementById("online2"));
-    var myChart3 = echarts.init(document.getElementById("online3"));
-    var myChart4 = echarts.init(document.getElementById("online4"));
-    var myChart5 = echarts.init(document.getElementById("online5"));
-    var myChart6 = echarts.init(document.getElementById("online6"));
-
-    let xValue = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13',
-      '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27',
-      '28', '29', '30'];
-    let yValue = [[6, 2, 6, 7, 8, 7, 1, 6, 7, 5, 6, 2, 3, 7, 8, 9, 1, 6, 7, 5,
-      6, 2, 9, 7, 8, 6, 1, 6, 7, 5, 6, 2, 3, 7, 8, 9, 1, 6, 7, 5,
-      6, 2, 6, 7, 8, 7, 1, 6, 5, 5, 6, 2, 3, 7, 3, 9, 1, 6, 7, 5,]];
-    charts.initCircleChart(circleChart1, 12.34, "cpu");
-    charts.initCircleChart(circleChart2, 9.32, "storage");
-    charts.initCircleChart(circleChart3, 20, "network");
-    charts.initCircleChart(circleChart4, 10, "memory");
-
-    charts.initLineChart(myChart1, "", "", ["test1"], "cpu");
-    charts.appendLineChartData(myChart1, xValue, ["test1"], yValue);
-    charts.addOptions(myChart1, "grid", 0, {"top": 18});
-    charts.addOptions(myChart1, "legend", 0, {"top": "0"});
-
-    charts.initLineChart(myChart2, "", "", ["test1"], "storage");
-    charts.appendLineChartData(myChart2, xValue, ["test1"], yValue);
-    charts.addOptions(myChart2, "grid", 0, {"top": 18});
-    charts.addOptions(myChart2, "legend", 0, {"top": "0"});
-
-    charts.initLineChart(myChart3, "", "", ["test1"], "network");
-    charts.appendLineChartData(myChart3, xValue, ["test1"], yValue);
-    charts.addOptions(myChart3, "grid", 0, {"top": 18});
-    charts.addOptions(myChart3, "legend", 0, {"top": "0"});
-
-    charts.initLineChart(myChart4, "", "", ["test1"], "memory");
-    charts.appendLineChartData(myChart4, xValue, ["test1"], yValue);
-    charts.addOptions(myChart4, "grid", 0, {"top": 18});
-    charts.addOptions(myChart4, "legend", 0, {"top": "0"});
-
-    charts.initLineChart(myChart5, "", "", ["test1"], "perf");
-    charts.appendLineChartData(myChart5, xValue, ["test1"], yValue);
-    charts.addOptions(myChart5, "grid", 0, {"top": 18});
-    charts.addOptions(myChart5, "legend", 0, {"top": "0"});
-
-    charts.initLineChart(myChart6, "", "", ["test1"], "system");
-    charts.appendLineChartData(myChart6, xValue, ["test1"], yValue);
-    charts.addOptions(myChart6, "grid", 0, {"top": 18});
-    charts.addOptions(myChart6, "legend", 0, {"top": "0"});
+    this.getAnalysisData(0, 0);
   },
 });
