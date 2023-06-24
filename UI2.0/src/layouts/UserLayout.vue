@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
+  <q-layout view="hHh Lpr lFf">
     <q-header style="height: 64px; min-width: 1920px">
       <q-toolbar class="row" style="justify-content: space-between">
         <div>

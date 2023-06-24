@@ -88,7 +88,20 @@ const routes = [
     path: '/about',
     component: () => import('layouts/UserLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/About-A-Tune.vue') }
+      { 
+        path: '', component: () => import('pages/About-A-Tune.vue'),
+        children: [
+          {
+            path: '', components: {
+              learn: () => import('src/pages/About/Learn-A-Tune.vue'),
+              install: () => import('src/pages/About/Install-and-deploy.vue'),
+              instructions: () => import('src/pages/About/Instructions.vue'),
+              question: () => import('src/pages/About/Install-and-deploy.vue'),
+              appendix: () => import('src/pages/About/Appendix.vue')
+            } 
+          }
+        ]
+      }
     ]
   },
   // Always leave this as last one,
