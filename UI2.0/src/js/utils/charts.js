@@ -210,6 +210,7 @@ export function initBarChart(chart, xName, yName, barNames, colors) {
     calculable: true,
     xAxis: [
       {
+        name: xName,
         type: "category",
         data: [],
         axisLine: {
