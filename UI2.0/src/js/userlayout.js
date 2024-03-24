@@ -1,5 +1,6 @@
 import { defineComponent, ref } from "vue";
 import axios from "./utils/AxiosConfig";
+import {Notify} from "quasar";
 
 export default defineComponent({
   name: "MainLayout",
@@ -8,10 +9,18 @@ export default defineComponent({
 
   methods: {
     onMainClick() {
-      localStorage.clear()
-      this.$router.push({
-        path: "/",
-      });
+      axios("/v1/UI/user/signOut", {
+        userId: this.$store.state.User.userInfo.userId
+      },"get").then(res => {
+        res = JSON.parse(res)
+        if(res.signOut) {
+          localStorage.clear()
+          this.$router.push({
+            path: "/"
+          })
+          Notify.create("成功退出登录")
+        }
+      })
     },
     onAboutClick() {
       this.$router.push({
