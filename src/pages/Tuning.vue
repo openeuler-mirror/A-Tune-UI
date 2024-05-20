@@ -48,6 +48,10 @@
                     </q-item-section>
                   </q-item>
                 </q-btn-dropdown>
+
+                <!-- Go to Details button here -->
+                <q-btn flat dense label="Go to Details" @click="goToTuningDetails(file.id)" style="margin-top: 8px" />
+
               </q-list>
             </div>
           </q-tab-panel>
