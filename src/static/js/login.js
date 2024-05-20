@@ -102,6 +102,19 @@ export default{
                 }
             });
         },
+        fetchSevenDayData() {
+            const path = `http://${engineHost}:${enginePort}/v1/UI/user/sevenDays`;
+            axios.get(path, {'Access-Control-Allow-Origin': '*'}).then((res) => {
+                const data = res.data;
+                let output = '';
+                for (const [key, value] of Object.entries(data)) {
+                    output += `${key}: ${value}\n`;
+                }
+                document.getElementById('seven-day-data').innerText = output;
+            }).catch((error) => {
+                console.error('Error fetching seven day data:', error);
+            });
+        },
         checkLogin() {
             this.clearAll();
             const path = `http://${engineHost}:${enginePort}/v1/UI/user/login`;
@@ -123,6 +136,7 @@ export default{
                     document.getElementById('login-incorrect-error').style.display = 'block';
                 }
             });
+            this.fetchSevenDayData();
         },
         checkSignup() {
             this.clearAll();

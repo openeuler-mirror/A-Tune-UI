@@ -121,6 +121,34 @@ export default {
                 }
             });
         },
+        // 从命令数据跳转到分析详情页面
+        goToAnalysisDetails(cid) {
+            const path = `http://${engineHost}:${enginePort}/v1/UI/command/getCommandDetails`;
+            var params = { cid: cid };
+            axios.get(path, { params: params }, { 'Access-Control-Allow-Origin': '*' }).then((res) => {
+                if (typeof (res.data) === 'string') {
+                    res.data = JSON.parse(res.data);
+                }
+                if (res.data.status === 'success') {
+                    const command = res.data.data;
+                    if (command.type === 'analysis') {
+                        this.$router.push({
+                            path: '/analysis/details',
+                            name: 'AnalysisDetails',
+                            params: {
+                                name: command.name,
+                                status: command.status,
+                                optionCompare: this.optionCompare
+                            }
+                        });
+                    } else {
+                        this.$q.notify('Command type is not analysis');
+                    }
+                } else {
+                    this.$q.notify('Failed to get command details');
+                }
+            });
+        }
     },
     created() {
         if (localStorage.getItem('userId') === null && localStorage.getItem('connectDB') !== 'false') {

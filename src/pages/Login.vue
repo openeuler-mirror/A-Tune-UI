@@ -53,6 +53,8 @@
       </div>
     </div>
 
+    <div id="seven-day-data" class="q-pa-lg" style="white-space: pre;"></div>
+
     <div class="column q-pa-lg" id="login" style="display: none">
       <div class="row">
         <q-card square class="shadow-24" style="width:300px;height:485px;">
